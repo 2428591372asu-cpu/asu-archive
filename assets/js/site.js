@@ -6,6 +6,30 @@
   'use strict';
 
   var D = window.ARCHIVE;
+
+/* ---------------------------------------------------------------- 界面文字 */
+function L(path, fallback) {
+  var v = (D && D.labels) || {};
+  var ks = String(path).split('.');
+  for (var i = 0; i < ks.length; i++) { v = (v == null) ? v : v[ks[i]]; }
+  return (typeof v === 'string' && v) ? v : (fallback || '');
+}
+function applyLabels() {
+  $$('[data-label]').forEach(function (el) {
+    var v = L(el.getAttribute('data-label'), null);
+    if (v) el.textContent = v;
+  });
+  $$('[data-label-html]').forEach(function (el) {
+    var v = L(el.getAttribute('data-label-html'), null);
+    if (v) el.innerHTML = esc(v);
+  });
+  $$('[data-label-short]').forEach(function (el) {
+    var v = L(el.getAttribute('data-label-short'), null);
+    if (v) el.setAttribute('data-short', v);
+  });
+  var ti = ((D.labels || {}).titles || {})[document.body.dataset.page || 'index'];
+  if (ti) document.title = ti;
+}
   if (!D) return;
 
   var IMG = 'assets/img/';
@@ -285,18 +309,34 @@
 
   /* ---------------------------------------------------------------- 首页大图轮换 */
   function initHeroSlides(h) {
-    var slides = (h.slides && h.slides.length) ? h.slides : [h.image];
+    var raw = (h.slides && h.slides.length) ? h.slides : [h.image];
+    var slides = raw.map(function (s) {
+      return typeof s === 'string'
+        ? { file: s, art: false, char: '' }
+        : { file: s.file, art: !!s.art, char: s.char || '', pos: s.pos || '', tone: s.tone || '' };
+    });
+    var heroEl = $('#index');
+    function paintSlideMeta(s) {
+      if (!heroEl) return;
+      heroEl.dataset.slide = s.art ? 'art' : 'photo';
+      if (s.art && s.char) heroEl.dataset.slideChar = s.char;
+      else delete heroEl.dataset.slideChar;
+    }
     var layers = $$('.hero__slide');
     var nav = $('#heroNav');
     var dotsWrap = $('#heroDots');
     if (!layers.length) return;
 
     layers.forEach(function (l, i) {
-      var f = slides[Math.min(i, slides.length - 1)];
+      var s0 = slides[Math.min(i, slides.length - 1)];
       /* 只有第一张立刻加载，其余等轮换时再取，避免一次拉满 */
       if (i === 0) {
-        l.src = img(f);
-        l.dataset.file = f;
+        l.src = img(s0.file);
+        l.dataset.file = s0.file;
+        l.dataset.kind = s0.art ? 'art' : 'photo';
+        l.dataset.tone = s0.tone || '';
+        if (s0.pos) l.style.objectPosition = s0.pos;
+        paintSlideMeta(s0);
       }
       l.alt = '双人插画';
     });
@@ -327,15 +367,32 @@
     function go(dir) {
       var next = (cur + dir + slides.length) % slides.length;
       var back = layers[1 - active];
-      var f = slides[next];
-      back.src = img(f);
-      back.dataset.file = f;
-      back.classList.add('is-on');
-      layers[active].classList.remove('is-on');
-      active = 1 - active;
-      cur = next;
-      paintDots();
-      arm();
+      var front = layers[active];
+      var ns = slides[next];
+      var src = img(ns.file);
+
+      function swap() {
+        back.dataset.kind = ns.art ? 'art' : 'photo';
+        back.dataset.tone = ns.tone || '';
+        back.dataset.file = ns.file;
+        back.style.objectPosition = ns.pos || '';
+        back.src = src;
+        paintSlideMeta(ns);
+        back.classList.add('is-on');
+        front.classList.remove('is-on');
+        active = 1 - active;
+        cur = next;
+        paintDots();
+      }
+
+      /* 先把下一张解码好再换层，否则换的瞬间这一层是空白，会闪一下 */
+      var done = false;
+      function once() { if (done) return; done = true; swap(); arm(); }
+      var pre = new Image();
+      pre.onload = once;
+      pre.onerror = once;
+      pre.src = src;
+      if (pre.complete) once();
     }
 
     nav.addEventListener('click', function (e) {
@@ -364,7 +421,7 @@
   function fieldHTML(f) {
     var v;
     if (f.v == null || f.v === '') {
-      v = '<span class="tbd" title="尚未补充">待补充</span>';
+      v = '<span class="tbd" title="尚未补充">' + esc(L('hints.tbd', '待补充')) + '</span>';
     } else if (f.link) {
       v = '<a href="character.html?id=' + encodeURIComponent(f.link) + '">' + esc(f.v) + '</a>';
     } else {
@@ -400,10 +457,10 @@
     $('#heroLead').textContent = h.lead;
 
     $('#heroStats').innerHTML = [
-      [pad2(s.chars), '角色'],
-      [pad2(s.files), '图集'],
-      [pad2(s.cats), '分类'],
-      [pad2(s.slots), '预留空位']
+      [pad2(s.chars), L('stats.0', '角色')],
+      [pad2(s.files), L('stats.1', '图集')],
+      [pad2(s.cats), L('stats.2', '分类')],
+      [pad2(s.slots), L('stats.3', '预留空位')]
     ].map(function (row) {
       return '<div class="hero__stat"><b>' + row[0] + '</b><span>' + row[1] + '</span></div>';
     }).join('');
@@ -414,35 +471,90 @@
     var togetherItems = D.together.map(function (t) {
       return { file: t.file, title: t.title, note: t.note, cat: '合作 / TOGETHER' };
     });
-    $('#shots').innerHTML = D.together.map(function (t, i) {
-      return '<figure class="shot" role="button" tabindex="0" data-shot="' + i + '"' +
-        ' aria-label="查看 ' + esc(t.title) + '">' +
-        imgTag(t.file, t.title, '') +
-        '<figcaption class="shot__bar"><span class="shot__no">' + pad2(i + 1) + '</span>' +
-        '<span>' + esc(t.title) + ' · ' + esc(t.note) + '</span></figcaption></figure>';
-    }).join('');
-    $$('#shots .shot').forEach(function (el) {
-      var open = function () { LB.open(togetherItems, Number(el.dataset.shot)); };
-      el.addEventListener('click', open);
-      el.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    /* 双人图集：分页（每页 8 张，2 行 × 4 列），图再多也不会把页面拉长到滑不动 */
+    var PER_PAGE = 8;
+    var pageCount = Math.max(1, Math.ceil(D.together.length / PER_PAGE));
+    var page = 1;
+
+    function paintShots() {
+      var start = (page - 1) * PER_PAGE;
+      var slice = D.together.slice(start, start + PER_PAGE);
+      $('#shots').innerHTML = slice.map(function (t, i) {
+        var gi = start + i;
+        return '<figure class="shot" role="button" tabindex="0" data-shot="' + gi + '"' +
+          ' aria-label="查看 ' + esc(t.title) + '">' +
+          imgTag(t.file, t.title, '') +
+          '<figcaption class="shot__bar"><span class="shot__no">' + pad2(gi + 1) + '</span>' +
+          '<span>' + esc(t.title) + ' · ' + esc(t.note) + '</span></figcaption></figure>';
+      }).join('');
+
+      $$('#shots .shot').forEach(function (el) {
+        var open = function () { LB.open(togetherItems, Number(el.dataset.shot)); };
+        el.addEventListener('click', open);
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+        });
       });
-    });
-    $('#shotsMore').textContent = pad2(D.together.length) + ' ITEMS — 点击任意一张查看大图';
+
+      var pager = $('#shotsPager');
+      if (!pager && $('#shots')) {
+        pager = document.createElement('div');
+        pager.id = 'shotsPager';
+        pager.className = 'shots__pager';
+        $('#shots').parentNode.insertBefore(pager, $('#shots').nextSibling);
+      }
+      if (pager) {
+        if (pageCount <= 1) {
+          pager.hidden = true;
+          pager.innerHTML = '';
+        } else {
+          pager.hidden = false;
+          var btns = '<button type="button" class="pg" data-pg="prev"' + (page === 1 ? ' disabled' : '') + ' aria-label="上一页">‹</button>';
+          for (var p = 1; p <= pageCount; p++) {
+            btns += '<button type="button" class="pg' + (p === page ? ' is-on' : '') + '" data-pg="' + p + '">' + pad2(p) + '</button>';
+          }
+          btns += '<button type="button" class="pg" data-pg="next"' + (page === pageCount ? ' disabled' : '') + ' aria-label="下一页">›</button>';
+          pager.innerHTML = btns + '<span class="shots__pgnum">' + pad2(page) + ' / ' + pad2(pageCount) + '</span>';
+          $$('#shotsPager .pg').forEach(function (b) {
+            b.addEventListener('click', function () {
+              var v = b.dataset.pg;
+              if (v === 'prev') page = Math.max(1, page - 1);
+              else if (v === 'next') page = Math.min(pageCount, page + 1);
+              else page = Number(v);
+              paintShots();
+              var top = $('#shots');
+              if (top && top.getBoundingClientRect().top < 0) top.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            });
+          });
+        }
+      }
+      $('#shotsMore').textContent = pad2(D.together.length) + ' ' + L('shotsMore', 'ITEMS — 点击任意一张查看大图');
+    }
+
+    paintShots();
+
+    /* 关于：标题与段落来自 data.js，段落里可以带换行 */
+    var ab = D.about || {};
+    if (ab.title && $('#aboutTitle')) $('#aboutTitle').textContent = ab.title;
+    if (ab.subtitle && $('#aboutSub')) $('#aboutSub').textContent = ab.subtitle;
+    if ($('#aboutText')) {
+      /* 容错：paragraphs 可能是数组，也可能是一整段字符串（旧数据 / 手改） */
+      var ps = ab.paragraphs;
+      if (typeof ps === 'string') ps = ps.split(/\n\s*\n|\n/);
+      if (!Array.isArray(ps)) ps = [];
+      $('#aboutText').innerHTML = ps.map(function (t) {
+        return '<p>' + esc(String(t).trim()) + '</p>';
+      }).join('');
+    }
 
     /* 关于 / 规格 */
-    $('#spec').innerHTML = [
-      ['角色', pad2(s.chars)],
-      ['图集', pad2(s.files) + ' 张'],
-      ['分类', D.categories.join(' / ')],
-      ['空位', pad2(s.slots) + ' 处待补充'],
-      ['结构', '静态页面 · 零依赖'],
-      ['数据', 'assets/js/data.js'],
-      ['版本', D.site.version]
-    ].map(function (r) {
-      return '<div class="spec__row"><div class="spec__k">' + esc(r[0]) + '</div>' +
-        '<div class="spec__v">' + esc(r[1]) + '</div></div>';
-    }).join('');
+    var specTable = (D.about && Array.isArray(D.about.table)) ? D.about.table : [];
+    if ($('#spec')) {
+      $('#spec').innerHTML = specTable.map(function (r) {
+        return '<div class="spec__row"><div class="spec__k">' + esc(r.k || '') + '</div>' +
+          '<div class="spec__v">' + esc(r.v || '') + '</div></div>';
+      }).join('');
+    }
   }
 
   /* ==========================================================================
@@ -489,8 +601,8 @@
         ((c.emptySlots || []).length ? '<span>空位 <b>' + pad2(c.emptySlots.length) + '</b></span>' : '') +
       '</div>' +
       '<div class="dh__actions">' +
-        '<a class="btn" href="#gallery">查看画廊 <span class="arw">&rarr;</span></a>' +
-        '<a class="btn btn--ghost" href="index.html#index">返回索引</a>' +
+        '<a class="btn" href="#gallery">' + esc(L('buttons.gallery', '查看画廊')) + ' <span class="arw">&rarr;</span></a>' +
+        '<a class="btn btn--ghost" href="index.html#index">' + esc(L('buttons.back', '返回索引')) + '</a>' +
       '</div>';
 
     /* 右栏：立绘裁切头像 + 描边残影；没有裁切就退回旧的头像位 / 空位 */
@@ -644,7 +756,7 @@
           '<span class="duo__label"><span class="duo__name">' + esc(c.latin) + '</span>' +
             (sameName(c) ? '' : '<span class="duo__cn">' + esc(c.name) + '</span>') +
           '</span>' +
-          '<span class="duo__cue">展开详情</span>' +
+          '<span class="duo__cue">' + esc(L('hints.cueOpen', '展开详情')) + '</span>' +
         '</button>';
       }).join('');
     }
@@ -674,7 +786,7 @@
           '</p>' +
           '<div class="duo__cta">' +
             '<a class="btn" href="character.html?id=' + encodeURIComponent(c.id) + '">' +
-              '进入档案 <span class="arw">&rarr;</span></a>' +
+              esc(L('buttons.enter', '进入档案')) + ' <span class="arw">&rarr;</span></a>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -686,7 +798,7 @@
         b.classList.toggle('is-open', on);
         b.setAttribute('aria-expanded', on ? 'true' : 'false');
         var cue = b.querySelector('.duo__cue');
-        if (cue) cue.textContent = on ? '进入档案 \u2192' : '展开详情';
+        if (cue) cue.textContent = on ? (L('hints.cueEnter', '进入档案') + ' \u2192') : L('hints.cueOpen', '展开详情');
       });
       if (hero) hero.classList.toggle('is-expanded', !!openIdNow);
       /* 选中谁，全站强调色就跟着变（灰 → 蓝 / 黄绿），切换时开一段颜色过渡 */
@@ -738,13 +850,8 @@
         if (openId) detail.style.height = 'auto';
       }, 1120);
 
-      /* 展开块可能落到视口下方，轻推一下 */
-      window.setTimeout(function () {
-        if (reduceMotion) return;
-        var r = detail.getBoundingClientRect();
-        var over = r.bottom - window.innerHeight + 44;
-        if (over > 0) window.scrollBy({ top: Math.min(over, 200), behavior: 'smooth' });
-      }, 240);
+      /* 展开时不再自动滚动页面——那会让点击和切换看起来像在上下跳 */
+
     }
 
     function close() {
@@ -826,7 +933,8 @@
 
     /* 单文件版里两个视图各有一份页脚，所以用 class 逐个填，不能只取第一个 */
     var base = cfg.base || 'https://count.getloli.com/get/@';
-    var url = base + encodeURIComponent(cfg.name || 'asu-archive') +
+    var slug = String(cfg.name || 'asu-archive').replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || 'asu-archive';
+    var url = base + encodeURIComponent(slug) +
               '?theme=' + encodeURIComponent(cfg.theme || 'moebooru');
 
     wraps.forEach(function (wrap) {
@@ -881,6 +989,7 @@
 
     var fv = $('#footVer'); if (fv) fv.textContent = D.site.version;
 
+    applyLabels();
     initTheme();
     initTopbar();
     initParallax();

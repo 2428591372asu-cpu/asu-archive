@@ -438,7 +438,7 @@ body::after{
   opacity:0; transition:transform .72s var(--ease), opacity .55s var(--ease);
 }
 .duo__detail[data-side="left"] .duo__info{ justify-self:end; padding-left:clamp(16px,2.2vw,28px); transform:translateX(30px); }
-.duo__detail[data-side="right"] .duo__info{ justify-self:start; padding-right:clamp(16px,2.2vw,28px); transform:translateX(-30px); }
+.duo__detail[data-side="right"] .duo__info{ justify-self:start; padding-left:clamp(24px,4vw,64px); padding-right:clamp(16px,2.2vw,28px); transform:translateX(-30px); }
 .duo__detail.is-open .duo__info{ transform:none; opacity:1; }
 .duo__k{
   display:flex; align-items:center; gap:10px;
@@ -1306,7 +1306,8 @@ body[data-theme] .duo__scrim{
 .hero__slide{
   position:absolute; inset:0; width:100%; height:100%;
   object-fit:cover; opacity:0;
-  transition:opacity 1.4s var(--ease);
+  transition:opacity 1s var(--ease);
+  will-change:opacity;
 }
 .hero__slide.is-on{ opacity:1; }
 .hero__nav{
@@ -1358,7 +1359,7 @@ body[data-theme] .hero__title-l1{
   to{ opacity:1; transform:none }
 }
 /* 切换角色：左右刷新覆盖（新内容从切换方向擦进来） */
-.duo__detail.is-switch{ transition:none; }
+.duo__detail.is-switch{ transition:height .32s var(--ease); }
 .duo__detail.is-switch .duo__inner{ animation:none; }
 .duo__detail.is-switch[data-dir="1"] .duo__inner{ animation:duoWipeR .72s var(--ease) both; }
 .duo__detail.is-switch[data-dir="-1"] .duo__inner{ animation:duoWipeL .72s var(--ease) both; }
@@ -1441,3 +1442,179 @@ body[data-theme="night"] .gitem:has(img.is-ready){ background:#0d0f12; }
 .counter__fallback b{ color:var(--ink); font-weight:500; font-size:12px; font-variant-numeric:tabular-nums; }
 .counter__note{ font-family:var(--mono); font-size:9px; letter-spacing:.12em; color:var(--ink-4); }
 @media (max-width:620px){ .counter__img{ width:260px; } }
+/* ==========================================================================
+   比例适配：手机 / 平板 / 桌面共用一套结构，只缩比例、不换布局
+   索引条始终左右并排；展开面板始终「插画一侧、文字另一侧」
+   ========================================================================== */
+@media (max-width:820px){
+  /* —— 索引条：恢复左右平分（原来这里被改成了竖排） —— */
+  .duo__row{ flex-direction:row; }
+  .duo__item{ flex-basis:0; }
+  .duo__item + .duo__item{ border-left:1px solid var(--line-2); border-top:0; }
+  .duo__item.is-open{ flex-grow:1.22; }
+
+  /* —— 展开面板：插画仍是绝对定位铺在一侧，文字叠在另一侧 —— */
+  .duo__inner{
+    display:grid; align-items:center;
+    min-height:clamp(260px,56vw,360px);
+  }
+  .duo__detail[data-side="left"] .duo__art,
+  .duo__detail[data-side="right"] .duo__art{
+    position:absolute; top:0; bottom:0; height:auto; min-height:0; width:52%;
+  }
+  .duo__detail[data-side="left"] .duo__art{ left:0; right:auto; }
+  .duo__detail[data-side="right"] .duo__art{ left:auto; right:0; }
+  /* 遮罩按插画宽度算，手机上要提前收干净，否则文字落在还有图的区域 */
+  .duo__detail[data-side="left"] .duo__art{
+    -webkit-mask-image:linear-gradient(90deg,#000 34%,rgba(0,0,0,.55) 60%,transparent 84%);
+    mask-image:linear-gradient(90deg,#000 34%,rgba(0,0,0,.55) 60%,transparent 84%);
+  }
+  .duo__detail[data-side="right"] .duo__art{
+    -webkit-mask-image:linear-gradient(270deg,#000 34%,rgba(0,0,0,.55) 60%,transparent 84%);
+    mask-image:linear-gradient(270deg,#000 34%,rgba(0,0,0,.55) 60%,transparent 84%);
+  }
+  .duo__detail[data-side="left"] .duo__art img{ object-position:38% 22%; }
+  .duo__detail[data-side="right"] .duo__art img{ object-position:30% 30%; }
+
+  .duo__info,
+  .duo__detail[data-side="left"] .duo__info,
+  .duo__detail[data-side="right"] .duo__info{
+    width:58%; order:0;
+    padding:clamp(16px,3.6vw,26px) 0;
+  }
+  .duo__detail[data-side="left"] .duo__info{
+    justify-self:end; padding-left:14px; transform:translateX(16px);
+  }
+  .duo__detail[data-side="right"] .duo__info{
+    justify-self:start; padding-right:14px; transform:translateX(-16px);
+  }
+  .duo__detail.is-open .duo__info{ transform:none; }
+
+  .duo__latin{ font-size:clamp(26px,6.6vw,36px); margin-top:10px; }
+  .duo__meta{ font-size:9.5px; letter-spacing:.14em; margin-top:7px; }
+  .duo__tags{ gap:5px; margin-top:10px; }
+  .duo__lead{ font-size:12.5px; line-height:1.75; max-width:none; -webkit-line-clamp:4; margin-top:10px; }
+  .duo__stats{ gap:6px 14px; font-size:9px; margin-top:11px; }
+  .duo__cta{ margin-top:13px; }
+  .duo__cta .btn{ padding:9px 14px; font-size:9.5px; }
+
+  /* 手机上没有悬停，底部的滚动提示会盖住索引条 */
+  .hero__cue{ display:none; }
+
+  /* 详情页展示位底部的说明压在插画上，垫一层底 */
+  .plate__foot{
+    left:10px; right:10px; bottom:10px; padding:6px 10px;
+    background:color-mix(in srgb, var(--bg) 86%, transparent);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+}
+
+/* 更窄：顶栏与索引条按比例继续缩，但左右并排不变 */
+@media (max-width:620px){
+  .topbar{ height:58px; gap:10px; padding-inline:14px; }
+  .brand{ gap:9px; }
+  .brand__mark{ width:20px; height:20px; }
+  .brand__en{ font-size:12.5px; letter-spacing:.12em; }
+  .brand__cn{ display:none; }
+  .nav{ gap:12px; }
+  .nav a{ font-size:10.5px; letter-spacing:.1em; gap:6px; }
+  .theme-toggle{ padding:6px 8px; margin-left:0; }
+  .theme-toggle__label{ display:none; }
+
+  .hero{ padding-top:100px; }
+  body[data-theme] .hero__title-l1{ font-size:clamp(30px,10vw,44px); }
+  .hero__stat b{ font-size:22px; }
+  .hero__stat span{ font-size:9px; }
+
+  .duo__item{ padding:12px 10px; gap:8px; }
+  .duo__no{ font-size:10px; }
+  .duo__k{ font-size:9px; letter-spacing:.14em; white-space:nowrap; }
+  .duo__k i{ width:14px; }
+  .duo__name{ font-size:clamp(15px,4.4vw,20px); }
+  .duo__cn{ font-size:10px; letter-spacing:.14em; }
+  .duo__cue{ font-size:8.5px; letter-spacing:.06em; }
+}
+
+@media (max-width:400px){
+  /* 再窄就把中文名让出去，保证两条仍然并排不换行 */
+  .duo__cn{ display:none; }
+  .duo__cue{ font-size:8px; letter-spacing:.02em; }
+  .brand__en{ font-size:10.5px; letter-spacing:.04em; }
+  .brand__mark{ width:17px; height:17px; }
+  .nav{ gap:9px; }
+  .nav a{ font-size:9.5px; letter-spacing:.06em; }
+}
+/* ==========================================================================
+   本轮修复：轮换立绘 / 手机切换键位置 / 换行符
+   ========================================================================== */
+
+/* 立绘：完整显示、贴右下角，比整屏小一档；
+   压暗只作用在立绘图片自己身上，不动压暗层（那层盖的是整页） */
+.hero__slide[data-kind="art"]{ object-fit:cover; }
+
+@media (min-width:821px){
+  .hero__slide[data-kind="art"]{
+    object-fit:contain;
+    object-position:96% 100%;   /* 右边 + 底边对齐 */
+    transform:scale(.94) translateX(1.5%);
+    transform-origin:96% 100%;
+  }
+  /* 立绘是线稿感很强的图，比照片「实」；补一层雾感（提亮 + 降对比 + 极轻模糊），
+     观感向照片那两张靠，同时不会把整页压暗 */
+  body[data-theme="day"] .hero__slide[data-kind="art"]{
+    filter:saturate(.68) brightness(1.12) contrast(.95) blur(.3px);
+  }
+  /* 每张图可单独调雾感：soft = 浅一档，none = 不上雾 */
+  body[data-theme="day"] .hero__slide[data-kind="art"][data-tone="soft"]{
+    filter:saturate(.74) brightness(1.09) contrast(.98) blur(.2px);
+  }
+  body[data-theme="day"] .hero__slide[data-kind="art"][data-tone="none"]{
+    filter:saturate(.84) brightness(1.06) contrast(1.03);
+  }
+  body[data-theme="night"] .hero__slide[data-kind="art"][data-tone="none"]{
+    filter:saturate(.62) brightness(.74) contrast(1);
+  }
+  body[data-theme="night"] .hero__slide[data-kind="art"]{
+    filter:saturate(.58) brightness(.68) contrast(.95) blur(.4px);
+  }
+}
+
+/* 换行符：段落里的 \n 要真的换行 */
+.hero__lead, .dh__lead, .duo__lead, #aboutText p, .plate__foot, .gitem__cap{ white-space:pre-line; }
+
+/* 手机端：轮换按钮常驻在主视觉右上角，不再压在索引条上 */
+@media (max-width:820px){
+  .hero__nav{
+    top:64px; bottom:auto; right:14px;
+    opacity:1; gap:6px;
+  }
+  .hero__arrow{ width:38px; height:38px; font-size:16px; }
+  .hero__dots{ display:none; }
+}
+/* 档案表：每行保留自己的底线，只把整块和下一个区块拉开距离。
+   之前删掉了最后两行的线，1 列布局（≤1180px）下「体重」「生日」之间会缺一条，看着像并到一起 */
+#dossierGrid{ padding-bottom:clamp(10px,1.8vw,20px); }
+/* 切换角色时面板高度会变，禁掉滚动锚定，避免浏览器为“补偿”而把视口推一下（上下跳） */
+.duo__detail{ overflow-anchor:none; }
+.duo__inner{ overflow-anchor:none; }
+
+/* 双人图集分页条 */
+.shots__pager{
+  display:flex; align-items:center; gap:6px; justify-content:flex-end;
+  margin-top:clamp(10px,1.6vw,18px); flex-wrap:wrap;
+}
+.shots__pager[hidden]{ display:none; }
+.shots__pager .pg{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  min-width:34px; height:30px; padding:0 9px; cursor:pointer;
+  color:var(--ink-2); background:transparent;
+  border:1px solid var(--line-2); border-radius:0;
+  transition:color .25s, border-color .25s, background .25s;
+}
+.shots__pager .pg:hover:not(:disabled){ color:var(--ink); border-color:var(--line-3); }
+.shots__pager .pg.is-on{ color:var(--bg); background:var(--ink); border-color:var(--ink); }
+.shots__pager .pg:disabled{ opacity:.32; cursor:default; }
+.shots__pgnum{
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  color:var(--ink-3); margin-left:8px;
+}

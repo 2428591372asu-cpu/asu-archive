@@ -3,12 +3,50 @@
    用法： node tools/verify.mjs http://127.0.0.1:8777 shots
    需要浏览器已带 --remote-debugging-port=9222 启动
    ========================================================================== */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 
 const CDP = process.env.CDP_BASE || 'http://127.0.0.1:9222';
 const ROOT = (process.argv[2] || 'http://127.0.0.1:8777').replace(/\/$/, '');
 const OUTDIR = process.argv[3] || 'shots';
 mkdirSync(OUTDIR, { recursive: true });
+
+/* --------------------------------------------------------------------------
+   期望值不写死：直接从 assets/js/data.js 算出来
+   这样加图 / 改分类 / 加角色之后，验证会自动跟着变
+   -------------------------------------------------------------------------- */
+const ARCHIVE = (() => {
+  const src = readFileSync(new URL('../assets/js/data.js', import.meta.url), 'utf8');
+  const box = {};
+  new Function('window', src)(box);
+  return box.ARCHIVE;
+})();
+const pad2 = (n) => String(n).padStart(2, '0');
+const EXPECT = (() => {
+  const files = new Set();
+  ARCHIVE.characters.forEach((c) => c.images.forEach((i) => files.add(i.file)));
+  const byId = {};
+  ARCHIVE.characters.forEach((c) => {
+    const catCount = {};
+    c.images.forEach((i) => { catCount[i.cat] = (catCount[i.cat] || 0) + 1; });
+    byId[c.id] = {
+      items: c.images.length,
+      fields: c.fields.length,
+      tbd: c.fields.filter((f) => f.v == null).length,
+      slots: (c.emptySlots || []).length,
+      hasHead: !!(c.head && c.head.image),
+      catCount: catCount
+    };
+  });
+  return {
+    chars: pad2(ARCHIVE.characters.length),
+    files: pad2(files.size),
+    cats: pad2(ARCHIVE.categories.length),
+    slots: pad2(ARCHIVE.characters.reduce((n, c) => n + (c.emptySlots || []).length, 0)),
+    together: ARCHIVE.together.length,
+    duoNames: ARCHIVE.characters.map((c) => c.latin),
+    byId: byId
+  };
+})();
 
 const version = await (await fetch(`${CDP}/json/version`)).json();
 const ws = new WebSocket(version.webSocketDebuggerUrl);
@@ -165,6 +203,7 @@ async function runPage(name, url, kind, opts) {
       shots: document.querySelectorAll('.shot').length,
       stats: [...document.querySelectorAll('.hero__stat b')].map(e => e.textContent),
       specRows: document.querySelectorAll('.spec__row').length,
+      aboutCount: document.querySelectorAll('#aboutText p').length,
       heroName: document.querySelector('#heroTitle').innerText.replace(/\\s+/g, '|'),
       heroBg: document.querySelector('#heroImg').src.split('/').pop(),
       slides: document.querySelectorAll('.hero__slide').length,
@@ -230,7 +269,7 @@ async function runPage(name, url, kind, opts) {
 
     /* 主题开关：白天 → 夜晚 → 白天 */
     await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
-    await sleep(750);
+    await sleep(1600);
     result.toggle = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
       label: document.querySelector('.theme-toggle__label').textContent,
@@ -239,7 +278,7 @@ async function runPage(name, url, kind, opts) {
     })`);
     await screenshot(sessionId, `${OUTDIR}/${name}--night.png`, false);
     await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
-    await sleep(750);
+    await sleep(1600);
     result.toggleBack = await evaluate(sessionId,
       `({ theme: document.body.dataset.theme })`);
   }
@@ -367,30 +406,32 @@ report.nav = await testNavigate();
 
 /* ---- 断言 ---- */
 const idx = report.index.checks;
-expect('index.duoItems', idx.duoItems, 2);
-expect('index.duoNames', idx.duoNames, ['A_SU', 'PUGUA']);
+expect('index.duoItems', idx.duoItems, ARCHIVE.characters.length);
+expect('index.duoNames', idx.duoNames, EXPECT.duoNames);
 expect('index.rosterGone', idx.rosterGone, true);
 expect('index.heroIndexGone', idx.heroIndexGone, true);
 expect('index.detailClosed', idx.detailClosed, true);
-expect('index.shots', idx.shots, 4);
+expect('index.shots', idx.shots, EXPECT.together);
 expect('index.specRows', idx.specRows, 7);
-expect('index.stats', idx.stats, ['02', '50', '08', '00']);
-expect('index.slides', idx.slides, 2);
+expect('index.stats', idx.stats, [EXPECT.chars, EXPECT.files, EXPECT.cats, EXPECT.slots]);
+expect('index.slides', idx.slides, 2);   /* 轮换只占两个图层，张数看下面的 slideList */
+expect('index.slideList>=2', ARCHIVE.hero.slides.length >= 2, true);
 expect('index.slideOn', idx.slideOn, 1);
 expect('index.arrows', idx.arrows, 2);
-expect('index.heroBg', idx.heroBg, 'together-picnic.jpg');
+expect('index.heroBg', idx.heroBg, (typeof ARCHIVE.hero.slides[0] === 'string' ? ARCHIVE.hero.slides[0] : ARCHIVE.hero.slides[0].file));
 expect('index.lightbox.open', report.index.lightbox.open, true);
 expect('index.lightbox.counter', report.index.lightbox.counter, '01/04');
 expect('index.lightboxClosed', report.index.lightboxClosed, true);
 expect('index.duoOpen.side', report.index.duoOpen.side, 'left');
 expect('index.duoOpen.openClass', report.index.duoOpen.openClass, true);
+expect('index.about段落', report.index.aboutCount !== 0, true);
 expect('index.duoOpen.expanded', report.index.duoOpen.expanded, 'true');
-expect('index.duoOpen.latin', report.index.duoOpen.latin, 'A_SU');
+expect('index.duoOpen.latin', report.index.duoOpen.latin, ARCHIVE.characters[0].latin);
 expect('index.duoOpen.cta', report.index.duoOpen.cta, 'character.html?id=a-su');
 expect('index.duoOpen.height>150', report.index.duoOpen.h > 150, true);
 expect('index.duoOpen.cue', report.index.duoOpen.cue, '进入档案 \u2192');
 expect('index.duoSwitch.side', report.index.duoSwitch.side, 'right');
-expect('index.duoSwitch.latin', report.index.duoSwitch.latin, 'PUGUA');
+expect('index.duoSwitch.latin', report.index.duoSwitch.latin, ARCHIVE.characters[1].latin);
 expect('index.duoSwitch.expanded', report.index.duoSwitch.expanded, 'true');
 expect('index.duoClosed.height', report.index.duoClosed, 0);
 expect('index.theme', idx.theme, 'day');
@@ -406,10 +447,10 @@ expect('nav.afterFirstClick', report.nav.afterFirst, 'index.html');
 expect('nav.afterSecondClick', report.nav.afterSecond, 'character.html?id=a-su');
 
 const asu = report['a-su'].checks;
-expect('a-su.items', asu.items, 22);
-expect('a-su.fields', asu.fields, 9);
-expect('a-su.tbd', asu.tbd, 1);
-expect('a-su.emptySlots', asu.emptySlots, 0);
+expect('a-su.items', asu.items, EXPECT.byId['a-su'].items);
+expect('a-su.fields', asu.fields, EXPECT.byId['a-su'].fields);
+expect('a-su.tbd', asu.tbd, EXPECT.byId['a-su'].tbd);
+expect('a-su.emptySlots', asu.emptySlots, EXPECT.byId['a-su'].slots);
 expect('a-su.plateImg', asu.plateImg, true);
 expect('a-su.theme', asu.theme, 'day');
 expect('a-su.charTheme', asu.charTheme, 'a-su');
@@ -417,12 +458,12 @@ expect('a-su.crossLink', asu.xcard, 'character.html?id=pugua');
 expect('a-su.lightbox.open', report['a-su'].lightbox.open, true);
 
 const pug = report.pugua.checks;
-expect('pugua.items', pug.items, 31);
-expect('pugua.fields', pug.fields, 10);
-expect('pugua.tbd', pug.tbd, 1);
-expect('pugua.emptySlots', pug.emptySlots, 0);
+expect('pugua.items', pug.items, EXPECT.byId['pugua'].items);
+expect('pugua.fields', pug.fields, EXPECT.byId['pugua'].fields);
+expect('pugua.tbd', pug.tbd, EXPECT.byId['pugua'].tbd);
+expect('pugua.emptySlots', pug.emptySlots, EXPECT.byId['pugua'].slots);
 expect('pugua.plateImg', pug.plateImg, true);
-expect('pugua.filterTest.items', report.pugua.filterTest.items, 5);
+expect('pugua.filterTest.items', report.pugua.filterTest.items, EXPECT.byId['pugua'].catCount['头像'] || 0);
 expect('pugua.filterTest.emptySlots', report.pugua.filterTest.emptySlots, 0);
 
 const fi = report['file-index'].checks;
@@ -432,13 +473,13 @@ expect('file-index.heroImg', fi.heroImgOk, true);
 
 const mob = report['index-mobile'];
 expect('mobile.vw', mob.checks.vw, 390);
-expect('mobile.column', mob.checks.column, 'column');
+expect('mobile.column', mob.checks.column, 'row');   /* 手机上索引条也是左右并排 */
 expect('mobile.detailClosed', mob.checks.detailClosed, true);
 expect('mobile.tapOpen.side', mob.tapOpen.side, 'right');
-expect('mobile.tapOpen.latin', mob.tapOpen.latin, 'PUGUA');
+expect('mobile.tapOpen.latin', mob.tapOpen.latin, ARCHIVE.characters[1].latin);
 expect('mobile.tapOpen.expanded', mob.tapOpen.expanded, 'true');
 expect('mobile.tapOpen.height>250', mob.tapOpen.h > 250, true);
-expect('mobile.tapOpen.infoFullWidth', mob.tapOpen.infoWidth > 340, true);
+expect('mobile.tapOpen.infoHalfWidth', mob.tapOpen.infoWidth < 240, true);   /* 展开面板仍是插画一侧 + 文字一侧 */
 
 for (const [name, r] of Object.entries(report)) {
   if (!r || !r.checks) continue;

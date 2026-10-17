@@ -5,3 +5,6 @@ shots/
 node_modules/
 Thumbs.db
 desktop.ini
+
+# 编辑器的自动备份（运行时生成）
+tools/.data-backup.js

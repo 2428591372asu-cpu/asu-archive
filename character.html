@@ -20,14 +20,14 @@
       <path d="M16 9 L23 16 L16 23 L9 16 Z" fill="#ffd400" fill-opacity=".85"/>
     </svg>
     <span class="brand__text">
-      <span class="brand__en">A_SU ARCHIVE</span>
-      <span class="brand__cn">设定档案</span>
+      <span class="brand__en" data-label="brandEn">A_SU ARCHIVE</span>
+      <span class="brand__cn" data-label="brandCn">设定档案</span>
     </span>
   </a>
   <nav class="nav" aria-label="主导航">
-    <a href="index.html#index" data-short="IDX"><span>索引 INDEX</span></a>
-    <a href="#dossier" data-short="FILE"><span>档案 DOSSIER</span></a>
-    <a href="#gallery" data-short="GAL"><span>画廊 GALLERY</span></a>
+    <a href="index.html#index" data-short="IDX" data-label-short="navShort.idx"><span data-label="nav.idx">索引 INDEX</span></a>
+    <a href="#dossier" data-short="FILE" data-label-short="navShort.dossier"><span data-label="nav.dossier">档案 DOSSIER</span></a>
+    <a href="#gallery" data-short="GAL" data-label-short="navShort.gallery"><span data-label="nav.gallery">画廊 GALLERY</span></a>
   </nav>
   <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="切换到夜晚模式">
     <span class="theme-toggle__dot" aria-hidden="true"></span>
@@ -54,7 +54,7 @@
     <div class="wrap">
       <div class="section-head" data-reveal>
         <div class="section-head__idx"><i></i>01</div>
-        <div class="section-head__t"><h2>档案</h2><span>DOSSIER</span></div>
+        <div class="section-head__t"><h2 data-label="heads.dossier.cn">档案</h2><span data-label="heads.dossier.en">DOSSIER</span></div>
         <div class="section-head__meta">PROFILE TABLE</div>
       </div>
       <div class="dossier" id="dossierGrid"></div>
@@ -66,8 +66,8 @@
     <div class="wrap">
       <div class="section-head" data-reveal>
         <div class="section-head__idx"><i></i>02</div>
-        <div class="section-head__t"><h2>画廊</h2><span>GALLERY</span></div>
-        <div class="section-head__meta">点击查看大图</div>
+        <div class="section-head__t"><h2 data-label="heads.gallery.cn">画廊</h2><span data-label="heads.gallery.en">GALLERY</span></div>
+        <div class="section-head__meta" data-label="hints.gallery">点击查看大图</div>
       </div>
       <div class="filters" id="filters" role="group" aria-label="分类筛选"></div>
       <div class="masonry" id="masonry"></div>
@@ -87,11 +87,11 @@
         <path d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z" fill="none" stroke="#ffd400" stroke-width="1.4"/>
         <path d="M16 9 L23 16 L16 23 L9 16 Z" fill="#ffd400" fill-opacity=".8"/>
       </svg>
-      <span class="foot__t">A_SU ARCHIVE — 本地演示 · 非官方同人档案</span>
+      <span class="foot__t" data-label="footer.tagline">A_SU ARCHIVE — 本地演示 · 非官方同人档案</span>
     </div>
     <div class="foot__r">
-      <span>SOURCE · D:\Asu\A_su的设定图集</span>
-      <span>BUILD · <span id="footVer">v0.1.0-demo</span></span>
+      <span data-label="footer.source">SOURCE · D:\Asu\A_su的设定图集</span>
+      <span><i style="font-style:normal" data-label="footer.build">BUILD ·</i> <span id="footVer">v0.1.0-demo</span></span>
     </div>
   </footer>
 

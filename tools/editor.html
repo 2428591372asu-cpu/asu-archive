@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文案编辑器 · A_SU ARCHIVE</title>
+<style>
+  :root{
+    --bg:#0d0f12; --panel:#14171b; --panel-2:#191d22; --line:#262b32;
+    --ink:#e8edf2; --ink-2:#a8b2bd; --ink-3:#6f7b87;
+    --acc:#4da3e0; --ok:#5fbf7f; --warn:#e0a44d;
+    --mono:"Cascadia Mono",Consolas,monospace;
+    --sans:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{background:var(--bg);color:var(--ink);font:14px/1.6 var(--sans);display:flex;flex-direction:column}
+
+  /* 顶栏 */
+  .bar{
+    flex:0 0 auto;display:flex;align-items:center;gap:14px;
+    padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);
+  }
+  .bar h1{font-size:14px;margin:0;letter-spacing:.08em;font-weight:600}
+  .bar .tag{font:10px/1 var(--mono);letter-spacing:.18em;color:var(--ink-3);border:1px solid var(--line);padding:4px 7px}
+  .bar .sp{flex:1}
+  .btn{
+    font:11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    padding:8px 12px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-2);
+    cursor:pointer;transition:.2s;
+  }
+  .btn:hover{color:var(--ink);border-color:var(--ink-3)}
+  .btn--primary{background:var(--acc);border-color:var(--acc);color:#06121c;font-weight:600}
+  .btn--primary:hover{color:#06121c;filter:brightness(1.1)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .dirty{font:10px/1 var(--mono);letter-spacing:.14em;color:var(--warn);visibility:hidden}
+  .dirty.on{visibility:visible}
+
+  /* 主体 */
+  .main{flex:1;display:flex;min-height:0}
+  .pane{overflow:auto}
+  .form{flex:0 0 52%;max-width:760px;padding:18px 20px 80px;border-right:1px solid var(--line)}
+  .prev{flex:1;display:flex;flex-direction:column;background:#08090b;min-width:0}
+  .prev__bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .prev__bar span{font:10px/1 var(--mono);letter-spacing:.14em;color:var(--ink-3)}
+  .prev iframe{flex:1;width:100%;border:0;background:#fff}
+
+  /* 分区 */
+  section{margin-bottom:26px}
+  .sec-h{
+    display:flex;align-items:center;gap:10px;margin:0 0 12px;
+    font:11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--acc);
+  }
+  .sec-h::after{content:"";flex:1;height:1px;background:var(--line)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+  .grid--one{grid-template-columns:1fr}
+  label.f{display:flex;flex-direction:column;gap:5px}
+  label.f > i{font:10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-style:normal}
+  input,textarea,select{
+    width:100%;padding:8px 10px;border:1px solid var(--line);background:var(--panel-2);
+    color:var(--ink);font:13px/1.5 var(--sans);border-radius:0;
+  }
+  textarea{min-height:64px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:1px solid var(--acc);border-color:var(--acc)}
+  .hint{font:10.5px/1.5 var(--sans);color:var(--ink-3);margin-top:2px}
+
+  /* 角色卡 */
+  .card{border:1px solid var(--line);background:var(--panel);margin-bottom:16px}
+  .card > h3{
+    margin:0;padding:10px 14px;font:12px/1 var(--mono);letter-spacing:.14em;
+    background:var(--panel-2);border-bottom:1px solid var(--line);color:var(--ink-2);
+  }
+  .card__body{padding:14px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font:10px/1 var(--mono);letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+  td input,td textarea{padding:6px 8px;font-size:12.5px}
+  .ro{color:var(--ink-3);font:11px/1.4 var(--mono);word-break:break-all}
+  .tbl-wrap{margin-top:12px}
+  .tbl-wrap > h4{margin:0 0 6px;font:10px/1 var(--mono);letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase}
+
+  /* 提示条 */
+  .toast{
+    position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
+    padding:10px 18px;background:var(--panel-2);border:1px solid var(--ok);color:var(--ink);
+    font:12px/1 var(--mono);letter-spacing:.08em;opacity:0;pointer-events:none;transition:.28s;z-index:50;
+  }
+  .toast.on{opacity:1;transform:translateX(-50%)}
+  .toast.err{border-color:#e06060}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>文案编辑器</h1>
+  <span class="tag">A_SU ARCHIVE</span>
+  <span class="dirty" id="dirty">未保存</span>
+  <span class="sp"></span>
+  <button class="btn" id="btnRestore" title="用上一次保存前的备份覆盖 data.js">还原上一版</button>
+  <button class="btn" id="btnReload">重新载入</button>
+  <button class="btn btn--primary" id="btnSave">保存到 data.js</button>
+</div>
+
+<div class="main">
+  <div class="pane form" id="form">载入中…</div>
+  <div class="prev">
+    <div class="prev__bar">
+      <span>预览</span>
+      <button class="btn" data-w="1440" id="wDesktop">桌面</button>
+      <button class="btn" data-w="390" id="wMobile">手机</button>
+      <span class="sp"></span>
+      <button class="btn" id="btnRefresh">刷新</button>
+    </div>
+    <iframe id="pv" src="/index.html" title="预览"></iframe>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/assets/js/data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var S = JSON.parse(JSON.stringify(window.ARCHIVE));
+  var dirty = false;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+
+  /* ---------- 读写路径 ---------- */
+  function getPath(obj, p) {
+    return p.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, obj);
+  }
+  function setPath(obj, p, v) {
+    var ks = p.split('.'), last = ks.pop(), o = obj;
+    ks.forEach(function (k) { o = o[k]; });
+    o[last] = v;
+  }
+
+  /* ---------- 控件 ---------- */
+  function field(label, path, opts) {
+    opts = opts || {};
+    var v = getPath(S, path);
+    var type = opts.type || 'text';
+    var val = v == null ? '' : v;
+    var hint = opts.hint ? '<span class="hint">' + esc(opts.hint) + '</span>' : '';
+    var attrs = 'data-path="' + path + '"' +
+      (type === 'tags' ? ' data-type="tags"' : '') +
+      (type === 'number' ? ' data-type="number"' : '') +
+      (opts.nullable ? ' data-nullable="1"' : '');
+
+    var input;
+    if (type === 'textarea') {
+      input = '<textarea ' + attrs + '>' + esc(val) + '</textarea>';
+    } else if (type === 'tags') {
+      input = '<input ' + attrs + ' value="' + esc((v || []).join(', ')) + '" placeholder="用逗号分隔">';
+    } else if (type === 'select') {
+      input = '<select ' + attrs + '>' + opts.options.map(function (o) {
+        return '<option value="' + esc(o) + '"' + (o === val ? ' selected' : '') + '>' + esc(o) + '</option>';
+      }).join('') + '</select>';
+    } else {
+      input = '<input ' + attrs + ' type="' + (type === 'number' ? 'number' : 'text') + '" value="' + esc(val) + '"' +
+        (opts.placeholder ? ' placeholder="' + esc(opts.placeholder) + '"' : '') + '>';
+    }
+    return '<label class="f"><i>' + esc(label) + '</i>' + input + hint + '</label>';
+  }
+
+  function grid(inner, one) {
+    return '<div class="grid' + (one ? ' grid--one' : '') + '">' + inner + '</div>';
+  }
+
+  /* ---------- 各分区 ---------- */
+  function secSite() {
+    return '<section><h2 class="sec-h">站点</h2>' + grid(
+      field('站点名 site.name', 'site.name') +
+      field('副名 site.cn', 'site.cn') +
+      field('版本 site.version', 'site.version') +
+      field('标语 site.tagline', 'site.tagline') +
+      field('分类 categories（逗号分隔）', 'categories', { type: 'tags', hint: '决定画廊筛选项和关于表的分类行' }) +
+      field('计数器名 counter.name', 'site.counter.name', { hint: 'Moe-counter 的计数键，改了就是新计数' }) +
+      field('计数器主题 counter.theme', 'site.counter.theme', { type: 'select', options: ['moebooru', 'gelbooru', 'rule34', 'moe'] })
+    ) + '</section>';
+  }
+
+  function secHero() {
+    return '<section><h2 class="sec-h">首页主视觉</h2>' + grid(
+      field('小标签 hero.label', 'hero.label') +
+      field('轮换间隔（毫秒）', 'hero.slideInterval', { type: 'number' }) +
+      field('主标题 hero.title1', 'hero.title1') +
+      field('副标题 hero.title2', 'hero.title2') +
+      field('中文名 hero.cn', 'hero.cn')
+    ) + grid(field('引导语 hero.lead', 'hero.lead', { type: 'textarea' }), true) + '</section>';
+  }
+
+  function secChar(c, ci) {
+    var p = 'characters.' + ci;
+    var fields = (c.fields || []).map(function (f, fi) {
+      var fp = p + '.fields.' + fi;
+      return '<tr>' +
+        '<td style="width:88px"><input data-path="' + fp + '.k" value="' + esc(f.k) + '"></td>' +
+        '<td><input data-path="' + fp + '.v" data-nullable="1" value="' + esc(f.v == null ? '' : f.v) + '" placeholder="留空 = 待补充"></td>' +
+        '<td style="width:56px"><input type="checkbox" data-path="' + fp + '.wide" data-type="bool"' + (f.wide ? ' checked' : '') + ' title="通栏（占满两列）"></td>' +
+'<td style="width:34px"><button type="button" class="btn" data-del-field="' + ci + ':' + fi + '" title="删掉这一行">×</button></td>' +
+        '</tr>';
+    }).join('');
+
+    var cats = (S.categories || []).map(function (x) {
+      return '<option value="' + esc(x) + '"' + (x === '__cur__' ? ' selected' : '') + '>';
+    });
+    var imgs = (c.images || []).map(function (im, ii) {
+      var ip = p + '.images.' + ii;
+      var sel = '<select data-path="' + ip + '.cat">' + (S.categories || []).map(function (x) {
+        return '<option value="' + esc(x) + '"' + (x === im.cat ? ' selected' : '') + '>' + esc(x) + '</option>';
+      }).join('') + '</select>';
+      return '<tr>' +
+        '<td class="ro" style="width:132px">' + esc(im.file) + '</td>' +
+        '<td style="width:96px">' + sel + '</td>' +
+        '<td><input data-path="' + ip + '.title" value="' + esc(im.title) + '"></td>' +
+        '<td><input data-path="' + ip + '.note" data-nullable="1" value="' + esc(im.note || '') + '" placeholder="可留空"></td>' +
+        '</tr>';
+    }).join('');
+
+    return '<div class="card">' +
+      '<h3>' + esc(c.name || ('角色 ' + (ci + 1))) + '　·　' + esc(c.code || '') + '</h3>' +
+      '<div class="card__body">' +
+        grid(
+          field('显示名 name', p + '.name') +
+          field('英文名 latin', p + '.latin') +
+          field('编号 code', p + '.code') +
+          field('分类 cat', p + '.cat')
+        ) +
+        grid(field('标签 tags（逗号分隔）', p + '.tags', { type: 'tags' }), true) +
+        grid(field('简介 lead', p + '.lead', { type: 'textarea' }), true) +
+
+        '<div class="tbl-wrap"><h4>档案表（' + (c.fields || []).length + ' 行）</h4>' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
+            '<button type="button" class="btn" data-add-field="' + ci + '">＋ 加一行</button>' +
+            '<span class="hint" style="margin:0">改完点右上角保存</span></div>' +
+          '<table><thead><tr><th>标签</th><th>内容</th><th>通栏</th><th></th></tr></thead><tbody>' + fields + '</tbody></table></div>' +
+
+        '<div class="tbl-wrap"><h4>画廊条目（' + (c.images || []).length + ' 张）</h4>' +
+          '<table><thead><tr><th>文件</th><th>分类</th><th>标题</th><th>注释</th></tr></thead><tbody>' + imgs + '</tbody></table></div>' +
+      '</div></div>';
+  }
+
+  function secTogether() {
+    var rows = (S.together || []).map(function (t, i) {
+      var p = 'together.' + i;
+      return '<tr><td class="ro" style="width:150px">' + esc(t.file) + '</td>' +
+        '<td><input data-path="' + p + '.title" value="' + esc(t.title) + '"></td>' +
+        '<td><input data-path="' + p + '.note" data-nullable="1" value="' + esc(t.note || '') + '"></td></tr>';
+    }).join('');
+    return '<section><h2 class="sec-h">双人图集</h2>' +
+      '<table><thead><tr><th>文件</th><th>标题</th><th>注释</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '</section>';
+  }
+
+  function secAbout() {
+    if (!S.about) S.about = { title: '', subtitle: '', paragraphs: [] };
+    var ab = S.about;
+    return '<section><h2 class="sec-h">关于</h2>' + grid(
+      field('标题 about.title', 'about.title') +
+      field('副标题 about.subtitle', 'about.subtitle')
+    ) +
+      '<div class="tbl-wrap"><h4>段落（一行一段）</h4>' +
+      '<textarea data-path="about.paragraphs" data-type="lines" style="min-height:130px">' +
+      esc((Array.isArray(ab.paragraphs) ? ab.paragraphs : String(ab.paragraphs || '').split(/\r?\n/)).join('\n')) + '</textarea>' +
+      '<span class="hint">任何文本框里按回车都会生效，页面上会跟着换行</span></div>' +
+
+      '<div class="tbl-wrap" style="margin-top:14px">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
+          '<h4 style="margin:0">关于右侧表格（' + (((S.about || {}).table) || []).length + ' 行）</h4>' +
+          '<button type="button" class="btn" data-add-spec="1">＋ 加一行</button>' +
+        '</div>' +
+        '<table><thead><tr><th>标签</th><th>内容</th><th></th></tr></thead><tbody>' +
+        (((S.about || {}).table) || []).map(function (r, i) {
+          return '<tr>' +
+            '<td style="width:96px"><input data-path="about.table.' + i + '.k" value="' + esc(r.k || '') + '"></td>' +
+            '<td><input data-path="about.table.' + i + '.v" value="' + esc(r.v || '') + '"></td>' +
+            '<td style="width:34px"><button type="button" class="btn" data-del-spec="' + i + '">×</button></td>' +
+            '</tr>';
+        }).join('') +
+        '</tbody></table>' +
+        '<span class="hint">这几行完全由你写，不再自动统计</span></div>' +
+      '</section>';
+  }
+
+  function secSlides() {
+    var h = S.hero;
+    if (!Array.isArray(h.slides)) h.slides = [];
+    /* 字符串统一成对象，方便逐张编辑 */
+    h.slides = h.slides.map(function (s) {
+      return typeof s === 'string'
+        ? { file: s, art: false, pos: '' }
+        : { file: s.file, art: !!s.art, pos: s.pos || '', char: s.char || '' };
+    });
+    var rows = h.slides.map(function (s, i) {
+      var p = 'hero.slides.' + i;
+      return '<tr>' +
+        '<td class="ro" style="width:150px">' + esc(s.file) + '</td>' +
+        '<td style="width:92px"><select data-path="' + p + '.art" data-type="bool">' +
+          '<option value="false"' + (!s.art ? ' selected' : '') + '>照片</option>' +
+          '<option value="true"' + (s.art ? ' selected' : '') + '>立绘</option></select></td>' +
+        '<td style="width:92px"><select data-path="' + p + '.tone">' +
+          ['', 'soft', 'none'].map(function (t) {
+            return '<option value="' + t + '"' + ((s.tone || '') === t ? ' selected' : '') + '>' +
+              (t === '' ? '默认雾' : t === 'soft' ? '浅雾' : '不上雾') + '</option>';
+          }).join('') + '</select></td>' +
+        '<td><input data-path="' + p + '.pos" value="' + esc(s.pos || '') +
+          '" placeholder="留空=默认；可写 50% 20%"></td>' +
+        '</tr>';
+    }).join('');
+    return '<section><h2 class="sec-h">首页轮换</h2>' +
+      '<table><thead><tr><th>图片</th><th>类型</th><th>雾感</th><th>焦点位置 pos</th></tr></thead><tbody>' +
+      rows + '</tbody></table>' +
+      '<span class="hint">「立绘」会完整显示并贴右下角，照片则铺满；焦点位置只在写了 pos 时生效（如 50% 20%）。</span>' +
+      '</section>';
+  }
+
+  function secLabels() {
+    if (!S.labels) S.labels = {};
+    function arr(path, n, label) {
+      var out = '';
+      for (var i = 0; i < n; i++) out += field(label + ' ' + (i + 1), path + '.' + i);
+      return out;
+    }
+    return '<section><h2 class="sec-h">界面文字</h2>' +
+      grid(
+        field('顶栏「设定档案」', 'labels.brandCn') +
+        field('右上角标记', 'labels.topMeta') +
+        field('索引标题', 'labels.indexHead') +
+        field('关于区右侧小字', 'labels.aboutMeta')
+      ) +
+      '<div class="tbl-wrap"><h4>导航 · 主页</h4>' + grid(
+        field('首页', 'labels.nav.home') + field('双人', 'labels.nav.cur') + field('关于', 'labels.nav.about')
+      ) + grid(
+        field('手机简写 首页', 'labels.navShort.home') + field('手机简写 双人', 'labels.navShort.cur') +
+        field('手机简写 关于', 'labels.navShort.about')
+      ) + '</div>' +
+      '<div class="tbl-wrap"><h4>导航 · 详情页</h4>' + grid(
+        field('索引', 'labels.nav.idx') + field('档案', 'labels.nav.dossier') + field('画廊', 'labels.nav.gallery')
+      ) + grid(
+        field('手机简写 索引', 'labels.navShort.idx') + field('手机简写 档案', 'labels.navShort.dossier') +
+        field('手机简写 画廊', 'labels.navShort.gallery')
+      ) + '</div>' +
+      '<div class="tbl-wrap"><h4>按钮</h4>' + grid(
+        field('双人图集', 'labels.buttons.cur') + field('关于本站', 'labels.buttons.about') +
+        field('查看画廊', 'labels.buttons.gallery') + field('返回索引', 'labels.buttons.back') +
+        field('进入档案', 'labels.buttons.enter')
+      ) + '</div>' +
+      '<div class="tbl-wrap"><h4>分区标题</h4>' + grid(
+        field('双人 · 中', 'labels.heads.cur.cn') + field('双人 · 英', 'labels.heads.cur.en') +
+        field('档案 · 中', 'labels.heads.dossier.cn') + field('档案 · 英', 'labels.heads.dossier.en') +
+        field('画廊 · 中', 'labels.heads.gallery.cn') + field('画廊 · 英', 'labels.heads.gallery.en')
+      ) + '</div>' +
+      '<div class="tbl-wrap"><h4>提示语</h4>' + grid(
+        field('索引提示', 'labels.hints.duo') + field('大图提示', 'labels.hints.shots') +
+        field('画廊提示', 'labels.hints.gallery') + field('展开详情', 'labels.hints.cueOpen') +
+        field('进入档案', 'labels.hints.cueEnter') + field('待补充', 'labels.hints.tbd')
+      ) + '</div>' +
+      '<div class="tbl-wrap"><h4>统计标签</h4>' + grid(arr('labels.stats', 4, '统计')) + '</div>' +
+      '<div class="tbl-wrap"><h4>关于表格标签</h4>' + grid(arr('labels.spec', 7, '表格')) + '</div>' +
+      '<div class="tbl-wrap"><h4>页脚与页面标题</h4>' + grid(
+        field('页脚主文案', 'labels.footer.tagline') + field('来源', 'labels.footer.source') +
+        field('构建前缀', 'labels.footer.build') + field('首页浏览器标题', 'labels.titles.index') +
+        field('详情页浏览器标题', 'labels.titles.character') + field('双人图集提示', 'labels.shotsMore')
+      ) + '</div>' +
+      '<span class="hint">这些是界面上的固定文字；角色名、简介、画廊标题那些在上面的「角色」区。</span>' +
+      '</section>';
+  }
+
+  function render() {
+    var html = secSite() + secHero() + secAbout() + secSlides() + secLabels() +
+      '<section><h2 class="sec-h">角色</h2>' +
+      (S.characters || []).map(secChar).join('') + '</section>' +
+      secTogether();
+    $('#form').innerHTML = html;
+  }
+
+  /* ---------- 输入 ---------- */
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (!el || !el.dataset || !el.dataset.path) return;
+    var v = el.value;
+    if (el.type === 'checkbox') v = el.checked;
+      else if (el.dataset.type === 'number') v = Number(v) || 0;
+    else if (el.dataset.type === 'tags') v = v.split(/[,，\s]+/).filter(Boolean);
+      else if (el.dataset.type === 'lines') v = v.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+    else if (el.dataset.nullable === '1' && v.trim() === '') v = null;
+    setPath(S, el.dataset.path, v);
+    markDirty(true);
+  });
+
+  document.addEventListener('change', function (e) {
+    var el = e.target;
+    if (el && el.tagName === 'SELECT' && el.dataset.path) {
+      setPath(S, el.dataset.path, el.value);
+      markDirty(true);
+    }
+  });
+
+  function markDirty(on) {
+    dirty = on;
+    $('#dirty').classList.toggle('on', on);
+  }
+
+  /* ---------- 提示 ---------- */
+  var toastTimer = 0;
+  function toast(msg, err) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.toggle('err', !!err);
+    t.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('on'); }, 2600);
+  }
+
+  // 关于右侧表格增删行
+  document.addEventListener('click', function (ev) {
+    var add = ev.target.closest ? ev.target.closest('[data-add-spec]') : null;
+    if (add) {
+      if (!S.about) S.about = {};
+      if (!Array.isArray(S.about.table)) S.about.table = [];
+      S.about.table.push({ k: '新标签', v: '' });
+      markDirty(true); render(); return;
+    }
+    var del = ev.target.closest ? ev.target.closest('[data-del-spec]') : null;
+    if (del) {
+      if (!confirm('删掉这一行？')) return;
+      S.about.table.splice(Number(del.getAttribute('data-del-spec')), 1);
+      markDirty(true); render();
+    }
+  });
+
+  // 档案表增删行
+  document.addEventListener('click', function (ev) {
+    var add = ev.target.closest ? ev.target.closest('[data-add-field]') : null;
+    if (add) {
+      var ci = Number(add.getAttribute('data-add-field'));
+      S.characters[ci].fields.push({ k: '新标签', v: null });
+      markDirty(true);
+      render();
+      var cards = document.querySelectorAll('.card');
+      var rows = cards[ci] ? cards[ci].querySelectorAll('tbody tr') : [];
+      if (rows.length) rows[rows.length - 1].scrollIntoView({ block: 'center' });
+      return;
+    }
+    var del = ev.target.closest ? ev.target.closest('[data-del-field]') : null;
+    if (del) {
+      var parts = del.getAttribute('data-del-field').split(':');
+      if (!confirm('删掉这一行？')) return;
+      S.characters[Number(parts[0])].fields.splice(Number(parts[1]), 1);
+      markDirty(true);
+      render();
+    }
+  });
+
+  // ---------- 动作 ----------
+  function refresh() {
+    var f = $('#pv');
+    f.src = '/index.html?t=' + Date.now();
+  }
+
+  async function save() {
+    var btn = $('#btnSave');
+    btn.disabled = true;
+    try {
+      var r = await fetch('/__save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archive: S })
+      });
+      if (!r.ok) throw new Error(await r.text());
+      var j = await r.json();
+      markDirty(false);
+      toast('已保存 · ' + Math.round(j.bytes / 1024) + ' KB');
+      refresh();
+    } catch (e) {
+      toast('保存失败：' + e.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function restore() {
+    if (!confirm('用上一次保存前的备份覆盖 data.js？')) return;
+    try {
+      var r = await fetch('/__restore', { method: 'POST' });
+      if (!r.ok) throw new Error(await r.text());
+      toast('已还原，重新载入中…');
+      setTimeout(function () { location.reload(); }, 600);
+    } catch (e) {
+      toast('还原失败：' + e.message, true);
+    }
+  }
+
+  $('#btnSave').addEventListener('click', save);
+  $('#btnRestore').addEventListener('click', restore);
+  $('#btnReload').addEventListener('click', function () {
+    if (dirty && !confirm('有未保存的改动，确定重新载入？')) return;
+    location.reload();
+  });
+  $('#btnRefresh').addEventListener('click', refresh);
+
+  $('#wDesktop').addEventListener('click', function () { setWidth(0); });
+  $('#wMobile').addEventListener('click', function () { setWidth(390); });
+  function setWidth(w) {
+    var f = $('#pv');
+    if (!w) { f.style.width = '100%'; f.style.margin = '0'; }
+    else { f.style.width = w + 'px'; f.style.margin = '0 auto'; }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); save(); }
+  });
+  window.addEventListener('beforeunload', function (e) {
+    if (!dirty) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
