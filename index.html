@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0a0b">
+<title>A_SU ARCHIVE · 双人设定档案</title>
+<meta name="description" content="A_su 与 蒲瓜 的双人设定图集档案站 —— 本地演示。">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="assets/img/together-picnic.jpg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="index">
+
+
+<!-- 顶栏 -->
+<header class="topbar" id="topbar">
+  <a class="brand" href="index.html" aria-label="A_SU ARCHIVE 首页">
+    <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z" fill="none" stroke="#ffd400" stroke-width="1.3"/>
+      <path d="M16 9 L23 16 L16 23 L9 16 Z" fill="#ffd400" fill-opacity=".85"/>
+    </svg>
+    <span class="brand__text">
+      <span class="brand__en">A_SU ARCHIVE</span>
+      <span class="brand__cn">设定档案</span>
+    </span>
+  </a>
+  <nav class="nav" aria-label="主导航">
+    <a href="#index" data-short="IDX"><span>首页 INDEX</span></a>
+    <a href="#together" data-short="DUO"><span>双人 TOGETHER</span></a>
+    <a href="#about" data-short="ABT"><span>关于 ABOUT</span></a>
+  </nav>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="切换到夜晚模式">
+    <span class="theme-toggle__dot" aria-hidden="true"></span>
+    <span class="theme-toggle__label">DAY</span>
+  </button>
+  <div class="topbar__meta">LOCAL DEMO</div>
+</header>
+
+<main class="shell">
+
+  <!-- ================= HERO / INDEX ================= -->
+  <section class="hero" id="index">
+    <div class="hero__bg">
+      <img class="hero__slide is-on" id="heroImg" alt="双人插画" loading="eager">
+      <img class="hero__slide" id="heroImg2" alt="" loading="eager">
+    </div>
+    <div class="hero__nav" id="heroNav">
+      <button type="button" class="hero__arrow" data-dir="-1" aria-label="上一张">&#8249;</button>
+      <button type="button" class="hero__arrow" data-dir="1" aria-label="下一张">&#8250;</button>
+      <span class="hero__dots" id="heroDots" aria-hidden="true"></span>
+    </div>
+    <div class="hero__scrim"></div>
+    <div class="hero__grid"></div>
+
+    <div class="wrap hero__inner">
+      <div class="hero__rail">SETTING ARCHIVE — A_SU / PUGUA</div>
+
+      <p class="hero__tag"><i class="rhombus"></i><span id="heroLabel">CHARACTER ARCHIVE</span></p>
+      <h1 class="hero__title" id="heroTitle"></h1>
+      <p class="hero__cn" id="heroCn"></p>
+      <p class="hero__lead" id="heroLead"></p>
+      <div class="hero__stats" id="heroStats"></div>
+
+      <div class="hero__actions">
+        <a class="btn btn--ghost" href="#together">双人图集 <span class="arw">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#about">关于本站 <span class="arw">&rarr;</span></a>
+      </div>
+
+      <!-- 唯一一处索引：两条角色条目 -->
+      <div class="duo" id="duo">
+        <div class="duo__head">
+          <span>INDEX :// <b>选择角色</b></span>
+          <span id="duoCue">悬停预览 · 点一下展开详情 · 再点一下进入档案</span>
+        </div>
+        <div class="duo__row" id="duoRow"></div>
+      </div>
+      <div class="duo__detail" id="duoDetail"></div>
+    </div>
+
+    <div class="hero__cue"><i></i>SCROLL</div>
+  </section>
+
+  <!-- ================= 双人 ================= -->
+  <section class="section section--tight" id="together">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <div class="section-head__idx"><i></i>01</div>
+        <div class="section-head__t"><h2>双人</h2><span>TOGETHER</span></div>
+        <div class="section-head__meta">SHARED ARTWORK</div>
+      </div>
+      <div class="shots" id="shots"></div>
+      <div class="shots__more" data-reveal>
+        <span id="shotsMore"></span>
+        <span>点击查看大图 · ← → 切换 · ESC 关闭</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 关于 ================= -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <div class="section-head__idx"><i></i>02</div>
+        <div class="section-head__t"><h2>关于</h2><span>ABOUT THIS ARCHIVE</span></div>
+        <div class="section-head__meta">DEMO BUILD</div>
+      </div>
+      <div class="about">
+        <div class="about__text" data-reveal>
+          <p>全站只有<strong>一处索引</strong>：首页底部那两条角色条目。电脑上鼠标悬停会微微放大，
+             点一下在下面展开详情（左侧角色向左展开、右侧角色向右展开），再点一下进档案。</p>
+          <p>版式照明日方舟官网走：<strong>深色底、细线框、右下切角、等宽大写小标签</strong>，
+             配一个超大英文标题和载入时的 LOADING 百分比。</p>
+          <p>图片来源是 <strong>D:\Asu\A_su的设定图集</strong>。站里用的是缩小压缩过的版本（由
+             <span class="mono">tools/make-assets.ps1</span> 生成），原图一张都没动。</p>
+          <p>两位角色的图都补齐了：阿苏 22 张、蒲瓜 31 张，共 50 张、8 个分类。以后补图时把文件丢进
+             <span class="mono">assets/img/</span>，再到
+             <span class="mono">data.js</span> 的 <span class="mono">images</span> 里加一行就行。</p>
+        </div>
+        <div class="spec" id="spec" data-reveal style="--d:120ms"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot wrap">
+    <div class="foot__l">
+      <svg class="foot__mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z" fill="none" stroke="#ffd400" stroke-width="1.4"/>
+        <path d="M16 9 L23 16 L16 23 L9 16 Z" fill="#ffd400" fill-opacity=".8"/>
+      </svg>
+      <span class="foot__t">A_SU ARCHIVE — 本地演示 · 非官方同人档案</span>
+    </div>
+    <div class="foot__r">
+      <span>SOURCE · D:\Asu\A_su的设定图集</span>
+      <span>BUILD · <span id="footVer">v0.1.0-demo</span></span>
+    </div>
+  </footer>
+
+    <div class="foot-meta wrap">
+    <a class="counter js-counter"
+       href="https://github.com/journey-ad/Moe-counter" target="_blank" rel="noopener noreferrer"
+       title="Moe-counter 浏览量">
+      <span class="counter__label">VISITORS</span>
+      <img class="counter__img js-moe" alt="访问量" decoding="async" referrerpolicy="no-referrer">
+      <span class="counter__fallback js-counter-fallback"><b class="js-count">—</b> 次 · 本地计数</span>
+    </a>
+    <span class="counter__note">COUNT BY MOE-COUNTER</span>
+  </div>
+</main>
+
+<noscript>
+  <p style="padding:120px 24px;text-align:center;color:#a6a6ad">
+    这个页面需要 JavaScript 才能从 data.js 里读取图集数据，请开启后刷新。
+  </p>
+</noscript>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

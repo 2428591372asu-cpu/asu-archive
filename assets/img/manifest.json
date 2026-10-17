@@ -1,0 +1,314 @@
+﻿[
+    {
+        "file":  "a-su-standing.png",
+        "w":  1341,
+        "h":  1700,
+        "bytes":  452225
+    },
+    {
+        "file":  "a-su-standing-w.jpg",
+        "w":  1341,
+        "h":  1700,
+        "bytes":  117059
+    },
+    {
+        "file":  "a-su-head.png",
+        "w":  1000,
+        "h":  984,
+        "bytes":  538877
+    },
+    {
+        "file":  "a-su-face-1.png",
+        "w":  900,
+        "h":  840,
+        "bytes":  335527
+    },
+    {
+        "file":  "a-su-face-1-w.jpg",
+        "w":  900,
+        "h":  840,
+        "bytes":  75516
+    },
+    {
+        "file":  "a-su-face-2.png",
+        "w":  900,
+        "h":  840,
+        "bytes":  469572
+    },
+    {
+        "file":  "a-su-face-2-w.jpg",
+        "w":  900,
+        "h":  840,
+        "bytes":  96939
+    },
+    {
+        "file":  "a-su-sheet-1.jpg",
+        "w":  2600,
+        "h":  1309,
+        "bytes":  391653
+    },
+    {
+        "file":  "a-su-sheet-2.jpg",
+        "w":  2600,
+        "h":  1309,
+        "bytes":  389798
+    },
+    {
+        "file":  "a-su-sheet-plain.jpg",
+        "w":  2600,
+        "h":  1358,
+        "bytes":  271088
+    },
+    {
+        "file":  "a-su-turnaround.jpg",
+        "w":  2600,
+        "h":  1526,
+        "bytes":  380778
+    },
+    {
+        "file":  "a-su-avatar.png",
+        "w":  500,
+        "h":  500,
+        "bytes":  243591
+    },
+    {
+        "file":  "a-su-avatar2.png",
+        "w":  500,
+        "h":  500,
+        "bytes":  243878
+    },
+    {
+        "file":  "a-su-avatar-bg.jpg",
+        "w":  500,
+        "h":  500,
+        "bytes":  67185
+    },
+    {
+        "file":  "a-su-avatar2-bg.jpg",
+        "w":  500,
+        "h":  500,
+        "bytes":  67193
+    },
+    {
+        "file":  "a-su-portrait.jpg",
+        "w":  1200,
+        "h":  1200,
+        "bytes":  178489
+    },
+    {
+        "file":  "a-su-portrait2.jpg",
+        "w":  1200,
+        "h":  1200,
+        "bytes":  178528
+    },
+    {
+        "file":  "a-su-birthday.jpg",
+        "w":  1160,
+        "h":  2000,
+        "bytes":  329607
+    },
+    {
+        "file":  "a-su-birthday-alt.jpg",
+        "w":  1160,
+        "h":  2000,
+        "bytes":  329329
+    },
+    {
+        "file":  "a-su-mcskin.png",
+        "w":  64,
+        "h":  64,
+        "bytes":  3487
+    },
+    {
+        "file":  "together-clean.jpg",
+        "w":  1393,
+        "h":  2200,
+        "bytes":  431235
+    },
+    {
+        "file":  "together-original.jpg",
+        "w":  1393,
+        "h":  2200,
+        "bytes":  405824
+    },
+    {
+        "file":  "together-draft.jpg",
+        "w":  1267,
+        "h":  2000,
+        "bytes":  287476
+    },
+    {
+        "file":  "together-picnic.jpg",
+        "w":  2200,
+        "h":  1238,
+        "bytes":  562336
+    },
+    {
+        "file":  "pugua-turnaround.jpg",
+        "w":  2600,
+        "h":  1430,
+        "bytes":  359188
+    },
+    {
+        "file":  "pugua-standing.png",
+        "w":  938,
+        "h":  1500,
+        "bytes":  1161411
+    },
+    {
+        "file":  "pugua-head.png",
+        "w":  971,
+        "h":  1000,
+        "bytes":  1103973
+    },
+    {
+        "file":  "pugua-standing-2.png",
+        "w":  1125,
+        "h":  1500,
+        "bytes":  667647
+    },
+    {
+        "file":  "pugua-standing-3.jpg",
+        "w":  1125,
+        "h":  1500,
+        "bytes":  181609
+    },
+    {
+        "file":  "pugua-face-4.png",
+        "w":  900,
+        "h":  900,
+        "bytes":  617420
+    },
+    {
+        "file":  "pugua-face-5.png",
+        "w":  900,
+        "h":  900,
+        "bytes":  362748
+    },
+    {
+        "file":  "pugua-pixel.png",
+        "w":  1200,
+        "h":  680,
+        "bytes":  92603
+    },
+    {
+        "file":  "pugua-pixel-head.png",
+        "w":  1024,
+        "h":  1024,
+        "bytes":  11612
+    },
+    {
+        "file":  "pugua-pixel-ember.png",
+        "w":  640,
+        "h":  640,
+        "bytes":  8999
+    },
+    {
+        "file":  "pugua-face-1.jpg",
+        "w":  300,
+        "h":  300,
+        "bytes":  37482
+    },
+    {
+        "file":  "pugua-face-2.jpg",
+        "w":  500,
+        "h":  500,
+        "bytes":  75494
+    },
+    {
+        "file":  "pugua-face-3.jpg",
+        "w":  1000,
+        "h":  1000,
+        "bytes":  335029
+    },
+    {
+        "file":  "pugua-turnaround-2.jpg",
+        "w":  2305,
+        "h":  1705,
+        "bytes":  709731
+    },
+    {
+        "file":  "pugua-lineart.jpg",
+        "w":  2000,
+        "h":  1067,
+        "bytes":  891793
+    },
+    {
+        "file":  "pugua-sheet-1.jpg",
+        "w":  554,
+        "h":  1200,
+        "bytes":  216877
+    },
+    {
+        "file":  "pugua-sheet-2.jpg",
+        "w":  562,
+        "h":  1200,
+        "bytes":  276016
+    },
+    {
+        "file":  "pugua-selfie.jpg",
+        "w":  1492,
+        "h":  1800,
+        "bytes":  429183
+    },
+    {
+        "file":  "pugua-halfbody.jpg",
+        "w":  961,
+        "h":  1600,
+        "bytes":  261107
+    },
+    {
+        "file":  "pugua-hat-green.jpg",
+        "w":  1800,
+        "h":  1800,
+        "bytes":  397604
+    },
+    {
+        "file":  "pugua-pastel.jpg",
+        "w":  1167,
+        "h":  1700,
+        "bytes":  616933
+    },
+    {
+        "file":  "pugua-portrait-1.jpg",
+        "w":  1079,
+        "h":  1800,
+        "bytes":  367190
+    },
+    {
+        "file":  "pugua-portrait-2.jpg",
+        "w":  1080,
+        "h":  1080,
+        "bytes":  219665
+    },
+    {
+        "file":  "pugua-fox.jpg",
+        "w":  1240,
+        "h":  1500,
+        "bytes":  258490
+    },
+    {
+        "file":  "pugua-hat-1.jpg",
+        "w":  1200,
+        "h":  1200,
+        "bytes":  395446
+    },
+    {
+        "file":  "pugua-hat-2.jpg",
+        "w":  1200,
+        "h":  1200,
+        "bytes":  457858
+    },
+    {
+        "file":  "pugua-eyes.jpg",
+        "w":  1400,
+        "h":  650,
+        "bytes":  159754
+    },
+    {
+        "file":  "pugua-scene.jpg",
+        "w":  1024,
+        "h":  512,
+        "bytes":  27367
+    }
+]
