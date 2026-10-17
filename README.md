@@ -229,7 +229,7 @@ git config user.name  "你的名字"
 git config user.email "你的邮箱"
 git add -A
 git commit -m "asu-archive: static site with custom domain"
-git remote add origin https://github.com/<用户名>/asu-archive.git
+git remote add origin https://github.com/2428591372asu-cpu/asu-archive.git
 git push -u origin main
 ```
 
@@ -243,7 +243,7 @@ Custom domain 一栏会自动读到仓库里的 `CNAME`（asu.pugua.net），保
 
 | 类型 | 主机记录 | 记录值 |
 | --- | --- | --- |
-| CNAME | `asu` | `<用户名>.github.io` |
+| CNAME | `asu` | `2428591372asu-cpu.github.io` |
 
 加完等生效（通常几分钟到几小时）。验证：
 
@@ -251,7 +251,7 @@ Custom domain 一栏会自动读到仓库里的 `CNAME`（asu.pugua.net），保
 Resolve-DnsName asu.pugua.net -Type CNAME
 ```
 
-拿到 `<用户名>.github.io` 之后，访问 `https://asu.pugua.net` 即可。
+拿到 `2428591372asu-cpu.github.io` 之后，访问 `https://asu.pugua.net` 即可。
 如果域名在 Cloudflare 这类带代理的服务商，先关掉那条记录的代理（灰云），等 Pages 证书签发完再开。
 
 ### 4. 注意点
