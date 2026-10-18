@@ -1635,3 +1635,10 @@ body[data-theme="night"] .gitem:has(img.is-ready){ background:#0d0f12; }
   transition:color .25s, border-color .25s;
 }
 .foot__credit a:hover{ color:var(--ink); border-color:var(--ink-3); }
+
+/* 手机端：横向图（宽>高）裁切时焦点靠右，避免只看到中间一段 */
+@media (max-width:820px){
+  /* 横向图裁切时焦点移到右侧，否则只看到画面中间一段 */
+  .duo__detail[data-side="left"] .duo__art img.is-wide{ object-position:82% 50%; }
+  .duo__detail[data-side="right"] .duo__art img.is-wide{ object-position:78% 50%; }
+}

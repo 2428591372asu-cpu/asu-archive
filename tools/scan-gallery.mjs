@@ -83,7 +83,12 @@ for (const main of mains) {
     const sdir = path.join(dir, sub);
     const files = listImages(sdir);
     if (!files.length) continue;
-    const smeta = readMeta(sdir);
+    let smeta = readMeta(sdir);
+    if (!Object.keys(smeta).length) {
+      /* 子文件夹没写 _meta.json 时，继承上级目录按文件名登记过的标题 */
+      smeta = {};
+      for (const f of files) if (meta[f]) smeta[f] = meta[f];
+    }
     items.push({
       type: 'series',
       dir: 'gallery/' + main + '/' + sub,
@@ -118,5 +123,12 @@ window.GALLERY_MAP = ${JSON.stringify(MAP, null, 2)};
 fs.writeFileSync(OUT, body, 'utf8');
 
 console.log('扫描完成：' + mains.length + ' 个主文件夹 / ' + nImg + ' 张单图 / ' + nSeries + ' 个系列');
+for (const main of mains) {
+  const dir = path.join(GAL, main);
+  const meta = readMeta(dir);
+  const have = new Set(listImages(dir));
+  const gone = Object.keys(meta).filter((k) => k[0] !== '_' && !have.has(k));
+  if (gone.length) console.log('  ! ' + main + '/_meta.json 元数据里有、磁盘上没有：' + gone.join(', '));
+}
 for (const m of mains) console.log('  ' + m + ': ' + GALLERY[m].length + ' 项');
 console.log('清单已写入 ' + path.relative(ROOT, OUT));

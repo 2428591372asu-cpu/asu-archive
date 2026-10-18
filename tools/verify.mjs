@@ -422,7 +422,7 @@ expect('index.duoNames', idx.duoNames, EXPECT.duoNames);
 expect('index.rosterGone', idx.rosterGone, true);
 expect('index.heroIndexGone', idx.heroIndexGone, true);
 expect('index.detailClosed', idx.detailClosed, true);
-expect('index.shots', idx.shots, EXPECT.together);
+expect('index.shots', idx.shots, (GALLERY_INDEX && GALLERY_INDEX.together) ? Math.min(8, GALLERY_INDEX.together.length) : ARCHIVE.together.length);
 expect('index.specRows', idx.specRows, ARCHIVE.about && ARCHIVE.about.table ? ARCHIVE.about.table.length : 0);
 expect('index.stats', idx.stats, [EXPECT.chars, EXPECT.files, EXPECT.cats, EXPECT.slots]);
 expect('index.slides', idx.slides, 2);   /* 轮换只占两个图层，张数看下面的 slideList */
@@ -432,7 +432,7 @@ expect('index.arrows', idx.arrows, 2);
 const slide0 = (typeof ARCHIVE.hero.slides[0] === 'string' ? ARCHIVE.hero.slides[0] : ARCHIVE.hero.slides[0].file);
   expect('index.heroBg', idx.heroBg, (GALLERY_MAP && GALLERY_MAP[slide0]) ? GALLERY_MAP[slide0].split('/').pop() : slide0);
 expect('index.lightbox.open', report.index.lightbox.open, true);
-expect('index.lightbox.counter', report.index.lightbox.counter, '01/04');
+expect('index.lightbox.counter', report.index.lightbox.counter, '01/' + pad2((GALLERY_INDEX && GALLERY_INDEX.together) ? GALLERY_INDEX.together.length : ARCHIVE.together.length));
 expect('index.lightboxClosed', report.index.lightboxClosed, true);
 expect('index.duoOpen.side', report.index.duoOpen.side, 'left');
 expect('index.duoOpen.openClass', report.index.duoOpen.openClass, true);

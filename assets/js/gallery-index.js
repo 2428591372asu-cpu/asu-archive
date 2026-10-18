@@ -5,154 +5,80 @@
 window.GALLERY = {
   "a-su": [
     {
-      "type": "image",
-      "file": "gallery/a-su/01_a-su-standing.png",
-      "title": "立绘 · 透明底",
-      "note": "全身站姿",
-      "cat": "立绘"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/02_a-su-standing-w.jpg",
-      "title": "立绘 · 白底",
-      "note": "全身站姿",
-      "cat": "立绘"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/03_a-su-sheet-1.jpg",
-      "title": "三视图 · 排版 1",
-      "note": "正 / 背 / 侧",
-      "cat": "三视图"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/04_a-su-sheet-2.jpg",
-      "title": "三视图 · 排版 2",
+      "type": "series",
+      "dir": "gallery/a-su/表情",
+      "cover": "gallery/a-su/表情/13_a-su-face-1.png",
+      "files": [
+        "gallery/a-su/表情/13_a-su-face-1.png",
+        "gallery/a-su/表情/14_a-su-face-1-w.jpg",
+        "gallery/a-su/表情/15_a-su-face-2.png",
+        "gallery/a-su/表情/16_a-su-face-2-w.jpg"
+      ],
+      "title": "表情",
       "note": "",
-      "cat": "三视图"
+      "cat": "表情",
+      "count": 4
     },
     {
-      "type": "image",
-      "file": "gallery/a-su/05_a-su-sheet-plain.jpg",
-      "title": "三视图 · 无排版",
+      "type": "series",
+      "dir": "gallery/a-su/立绘",
+      "cover": "gallery/a-su/立绘/01_a-su-standing.png",
+      "files": [
+        "gallery/a-su/立绘/01_a-su-standing.png",
+        "gallery/a-su/立绘/02_a-su-standing-w.jpg"
+      ],
+      "title": "立绘",
       "note": "",
-      "cat": "三视图"
+      "cat": "立绘",
+      "count": 2
     },
     {
-      "type": "image",
-      "file": "gallery/a-su/06_a-su-turnaround.jpg",
-      "title": "三视图 · 旧版",
-      "note": "含配色与细节标注",
-      "cat": "三视图"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/07_a-su-avatar.png",
-      "title": "头像 · 透明底",
-      "note": "PNG 透明通道",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/08_a-su-avatar2.png",
-      "title": "头像 II · 透明底",
-      "note": "PNG 透明通道",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/09_a-su-avatar-bg.jpg",
-      "title": "头像 · 带背景",
+      "type": "series",
+      "dir": "gallery/a-su/三视图",
+      "cover": "gallery/a-su/三视图/03_a-su-sheet-1.jpg",
+      "files": [
+        "gallery/a-su/三视图/03_a-su-sheet-1.jpg",
+        "gallery/a-su/三视图/04_a-su-sheet-2.jpg",
+        "gallery/a-su/三视图/05_a-su-sheet-plain.jpg",
+        "gallery/a-su/三视图/06_a-su-turnaround.jpg"
+      ],
+      "title": "三视图",
       "note": "",
-      "cat": "头像"
+      "cat": "三视图",
+      "count": 4
     },
     {
-      "type": "image",
-      "file": "gallery/a-su/10_a-su-avatar2-bg.jpg",
-      "title": "头像 II · 带背景",
-      "note": "",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/11_a-su-portrait.jpg",
-      "title": "头像 · 白底",
-      "note": "",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/12_a-su-portrait2.jpg",
-      "title": "头像 II · 白底",
-      "note": "",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/13_a-su-face-1.png",
-      "title": "表情 · 苦呀西（透明底）",
-      "note": "",
-      "cat": "表情"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/14_a-su-face-1-w.jpg",
-      "title": "表情 · 苦呀西（白底）",
-      "note": "",
-      "cat": "表情"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/15_a-su-face-2.png",
-      "title": "表情 · 哈气（透明底）",
-      "note": "",
-      "cat": "表情"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/16_a-su-face-2-w.jpg",
-      "title": "表情 · 哈气（白底）",
-      "note": "",
-      "cat": "表情"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/17_a-su-birthday.jpg",
+      "type": "series",
+      "dir": "gallery/a-su/生贺",
+      "cover": "gallery/a-su/生贺/17_a-su-birthday.jpg",
+      "files": [
+        "gallery/a-su/生贺/17_a-su-birthday.jpg",
+        "gallery/a-su/生贺/18_a-su-birthday-alt.jpg"
+      ],
       "title": "生贺",
-      "note": "生日插画",
-      "cat": "插画"
+      "note": "",
+      "cat": "生贺",
+      "count": 2
     },
     {
-      "type": "image",
-      "file": "gallery/a-su/18_a-su-birthday-alt.jpg",
-      "title": "生贺 · 差分",
-      "note": "生贺差分版",
-      "cat": "插画"
-    },
-    {
-      "type": "image",
-      "file": "gallery/a-su/19_a-su-mcskin.png",
-      "title": "MC 皮肤",
-      "note": "64 × 64 像素",
-      "cat": "其它"
+      "type": "series",
+      "dir": "gallery/a-su/头像",
+      "cover": "gallery/a-su/头像/07_a-su-avatar.png",
+      "files": [
+        "gallery/a-su/头像/07_a-su-avatar.png",
+        "gallery/a-su/头像/08_a-su-avatar2.png",
+        "gallery/a-su/头像/09_a-su-avatar-bg.jpg",
+        "gallery/a-su/头像/10_a-su-avatar2-bg.jpg",
+        "gallery/a-su/头像/11_a-su-portrait.jpg",
+        "gallery/a-su/头像/12_a-su-portrait2.jpg"
+      ],
+      "title": "头像",
+      "note": "",
+      "cat": "头像",
+      "count": 6
     }
   ],
   "pugua": [
-    {
-      "type": "image",
-      "file": "gallery/pugua/01_pugua-standing.png",
-      "title": "立绘 · 自拍杆（透明底）",
-      "note": "全身站姿",
-      "cat": "立绘"
-    },
-    {
-      "type": "image",
-      "file": "gallery/pugua/02_pugua-standing-2.png",
-      "title": "立绘 II · 透明底",
-      "note": "",
-      "cat": "立绘"
-    },
     {
       "type": "image",
       "file": "gallery/pugua/03_pugua-standing-3.jpg",
@@ -199,13 +125,6 @@ window.GALLERY = {
       "type": "image",
       "file": "gallery/pugua/09_pugua-face-1.jpg",
       "title": "头像 · 贴纸",
-      "note": "",
-      "cat": "头像"
-    },
-    {
-      "type": "image",
-      "file": "gallery/pugua/10_pugua-face-2.jpg",
-      "title": "头像 · 黄底",
       "note": "",
       "cat": "头像"
     },
@@ -327,6 +246,43 @@ window.GALLERY = {
       "title": "场景 · 夜",
       "note": "",
       "cat": "其它"
+    },
+    {
+      "type": "image",
+      "file": "gallery/pugua/立绘2.png",
+      "title": "立绘2",
+      "note": "",
+      "cat": ""
+    },
+    {
+      "type": "series",
+      "dir": "gallery/pugua/立绘1",
+      "cover": "gallery/pugua/立绘1/01_pugua-standing.png",
+      "files": [
+        "gallery/pugua/立绘1/01_pugua-standing.png",
+        "gallery/pugua/立绘1/立绘自拍杆透明底.PNG",
+        "gallery/pugua/立绘1/C11E194217D3AF71209AF5737D1490BD.png",
+        "gallery/pugua/立绘1/C18F3191FC41801AFF743F69FF531730.png",
+        "gallery/pugua/立绘1/DD568733DC07FB1FC1F0FBF68E7094C2.png",
+        "gallery/pugua/立绘1/FBAE1C29C1D010FF12637D1C64E6ACD4.png"
+      ],
+      "title": "立绘1",
+      "note": "",
+      "cat": "立绘1",
+      "count": 6
+    },
+    {
+      "type": "series",
+      "dir": "gallery/pugua/石炭头像",
+      "cover": "gallery/pugua/石炭头像/10_pugua-face-2.jpg",
+      "files": [
+        "gallery/pugua/石炭头像/10_pugua-face-2.jpg",
+        "gallery/pugua/石炭头像/DBF95587244C989A8FE0B7EAB01C72B6.png"
+      ],
+      "title": "石炭头像",
+      "note": "",
+      "cat": "石炭头像",
+      "count": 2
     }
   ],
   "together": [
@@ -338,71 +294,76 @@ window.GALLERY = {
       "cat": "合作"
     },
     {
-      "type": "image",
-      "file": "gallery/together/02_together-clean.jpg",
-      "title": "海滩",
-      "note": "无噪点版",
-      "cat": "合作"
-    },
-    {
-      "type": "image",
-      "file": "gallery/together/03_together-original.jpg",
-      "title": "海滩",
-      "note": "原图",
-      "cat": "合作"
-    },
-    {
-      "type": "image",
-      "file": "gallery/together/04_together-draft.jpg",
-      "title": "海滩",
-      "note": "草稿",
-      "cat": "合作"
+      "type": "series",
+      "dir": "gallery/together/双人插1",
+      "cover": "gallery/together/双人插1/02_together-clean.jpg",
+      "files": [
+        "gallery/together/双人插1/02_together-clean.jpg",
+        "gallery/together/双人插1/03_together-original.jpg",
+        "gallery/together/双人插1/04_together-draft.jpg"
+      ],
+      "title": "双人插1",
+      "note": "",
+      "cat": "双人插1",
+      "count": 3
     }
   ]
 };
 window.GALLERY_MAP = {
-  "01_a-su-standing.png": "gallery/a-su/01_a-su-standing.png",
-  "a-su-standing.png": "gallery/a-su/01_a-su-standing.png",
-  "02_a-su-standing-w.jpg": "gallery/a-su/02_a-su-standing-w.jpg",
-  "a-su-standing-w.jpg": "gallery/a-su/02_a-su-standing-w.jpg",
-  "03_a-su-sheet-1.jpg": "gallery/a-su/03_a-su-sheet-1.jpg",
-  "a-su-sheet-1.jpg": "gallery/a-su/03_a-su-sheet-1.jpg",
-  "04_a-su-sheet-2.jpg": "gallery/a-su/04_a-su-sheet-2.jpg",
-  "a-su-sheet-2.jpg": "gallery/a-su/04_a-su-sheet-2.jpg",
-  "05_a-su-sheet-plain.jpg": "gallery/a-su/05_a-su-sheet-plain.jpg",
-  "a-su-sheet-plain.jpg": "gallery/a-su/05_a-su-sheet-plain.jpg",
-  "06_a-su-turnaround.jpg": "gallery/a-su/06_a-su-turnaround.jpg",
-  "a-su-turnaround.jpg": "gallery/a-su/06_a-su-turnaround.jpg",
-  "07_a-su-avatar.png": "gallery/a-su/07_a-su-avatar.png",
-  "a-su-avatar.png": "gallery/a-su/07_a-su-avatar.png",
-  "08_a-su-avatar2.png": "gallery/a-su/08_a-su-avatar2.png",
-  "a-su-avatar2.png": "gallery/a-su/08_a-su-avatar2.png",
-  "09_a-su-avatar-bg.jpg": "gallery/a-su/09_a-su-avatar-bg.jpg",
-  "a-su-avatar-bg.jpg": "gallery/a-su/09_a-su-avatar-bg.jpg",
-  "10_a-su-avatar2-bg.jpg": "gallery/a-su/10_a-su-avatar2-bg.jpg",
-  "a-su-avatar2-bg.jpg": "gallery/a-su/10_a-su-avatar2-bg.jpg",
-  "11_a-su-portrait.jpg": "gallery/a-su/11_a-su-portrait.jpg",
-  "a-su-portrait.jpg": "gallery/a-su/11_a-su-portrait.jpg",
-  "12_a-su-portrait2.jpg": "gallery/a-su/12_a-su-portrait2.jpg",
-  "a-su-portrait2.jpg": "gallery/a-su/12_a-su-portrait2.jpg",
-  "13_a-su-face-1.png": "gallery/a-su/13_a-su-face-1.png",
-  "a-su-face-1.png": "gallery/a-su/13_a-su-face-1.png",
-  "14_a-su-face-1-w.jpg": "gallery/a-su/14_a-su-face-1-w.jpg",
-  "a-su-face-1-w.jpg": "gallery/a-su/14_a-su-face-1-w.jpg",
-  "15_a-su-face-2.png": "gallery/a-su/15_a-su-face-2.png",
-  "a-su-face-2.png": "gallery/a-su/15_a-su-face-2.png",
-  "16_a-su-face-2-w.jpg": "gallery/a-su/16_a-su-face-2-w.jpg",
-  "a-su-face-2-w.jpg": "gallery/a-su/16_a-su-face-2-w.jpg",
-  "17_a-su-birthday.jpg": "gallery/a-su/17_a-su-birthday.jpg",
-  "a-su-birthday.jpg": "gallery/a-su/17_a-su-birthday.jpg",
-  "18_a-su-birthday-alt.jpg": "gallery/a-su/18_a-su-birthday-alt.jpg",
-  "a-su-birthday-alt.jpg": "gallery/a-su/18_a-su-birthday-alt.jpg",
-  "19_a-su-mcskin.png": "gallery/a-su/19_a-su-mcskin.png",
-  "a-su-mcskin.png": "gallery/a-su/19_a-su-mcskin.png",
-  "01_pugua-standing.png": "gallery/pugua/01_pugua-standing.png",
-  "pugua-standing.png": "gallery/pugua/01_pugua-standing.png",
-  "02_pugua-standing-2.png": "gallery/pugua/02_pugua-standing-2.png",
-  "pugua-standing-2.png": "gallery/pugua/02_pugua-standing-2.png",
+  "13_a-su-face-1.png": "gallery/a-su/表情/13_a-su-face-1.png",
+  "a-su-face-1.png": "gallery/a-su/表情/13_a-su-face-1.png",
+  "__title__gallery/a-su/表情/13_a-su-face-1.png": "表情 · 苦呀西（透明底）",
+  "14_a-su-face-1-w.jpg": "gallery/a-su/表情/14_a-su-face-1-w.jpg",
+  "a-su-face-1-w.jpg": "gallery/a-su/表情/14_a-su-face-1-w.jpg",
+  "__title__gallery/a-su/表情/14_a-su-face-1-w.jpg": "表情 · 苦呀西（白底）",
+  "15_a-su-face-2.png": "gallery/a-su/表情/15_a-su-face-2.png",
+  "a-su-face-2.png": "gallery/a-su/表情/15_a-su-face-2.png",
+  "__title__gallery/a-su/表情/15_a-su-face-2.png": "表情 · 哈气（透明底）",
+  "16_a-su-face-2-w.jpg": "gallery/a-su/表情/16_a-su-face-2-w.jpg",
+  "a-su-face-2-w.jpg": "gallery/a-su/表情/16_a-su-face-2-w.jpg",
+  "__title__gallery/a-su/表情/16_a-su-face-2-w.jpg": "表情 · 哈气（白底）",
+  "01_a-su-standing.png": "gallery/a-su/立绘/01_a-su-standing.png",
+  "a-su-standing.png": "gallery/a-su/立绘/01_a-su-standing.png",
+  "__title__gallery/a-su/立绘/01_a-su-standing.png": "立绘 · 透明底",
+  "02_a-su-standing-w.jpg": "gallery/a-su/立绘/02_a-su-standing-w.jpg",
+  "a-su-standing-w.jpg": "gallery/a-su/立绘/02_a-su-standing-w.jpg",
+  "__title__gallery/a-su/立绘/02_a-su-standing-w.jpg": "立绘 · 白底",
+  "03_a-su-sheet-1.jpg": "gallery/a-su/三视图/03_a-su-sheet-1.jpg",
+  "a-su-sheet-1.jpg": "gallery/a-su/三视图/03_a-su-sheet-1.jpg",
+  "__title__gallery/a-su/三视图/03_a-su-sheet-1.jpg": "三视图 · 排版 1",
+  "04_a-su-sheet-2.jpg": "gallery/a-su/三视图/04_a-su-sheet-2.jpg",
+  "a-su-sheet-2.jpg": "gallery/a-su/三视图/04_a-su-sheet-2.jpg",
+  "__title__gallery/a-su/三视图/04_a-su-sheet-2.jpg": "三视图 · 排版 2",
+  "05_a-su-sheet-plain.jpg": "gallery/a-su/三视图/05_a-su-sheet-plain.jpg",
+  "a-su-sheet-plain.jpg": "gallery/a-su/三视图/05_a-su-sheet-plain.jpg",
+  "__title__gallery/a-su/三视图/05_a-su-sheet-plain.jpg": "三视图 · 无排版",
+  "06_a-su-turnaround.jpg": "gallery/a-su/三视图/06_a-su-turnaround.jpg",
+  "a-su-turnaround.jpg": "gallery/a-su/三视图/06_a-su-turnaround.jpg",
+  "__title__gallery/a-su/三视图/06_a-su-turnaround.jpg": "三视图 · 旧版",
+  "17_a-su-birthday.jpg": "gallery/a-su/生贺/17_a-su-birthday.jpg",
+  "a-su-birthday.jpg": "gallery/a-su/生贺/17_a-su-birthday.jpg",
+  "__title__gallery/a-su/生贺/17_a-su-birthday.jpg": "生贺",
+  "18_a-su-birthday-alt.jpg": "gallery/a-su/生贺/18_a-su-birthday-alt.jpg",
+  "a-su-birthday-alt.jpg": "gallery/a-su/生贺/18_a-su-birthday-alt.jpg",
+  "__title__gallery/a-su/生贺/18_a-su-birthday-alt.jpg": "生贺 · 差分",
+  "07_a-su-avatar.png": "gallery/a-su/头像/07_a-su-avatar.png",
+  "a-su-avatar.png": "gallery/a-su/头像/07_a-su-avatar.png",
+  "__title__gallery/a-su/头像/07_a-su-avatar.png": "头像 · 透明底",
+  "08_a-su-avatar2.png": "gallery/a-su/头像/08_a-su-avatar2.png",
+  "a-su-avatar2.png": "gallery/a-su/头像/08_a-su-avatar2.png",
+  "__title__gallery/a-su/头像/08_a-su-avatar2.png": "头像 II · 透明底",
+  "09_a-su-avatar-bg.jpg": "gallery/a-su/头像/09_a-su-avatar-bg.jpg",
+  "a-su-avatar-bg.jpg": "gallery/a-su/头像/09_a-su-avatar-bg.jpg",
+  "__title__gallery/a-su/头像/09_a-su-avatar-bg.jpg": "头像 · 带背景",
+  "10_a-su-avatar2-bg.jpg": "gallery/a-su/头像/10_a-su-avatar2-bg.jpg",
+  "a-su-avatar2-bg.jpg": "gallery/a-su/头像/10_a-su-avatar2-bg.jpg",
+  "__title__gallery/a-su/头像/10_a-su-avatar2-bg.jpg": "头像 II · 带背景",
+  "11_a-su-portrait.jpg": "gallery/a-su/头像/11_a-su-portrait.jpg",
+  "a-su-portrait.jpg": "gallery/a-su/头像/11_a-su-portrait.jpg",
+  "__title__gallery/a-su/头像/11_a-su-portrait.jpg": "头像 · 白底",
+  "12_a-su-portrait2.jpg": "gallery/a-su/头像/12_a-su-portrait2.jpg",
+  "a-su-portrait2.jpg": "gallery/a-su/头像/12_a-su-portrait2.jpg",
+  "__title__gallery/a-su/头像/12_a-su-portrait2.jpg": "头像 II · 白底",
   "03_pugua-standing-3.jpg": "gallery/pugua/03_pugua-standing-3.jpg",
   "pugua-standing-3.jpg": "gallery/pugua/03_pugua-standing-3.jpg",
   "04_pugua-turnaround.jpg": "gallery/pugua/04_pugua-turnaround.jpg",
@@ -417,8 +378,6 @@ window.GALLERY_MAP = {
   "pugua-sheet-2.jpg": "gallery/pugua/08_pugua-sheet-2.jpg",
   "09_pugua-face-1.jpg": "gallery/pugua/09_pugua-face-1.jpg",
   "pugua-face-1.jpg": "gallery/pugua/09_pugua-face-1.jpg",
-  "10_pugua-face-2.jpg": "gallery/pugua/10_pugua-face-2.jpg",
-  "pugua-face-2.jpg": "gallery/pugua/10_pugua-face-2.jpg",
   "11_pugua-face-3.jpg": "gallery/pugua/11_pugua-face-3.jpg",
   "pugua-face-3.jpg": "gallery/pugua/11_pugua-face-3.jpg",
   "12_pugua-face-4.png": "gallery/pugua/12_pugua-face-4.png",
@@ -453,12 +412,28 @@ window.GALLERY_MAP = {
   "pugua-eyes.jpg": "gallery/pugua/26_pugua-eyes.jpg",
   "27_pugua-scene.jpg": "gallery/pugua/27_pugua-scene.jpg",
   "pugua-scene.jpg": "gallery/pugua/27_pugua-scene.jpg",
+  "立绘2.png": "gallery/pugua/立绘2.png",
+  "01_pugua-standing.png": "gallery/pugua/立绘1/01_pugua-standing.png",
+  "pugua-standing.png": "gallery/pugua/立绘1/01_pugua-standing.png",
+  "__title__gallery/pugua/立绘1/01_pugua-standing.png": "立绘 · 自拍杆（透明底）",
+  "立绘自拍杆透明底.PNG": "gallery/pugua/立绘1/立绘自拍杆透明底.PNG",
+  "C11E194217D3AF71209AF5737D1490BD.png": "gallery/pugua/立绘1/C11E194217D3AF71209AF5737D1490BD.png",
+  "C18F3191FC41801AFF743F69FF531730.png": "gallery/pugua/立绘1/C18F3191FC41801AFF743F69FF531730.png",
+  "DD568733DC07FB1FC1F0FBF68E7094C2.png": "gallery/pugua/立绘1/DD568733DC07FB1FC1F0FBF68E7094C2.png",
+  "FBAE1C29C1D010FF12637D1C64E6ACD4.png": "gallery/pugua/立绘1/FBAE1C29C1D010FF12637D1C64E6ACD4.png",
+  "10_pugua-face-2.jpg": "gallery/pugua/石炭头像/10_pugua-face-2.jpg",
+  "pugua-face-2.jpg": "gallery/pugua/石炭头像/10_pugua-face-2.jpg",
+  "__title__gallery/pugua/石炭头像/10_pugua-face-2.jpg": "头像 · 黄底",
+  "DBF95587244C989A8FE0B7EAB01C72B6.png": "gallery/pugua/石炭头像/DBF95587244C989A8FE0B7EAB01C72B6.png",
   "01_together-picnic.jpg": "gallery/together/01_together-picnic.jpg",
   "together-picnic.jpg": "gallery/together/01_together-picnic.jpg",
-  "02_together-clean.jpg": "gallery/together/02_together-clean.jpg",
-  "together-clean.jpg": "gallery/together/02_together-clean.jpg",
-  "03_together-original.jpg": "gallery/together/03_together-original.jpg",
-  "together-original.jpg": "gallery/together/03_together-original.jpg",
-  "04_together-draft.jpg": "gallery/together/04_together-draft.jpg",
-  "together-draft.jpg": "gallery/together/04_together-draft.jpg"
+  "02_together-clean.jpg": "gallery/together/双人插1/02_together-clean.jpg",
+  "together-clean.jpg": "gallery/together/双人插1/02_together-clean.jpg",
+  "__title__gallery/together/双人插1/02_together-clean.jpg": "海滩",
+  "03_together-original.jpg": "gallery/together/双人插1/03_together-original.jpg",
+  "together-original.jpg": "gallery/together/双人插1/03_together-original.jpg",
+  "__title__gallery/together/双人插1/03_together-original.jpg": "海滩",
+  "04_together-draft.jpg": "gallery/together/双人插1/04_together-draft.jpg",
+  "together-draft.jpg": "gallery/together/双人插1/04_together-draft.jpg",
+  "__title__gallery/together/双人插1/04_together-draft.jpg": "海滩"
 };

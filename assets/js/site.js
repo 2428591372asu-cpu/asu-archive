@@ -834,7 +834,8 @@ function applyLabels() {
       return '<div class="duo__inner">' +
         '<div class="duo__art">' +
           '<img src="' + img(c.card.image) + '" alt="' + esc(c.name) + ' 插画"' +
-            ' data-file="' + esc(c.card.image) + '" decoding="async">' +
+            ' data-file="' + esc(c.card.image) + '" decoding="async"' +
+            ' onload="this.classList.toggle(\'is-wide\', this.naturalWidth > this.naturalHeight)">' +
         '</div>' +
         '<div class="duo__scrim"></div>' +
         '<div class="duo__info">' +
