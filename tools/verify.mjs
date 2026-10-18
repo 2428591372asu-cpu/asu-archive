@@ -20,6 +20,16 @@ const ARCHIVE = (() => {
   new Function('window', src)(box);
   return box.ARCHIVE;
 })();
+const GAL_IDX = (() => {
+  try {
+    const src = readFileSync(new URL('../assets/js/gallery-index.js', import.meta.url), 'utf8');
+    const box = {};
+    new Function('window', src)(box);
+    return { gallery: box.GALLERY || null, map: box.GALLERY_MAP || null };
+  } catch (e) { return { gallery: null, map: null }; }
+})();
+const GALLERY_INDEX = GAL_IDX.gallery;
+const GALLERY_MAP = GAL_IDX.map;
 const pad2 = (n) => String(n).padStart(2, '0');
 const EXPECT = (() => {
   const files = new Set();
@@ -27,9 +37,10 @@ const EXPECT = (() => {
   const byId = {};
   ARCHIVE.characters.forEach((c) => {
     const catCount = {};
-    c.images.forEach((i) => { catCount[i.cat] = (catCount[i.cat] || 0) + 1; });
+    const srcList = (GALLERY_INDEX && GALLERY_INDEX[c.id]) ? GALLERY_INDEX[c.id].map((it) => ({ cat: it.cat || (it.type === 'series' ? '系列' : '单图') })) : c.images;
+    srcList.forEach((i) => { catCount[i.cat] = (catCount[i.cat] || 0) + 1; });
     byId[c.id] = {
-      items: c.images.length,
+      items: (GALLERY_INDEX && GALLERY_INDEX[c.id]) ? GALLERY_INDEX[c.id].length : c.images.length,
       fields: c.fields.length,
       tbd: c.fields.filter((f) => f.v == null).length,
       slots: (c.emptySlots || []).length,
@@ -412,13 +423,14 @@ expect('index.rosterGone', idx.rosterGone, true);
 expect('index.heroIndexGone', idx.heroIndexGone, true);
 expect('index.detailClosed', idx.detailClosed, true);
 expect('index.shots', idx.shots, EXPECT.together);
-expect('index.specRows', idx.specRows, 7);
+expect('index.specRows', idx.specRows, ARCHIVE.about && ARCHIVE.about.table ? ARCHIVE.about.table.length : 0);
 expect('index.stats', idx.stats, [EXPECT.chars, EXPECT.files, EXPECT.cats, EXPECT.slots]);
 expect('index.slides', idx.slides, 2);   /* 轮换只占两个图层，张数看下面的 slideList */
 expect('index.slideList>=2', ARCHIVE.hero.slides.length >= 2, true);
 expect('index.slideOn', idx.slideOn, 1);
 expect('index.arrows', idx.arrows, 2);
-expect('index.heroBg', idx.heroBg, (typeof ARCHIVE.hero.slides[0] === 'string' ? ARCHIVE.hero.slides[0] : ARCHIVE.hero.slides[0].file));
+const slide0 = (typeof ARCHIVE.hero.slides[0] === 'string' ? ARCHIVE.hero.slides[0] : ARCHIVE.hero.slides[0].file);
+  expect('index.heroBg', idx.heroBg, (GALLERY_MAP && GALLERY_MAP[slide0]) ? GALLERY_MAP[slide0].split('/').pop() : slide0);
 expect('index.lightbox.open', report.index.lightbox.open, true);
 expect('index.lightbox.counter', report.index.lightbox.counter, '01/04');
 expect('index.lightboxClosed', report.index.lightboxClosed, true);

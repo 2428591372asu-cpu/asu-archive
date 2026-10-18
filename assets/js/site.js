@@ -35,7 +35,10 @@ function applyLabels() {
   var IMG = 'assets/img/';
   /* 单文件构建时 window.__IMG__ 里是 base64；正常目录版继续走 assets/img/ */
   function img(file) {
-    return (window.__IMG__ && window.__IMG__[file]) || (IMG + file);
+    if (window.__IMG__ && window.__IMG__[file]) return window.__IMG__[file];
+    /* 图片放在 assets/img/gallery/<主文件夹>/ 里，由 tools/scan-gallery.mjs 登记路径 */
+    if (window.GALLERY_MAP && window.GALLERY_MAP[file]) return IMG + window.GALLERY_MAP[file];
+    return IMG + file;
   }
   /* 单文件构建时 window.__ARCHIVE_ROUTE__ 接管页面切换；目录版直接跳转。
      不要再铺转场层——跳转本身够快，加过渡只会闪。 */
@@ -418,6 +421,15 @@ function applyLabels() {
       ' data-file="' + esc(file) + '" loading="lazy" decoding="async" ' + (extra || '') + '>';
   }
 
+  /* 多图角标：两个重叠的方框 + 张数，用在系列封面上 */
+  function countBadge(n) {
+    return '<span class="gitem__count" title="多图 · ' + n + ' 张">' +
+      '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">' +
+      '<rect x="1.7" y="1.7" width="9.2" height="9.2" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>' +
+      '<rect x="5.6" y="5.6" width="8.7" height="8.7" rx="1.5" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.4"/>' +
+      '</svg><b>' + pad2(n) + '</b></span>';
+  }
+
   function fieldHTML(f) {
     var v;
     if (f.v == null || f.v === '') {
@@ -468,28 +480,54 @@ function applyLabels() {
     /* 索引条目与展开面板由 Duo.init() 渲染 */
 
     /* 双人图集 */
-    var togetherItems = D.together.map(function (t) {
-      return { file: t.file, title: t.title, note: t.note, cat: '合作 / TOGETHER' };
+    var folderT = (window.GALLERY && window.GALLERY.together) || null;
+    var togetherList = folderT
+      ? folderT.map(function (it) {
+          var isSeries = it.type === 'series';
+          return {
+            file: isSeries ? it.cover : it.file,
+            title: it.title,
+            note: it.note || (isSeries ? it.count + ' 张一组' : ''),
+            cat: '合作 / TOGETHER',
+            series: isSeries ? it.files : null,
+            count: isSeries ? it.count : 0
+          };
+        })
+      : D.together.map(function (t) {
+          return { file: t.file, title: t.title, note: t.note, cat: '合作 / TOGETHER', series: null, count: 0 };
+        });
+    var togetherItems = togetherList.map(function (t) {
+      return { file: t.file, title: t.title, note: t.note, cat: t.cat };
     });
     /* 双人图集：分页（每页 8 张，2 行 × 4 列），图再多也不会把页面拉长到滑不动 */
     var PER_PAGE = 8;
-    var pageCount = Math.max(1, Math.ceil(D.together.length / PER_PAGE));
+    var pageCount = Math.max(1, Math.ceil(togetherList.length / PER_PAGE));
     var page = 1;
 
     function paintShots() {
       var start = (page - 1) * PER_PAGE;
-      var slice = D.together.slice(start, start + PER_PAGE);
+      var slice = togetherList.slice(start, start + PER_PAGE);
       $('#shots').innerHTML = slice.map(function (t, i) {
         var gi = start + i;
         return '<figure class="shot" role="button" tabindex="0" data-shot="' + gi + '"' +
           ' aria-label="查看 ' + esc(t.title) + '">' +
           imgTag(t.file, t.title, '') +
-          '<figcaption class="shot__bar"><span class="shot__no">' + pad2(gi + 1) + '</span>' +
+          (t.count ? countBadge(t.count) : '') +
+        '<figcaption class="shot__bar"><span class="shot__no">' + pad2(gi + 1) + '</span>' +
           '<span>' + esc(t.title) + ' · ' + esc(t.note) + '</span></figcaption></figure>';
       }).join('');
 
       $$('#shots .shot').forEach(function (el) {
-        var open = function () { LB.open(togetherItems, Number(el.dataset.shot)); };
+        var open = function () {
+          var it = togetherList[Number(el.dataset.shot)];
+          if (it && it.series && it.series.length) {
+            LB.open(it.series.map(function (f, k) {
+              return { file: f, title: it.title + ' · ' + pad2(k + 1), note: it.note || '', cat: it.cat };
+            }), 0);
+            return;
+          }
+          LB.open(togetherItems, Number(el.dataset.shot));
+        };
         el.addEventListener('click', open);
         el.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
@@ -528,7 +566,7 @@ function applyLabels() {
           });
         }
       }
-      $('#shotsMore').textContent = pad2(D.together.length) + ' ' + L('shotsMore', 'ITEMS — 点击任意一张查看大图');
+      $('#shotsMore').textContent = pad2(togetherList.length) + ' ' + L('shotsMore', 'ITEMS — 点击任意一张查看大图');
     }
 
     paintShots();
@@ -638,6 +676,24 @@ function applyLabels() {
     /* 档案表 */
     $('#dossierGrid').innerHTML = c.fields.map(fieldHTML).join('');
 
+    /* 画廊：优先用文件夹清单（assets/img/gallery/<角色>/），没有就退回 data.js */
+    var folderItems = (window.GALLERY && window.GALLERY[c.id]) || null;
+    var galItems = folderItems
+      ? folderItems.map(function (it) {
+          var isSeries = it.type === 'series';
+          return {
+            file: isSeries ? it.cover : it.file,
+            title: it.title,
+            note: it.note || (isSeries ? it.count + ' 张一组' : ''),
+            cat: it.cat || (isSeries ? '系列' : '单图'),
+            series: isSeries ? it.files : null,
+            count: isSeries ? it.count : 0
+          };
+        })
+      : (c.images || []);
+    var galCats = [];
+    galItems.forEach(function (i) { if (galCats.indexOf(i.cat) < 0) galCats.push(i.cat); });
+
     /* 画廊 */
     var gal = (function () {
       var filter = 'ALL';
@@ -646,6 +702,7 @@ function applyLabels() {
         return '<figure class="gitem" role="button" tabindex="0" data-i="' + i + '"' +
           ' style="animation-delay:' + (i * 35) + 'ms" aria-label="查看 ' + esc(it.title) + '">' +
           imgTag(it.file, it.title, '') +
+          (it.count ? countBadge(it.count) : '') +
           '<span class="gitem__tag">' + esc(it.cat) + '</span>' +
           '<div class="gitem__ov"><span class="gitem__t">' + esc(it.title) + '</span>' +
           '<span class="gitem__c">' + esc(it.cat) + '</span></div></figure>';
@@ -659,10 +716,10 @@ function applyLabels() {
 
       function paint() {
         var list = filter === 'ALL'
-          ? c.images.slice().sort(function (a, b) {
-              return D.categories.indexOf(a.cat) - D.categories.indexOf(b.cat);
+          ? galItems.slice().sort(function (a, b) {
+              return galCats.indexOf(a.cat) - galCats.indexOf(b.cat);
             })
-          : c.images.filter(function (i) { return i.cat === filter; });
+          : galItems.filter(function (i) { return i.cat === filter; });
         var slots = (c.emptySlots || []).filter(function (s) {
           return filter === 'ALL' || s.cat === filter;
         });
@@ -675,7 +732,16 @@ function applyLabels() {
           return { file: it.file, title: it.title, note: it.note || '', cat: it.cat };
         });
         $$('#masonry .gitem').forEach(function (el) {
-          var open = function () { LB.open(lbItems, Number(el.dataset.i)); };
+          var open = function () {
+            var it = list[Number(el.dataset.i)];
+            if (it && it.series && it.series.length) {
+              LB.open(it.series.map(function (f, k) {
+                return { file: f, title: it.title + ' · ' + pad2(k + 1), note: it.note || '', cat: it.cat };
+              }), 0);
+              return;
+            }
+            LB.open(lbItems, Number(el.dataset.i));
+          };
           el.addEventListener('click', open);
           el.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
@@ -684,9 +750,9 @@ function applyLabels() {
       }
 
       function paintFilters() {
-        var all = [['ALL', '全部', c.images.length]].concat(
-          D.categories.map(function (cat) {
-            var n = c.images.filter(function (i) { return i.cat === cat; }).length;
+        var all = [['ALL', '全部', galItems.length]].concat(
+          galCats.map(function (cat) {
+            var n = galItems.filter(function (i) { return i.cat === cat; }).length;
             var empty = (c.emptySlots || []).some(function (s) { return s.cat === cat; });
             return [cat, cat, n, empty];
           }).filter(function (r) { return r[2] > 0 || r[3]; })

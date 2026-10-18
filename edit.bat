@@ -12,10 +12,13 @@ if errorlevel 1 (
 
 echo ============================================
 echo   A_SU ARCHIVE - 文案编辑器
-echo   浏览器会自动打开编辑页
+echo   启动前会先扫描一遍画廊文件夹
 echo   改完点「保存到 data.js」，站点刷新即生效
 echo   关闭这个窗口即停止
 echo ============================================
+echo.
+
+node tools/scan-gallery.mjs
 echo.
 
 node tools/cms.mjs

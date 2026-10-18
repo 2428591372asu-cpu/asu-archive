@@ -1,0 +1,137 @@
+{
+  "01_pugua-standing.png": {
+    "title": "立绘 · 自拍杆（透明底）",
+    "note": "全身站姿",
+    "cat": "立绘"
+  },
+  "02_pugua-standing-2.png": {
+    "title": "立绘 II · 透明底",
+    "note": "",
+    "cat": "立绘"
+  },
+  "03_pugua-standing-3.jpg": {
+    "title": "立绘 III · 黑裙",
+    "note": "",
+    "cat": "立绘"
+  },
+  "04_pugua-turnaround.jpg": {
+    "title": "三视图 · 正 / 侧 / 背",
+    "note": "含配件与色卡",
+    "cat": "三视图"
+  },
+  "05_pugua-turnaround-2.jpg": {
+    "title": "三视图 · 格纹版",
+    "note": "",
+    "cat": "三视图"
+  },
+  "06_pugua-lineart.jpg": {
+    "title": "线稿 · 眼睛特写",
+    "note": "",
+    "cat": "三视图"
+  },
+  "07_pugua-sheet-1.jpg": {
+    "title": "设定 · 分镜页",
+    "note": "",
+    "cat": "三视图"
+  },
+  "08_pugua-sheet-2.jpg": {
+    "title": "设定 · 表情动作集",
+    "note": "",
+    "cat": "三视图"
+  },
+  "09_pugua-face-1.jpg": {
+    "title": "头像 · 贴纸",
+    "note": "",
+    "cat": "头像"
+  },
+  "10_pugua-face-2.jpg": {
+    "title": "头像 · 黄底",
+    "note": "",
+    "cat": "头像"
+  },
+  "11_pugua-face-3.jpg": {
+    "title": "头像 · 深色",
+    "note": "",
+    "cat": "头像"
+  },
+  "12_pugua-face-4.png": {
+    "title": "头像 · 贴纸 Q 版",
+    "note": "",
+    "cat": "头像"
+  },
+  "13_pugua-face-5.png": {
+    "title": "头像 · 坐姿 Q 版",
+    "note": "",
+    "cat": "头像"
+  },
+  "14_pugua-pixel.png": {
+    "title": "像素 · 蒲瓜",
+    "note": "主页卡图",
+    "cat": "像素"
+  },
+  "15_pugua-pixel-head.png": {
+    "title": "像素 · 头像",
+    "note": "",
+    "cat": "像素"
+  },
+  "16_pugua-pixel-ember.png": {
+    "title": "像素 · EMBER",
+    "note": "",
+    "cat": "像素"
+  },
+  "17_pugua-selfie.jpg": {
+    "title": "插画 · 自拍",
+    "note": "",
+    "cat": "插画"
+  },
+  "18_pugua-halfbody.jpg": {
+    "title": "插画 · 半身",
+    "note": "",
+    "cat": "插画"
+  },
+  "19_pugua-hat-green.jpg": {
+    "title": "插画 · 草帽",
+    "note": "",
+    "cat": "插画"
+  },
+  "20_pugua-pastel.jpg": {
+    "title": "插画 · 粉彩",
+    "note": "",
+    "cat": "插画"
+  },
+  "21_pugua-portrait-1.jpg": {
+    "title": "插画 · 水手领",
+    "note": "",
+    "cat": "插画"
+  },
+  "22_pugua-portrait-2.jpg": {
+    "title": "插画 · 星屑",
+    "note": "",
+    "cat": "插画"
+  },
+  "23_pugua-fox.jpg": {
+    "title": "插画 · 抱狐",
+    "note": "",
+    "cat": "插画"
+  },
+  "24_pugua-hat-1.jpg": {
+    "title": "插画 · 白帽",
+    "note": "",
+    "cat": "插画"
+  },
+  "25_pugua-hat-2.jpg": {
+    "title": "插画 · 白帽 · 星",
+    "note": "",
+    "cat": "插画"
+  },
+  "26_pugua-eyes.jpg": {
+    "title": "特写 · 眼睛",
+    "note": "",
+    "cat": "其它"
+  },
+  "27_pugua-scene.jpg": {
+    "title": "场景 · 夜",
+    "note": "",
+    "cat": "其它"
+  }
+}

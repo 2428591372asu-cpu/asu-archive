@@ -1618,3 +1618,20 @@ body[data-theme="night"] .gitem:has(img.is-ready){ background:#0d0f12; }
   font-family:var(--mono); font-size:10px; letter-spacing:.2em;
   color:var(--ink-3); margin-left:8px;
 }
+
+/* 系列角标：文件夹里有子文件夹时，封面右上角显示 ×NN */
+.gitem, .shot{ position:relative; }
+.gitem__count{
+  position:absolute; top:8px; right:8px; z-index:3;
+  display:inline-flex; align-items:center; gap:4px;
+  font-family:var(--mono); font-size:10px; line-height:1; letter-spacing:.06em;
+  padding:4px 6px; color:var(--bg); background:var(--ink); pointer-events:none;
+  box-shadow:0 1px 0 rgba(0,0,0,.18);
+}
+.gitem__count svg{ display:block; opacity:.9; }
+.gitem__count b{ font-weight:400; }
+.foot__credit a{
+  color:var(--ink-3); border-bottom:1px solid var(--line-2);
+  transition:color .25s, border-color .25s;
+}
+.foot__credit a:hover{ color:var(--ink); border-color:var(--ink-3); }

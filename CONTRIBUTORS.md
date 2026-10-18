@@ -10,10 +10,11 @@
 
 ## 实现与工具
 
-**DeepSeek**（AI 助手，经 DeepSeek Harness 驱动）
+**DeepSeek Flash**（模型 `deepseek-flash`，经 DeepSeek Harness 驱动）
 
 - 页面结构、样式与交互实现：主视觉、双人索引与展开面板、画廊、灯箱、主题切换
 - 数据驱动重构：全站内容收敛到 `assets/js/data.js`，页面只负责渲染
+- 画廊的文件夹驱动方案：`tools/scan-gallery.mjs` 扫描 `assets/img/gallery/` 生成清单
 - 可视化编辑器：`tools/editor.html` + `tools/cms.mjs`（零依赖，`edit.bat` 启动）
 - 回归验证脚本：`tools/verify.mjs`、`tools/shot.mjs`、`tools/verify-demo.mjs`
 - 本项目的 bug 排查与修复

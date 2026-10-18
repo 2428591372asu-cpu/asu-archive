@@ -1,0 +1,97 @@
+{
+  "01_a-su-standing.png": {
+    "title": "立绘 · 透明底",
+    "note": "全身站姿",
+    "cat": "立绘"
+  },
+  "02_a-su-standing-w.jpg": {
+    "title": "立绘 · 白底",
+    "note": "全身站姿",
+    "cat": "立绘"
+  },
+  "03_a-su-sheet-1.jpg": {
+    "title": "三视图 · 排版 1",
+    "note": "正 / 背 / 侧",
+    "cat": "三视图"
+  },
+  "04_a-su-sheet-2.jpg": {
+    "title": "三视图 · 排版 2",
+    "note": "",
+    "cat": "三视图"
+  },
+  "05_a-su-sheet-plain.jpg": {
+    "title": "三视图 · 无排版",
+    "note": "",
+    "cat": "三视图"
+  },
+  "06_a-su-turnaround.jpg": {
+    "title": "三视图 · 旧版",
+    "note": "含配色与细节标注",
+    "cat": "三视图"
+  },
+  "07_a-su-avatar.png": {
+    "title": "头像 · 透明底",
+    "note": "PNG 透明通道",
+    "cat": "头像"
+  },
+  "08_a-su-avatar2.png": {
+    "title": "头像 II · 透明底",
+    "note": "PNG 透明通道",
+    "cat": "头像"
+  },
+  "09_a-su-avatar-bg.jpg": {
+    "title": "头像 · 带背景",
+    "note": "",
+    "cat": "头像"
+  },
+  "10_a-su-avatar2-bg.jpg": {
+    "title": "头像 II · 带背景",
+    "note": "",
+    "cat": "头像"
+  },
+  "11_a-su-portrait.jpg": {
+    "title": "头像 · 白底",
+    "note": "",
+    "cat": "头像"
+  },
+  "12_a-su-portrait2.jpg": {
+    "title": "头像 II · 白底",
+    "note": "",
+    "cat": "头像"
+  },
+  "13_a-su-face-1.png": {
+    "title": "表情 · 苦呀西（透明底）",
+    "note": "",
+    "cat": "表情"
+  },
+  "14_a-su-face-1-w.jpg": {
+    "title": "表情 · 苦呀西（白底）",
+    "note": "",
+    "cat": "表情"
+  },
+  "15_a-su-face-2.png": {
+    "title": "表情 · 哈气（透明底）",
+    "note": "",
+    "cat": "表情"
+  },
+  "16_a-su-face-2-w.jpg": {
+    "title": "表情 · 哈气（白底）",
+    "note": "",
+    "cat": "表情"
+  },
+  "17_a-su-birthday.jpg": {
+    "title": "生贺",
+    "note": "生日插画",
+    "cat": "插画"
+  },
+  "18_a-su-birthday-alt.jpg": {
+    "title": "生贺 · 差分",
+    "note": "生贺差分版",
+    "cat": "插画"
+  },
+  "19_a-su-mcskin.png": {
+    "title": "MC 皮肤",
+    "note": "64 × 64 像素",
+    "cat": "其它"
+  }
+}

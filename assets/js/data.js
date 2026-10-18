@@ -530,7 +530,7 @@ window.ARCHIVE = (function () {
         },
         {
           k: '特别鸣谢：',
-          v: 'deepseek V4 flash'
+          v: 'DeepSeek Flash'
         },
         {
           k: '最后修改：',
