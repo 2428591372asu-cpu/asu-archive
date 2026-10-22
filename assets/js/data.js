@@ -25,7 +25,7 @@ window.ARCHIVE = (function () {
       latin: 'A_su',
       code: 'FILE-001',
       cat: '白狼',
-      tags: ['白发', '蓝瞳', '狐耳', '白大衣', '铃铛缎带'],
+      tags: ['白发', '蓝瞳', '黑丝裸足（嗯嗯）'],
       card: {
         image: 'a-su-birthday.jpg',
         pos: '50% 18%'
@@ -40,7 +40,7 @@ window.ARCHIVE = (function () {
         image: 'a-su-avatar.png',
         tag: 'AVATAR / 头像'
       },
-      lead: '于自己剧集的导演，一只享受生活的白狼',
+      lead: '—w—（不知道写些什么，大概是一只笨狼吧）',
       fields: [
         {
           k: '编号',
@@ -216,8 +216,8 @@ window.ARCHIVE = (function () {
       name: '蒲瓜',
       latin: 'PUGUA',
       code: 'FILE-002',
-      cat: '蓝狐 · FOX',
-      tags: ['蓝发', '绿瞳', '狐耳', '连帽外套', '像素'],
+      cat: '仙狐 ',
+      tags: ['蓝发', '黄绿瞳', '白丝'],
       card: {
         image: 'pugua-pixel.png',
         pos: '50% 46%'
@@ -495,7 +495,8 @@ window.ARCHIVE = (function () {
           file: 'a-su-head.png',
           art: true,
           pos: '',
-          char: 'a-su'
+          char: 'a-su',
+          tone: ''
         },
         {
           file: 'pugua-head.png',
@@ -521,7 +522,7 @@ window.ARCHIVE = (function () {
         '禁止用于商业用途',
         '禁止进行R18G，违法，政治相关内容的二次创作',
         '禁止用于 AI 训练',
-        '禁止画巨乳'
+        '禁止画巨乳（嗯对'
       ],
       table: [
         {

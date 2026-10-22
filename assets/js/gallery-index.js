@@ -283,6 +283,20 @@ window.GALLERY = {
       "note": "",
       "cat": "石炭头像",
       "count": 2
+    },
+    {
+      "type": "series",
+      "dir": "gallery/pugua/像素头像",
+      "cover": "gallery/pugua/像素头像/45D1FF62C701389BA2D30CC5DFC73E4D.png",
+      "files": [
+        "gallery/pugua/像素头像/45D1FF62C701389BA2D30CC5DFC73E4D.png",
+        "gallery/pugua/像素头像/64EF9AD0AD8572EABB9F3B3F2FBFE7E8.png",
+        "gallery/pugua/像素头像/408A146E26998DF7F08D14916158D3AC.png"
+      ],
+      "title": "像素头像",
+      "note": "",
+      "cat": "像素头像",
+      "count": 3
     }
   ],
   "together": [
@@ -425,6 +439,9 @@ window.GALLERY_MAP = {
   "pugua-face-2.jpg": "gallery/pugua/石炭头像/10_pugua-face-2.jpg",
   "__title__gallery/pugua/石炭头像/10_pugua-face-2.jpg": "头像 · 黄底",
   "DBF95587244C989A8FE0B7EAB01C72B6.png": "gallery/pugua/石炭头像/DBF95587244C989A8FE0B7EAB01C72B6.png",
+  "45D1FF62C701389BA2D30CC5DFC73E4D.png": "gallery/pugua/像素头像/45D1FF62C701389BA2D30CC5DFC73E4D.png",
+  "64EF9AD0AD8572EABB9F3B3F2FBFE7E8.png": "gallery/pugua/像素头像/64EF9AD0AD8572EABB9F3B3F2FBFE7E8.png",
+  "408A146E26998DF7F08D14916158D3AC.png": "gallery/pugua/像素头像/408A146E26998DF7F08D14916158D3AC.png",
   "01_together-picnic.jpg": "gallery/together/01_together-picnic.jpg",
   "together-picnic.jpg": "gallery/together/01_together-picnic.jpg",
   "02_together-clean.jpg": "gallery/together/双人插1/02_together-clean.jpg",
