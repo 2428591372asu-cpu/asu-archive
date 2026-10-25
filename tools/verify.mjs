@@ -205,6 +205,11 @@ async function runPage(name, url, kind, opts) {
   })`);
 
   if (kind === 'index') {
+    /* 先清主题状态，避免上次运行残留（localStorage 会跨运行保留） */
+    await evaluate(sessionId, `try{localStorage.removeItem('asu-archive-theme');localStorage.removeItem('asu-archive-theme:prev');localStorage.removeItem('asu-archive-theme:unlock');}catch(e){} 1`);
+    await evaluate(sessionId, `location.reload(); 1`);
+    await sleep(1600);
+
     Object.assign(result.checks, await evaluate(sessionId, `({
       duoItems: document.querySelectorAll('.duo__item').length,
       duoNames: [...document.querySelectorAll('.duo__name')].map(e => e.textContent),
@@ -292,6 +297,40 @@ async function runPage(name, url, kind, opts) {
     await sleep(1600);
     result.toggleBack = await evaluate(sessionId,
       `({ theme: document.body.dataset.theme })`);
+
+    /* 星域主题：进入 → 检查氛围层 → 退出回到白天 */
+    /* 彩蛋：先确保是「未解锁 + 白天」的干净状态，再验证按钮出现 */
+    await evaluate(sessionId, `localStorage.removeItem('asu-archive-theme:unlock'); localStorage.setItem('asu-archive-theme','day'); 1`);
+    await evaluate(sessionId, `location.reload(); 1`);
+    await sleep(1600);
+    result.easter = await evaluate(sessionId, `({
+      api: !!window.__ARCHIVE_EASTER__,
+      unlockedDefault: window.__ARCHIVE_EASTER__ ? window.__ARCHIVE_EASTER__.isUnlocked() : null,
+      hidden: getComputedStyle(document.querySelector('#skinToggle')).display,
+      theme: document.body.dataset.theme
+    })`);
+    await evaluate(sessionId, `window.__ARCHIVE_EASTER__.unlock(); 1`);
+    await sleep(250);
+    result.easter.shown = await evaluate(sessionId, `getComputedStyle(document.querySelector('#skinToggle')).display`);
+    result.easter.unlockedAfter = await evaluate(sessionId, `window.__ARCHIVE_EASTER__.isUnlocked()`);
+
+    await evaluate(sessionId, `document.querySelector('#skinToggle').click(); 1`);
+    await sleep(1400);
+    result.scifi = await evaluate(sessionId, `({
+      theme: document.body.dataset.theme,
+      pressed: document.querySelector('#skinToggle').getAttribute('aria-pressed'),
+      stars: !!document.querySelector('.sf-stars'),
+      orbRings: document.querySelectorAll('.sf-orb__ring').length,
+      trailCanvas: !!document.querySelector('.sf-trail'),
+      frame: !!document.querySelector('.sf-frame'),
+      bg: getComputedStyle(document.body).backgroundColor,
+      label: document.querySelector('.theme-toggle__label').textContent
+    })`);
+    await screenshot(sessionId, `${OUTDIR}/${name}--scifi.png`, false);
+
+    await evaluate(sessionId, `document.querySelector('#skinToggle').click(); 1`);
+    await sleep(1200);
+    result.scifiBack = await evaluate(sessionId, `({ theme: document.body.dataset.theme })`);
   }
 
   if (kind === 'duomobile') {
@@ -455,6 +494,22 @@ expect('index.toggle.label', report.index.toggle.label, 'NIGHT');
 expect('index.toggle.pressed', report.index.toggle.pressed, 'true');
 expect('index.toggle.bg（主题黑）', report.index.toggle.bg, 'rgb(8, 9, 11)');
 expect('index.toggleBack.theme', report.index.toggleBack.theme, 'day');
+
+  /* 星域主题 */
+  expect('index.easter.theme', report.index.easter.theme, 'day');
+  expect('index.easter.api', report.index.easter.api, true);
+  expect('index.easter.unlockedDefault', report.index.easter.unlockedDefault, false);
+  expect('index.easter.shown', report.index.easter.shown, 'flex');
+  expect('index.easter.unlockedAfter', report.index.easter.unlockedAfter, true);
+  expect('index.scifi.theme', report.index.scifi.theme, 'scifi');
+  expect('index.scifi.pressed', report.index.scifi.pressed, 'true');
+  expect('index.scifi.stars', report.index.scifi.stars, true);
+  expect('index.scifi.orbRings', report.index.scifi.orbRings, 0);
+  expect('index.scifi.trailCanvas', report.index.scifi.trailCanvas, true);
+  expect('index.scifi.frame', report.index.scifi.frame, true);
+  expect('index.scifi.bg（深空底）', report.index.scifi.bg, 'rgb(4, 7, 12)');
+  expect('index.scifi.label', report.index.scifi.label, 'SCI-FI');
+  expect('index.scifiBack.theme', report.index.scifiBack.theme, 'day');
 expect('nav.afterFirstClick', report.nav.afterFirst, 'index.html');
 expect('nav.afterSecondClick', report.nav.afterSecond, 'character.html?id=a-su');
 

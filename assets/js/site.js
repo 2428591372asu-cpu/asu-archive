@@ -62,31 +62,120 @@ function applyLabels() {
     var t = null;
     try { t = window.localStorage.getItem(THEME_KEY); } catch (e) { t = null; }
     if (!t) {
-      var m = /(?:\?|&)theme=(day|night)/.exec(location.search);
+      var m = /(?:\?|&)theme=(day|night|scifi)/.exec(location.search);
       if (m) t = m[1];
     }
-    return t === 'night' ? 'night' : 'day';
+    return t === 'night' || t === 'scifi' ? t : 'day';
   }
 
   function applyTheme(t) {
     document.body.dataset.theme = t;
-    var btn = $('#themeToggle');
-    if (!btn) return;
+    var scifi = t === 'scifi';
     var night = t === 'night';
-    btn.classList.toggle('is-night', night);
-    btn.setAttribute('aria-pressed', night ? 'true' : 'false');
-    btn.setAttribute('aria-label', night ? '切换到白天模式' : '切换到夜晚模式');
-    var lb = btn.querySelector('.theme-toggle__label');
-    if (lb) lb.textContent = night ? 'NIGHT' : 'DAY';
+
+    var btn = $('#themeToggle');
+    if (btn) {
+      btn.classList.toggle('is-night', night);
+      btn.setAttribute('aria-pressed', night ? 'true' : 'false');
+      btn.setAttribute('aria-label', night ? '切换到白天模式' : '切换到夜晚模式');
+      var lb = btn.querySelector('.theme-toggle__label');
+      if (lb) lb.textContent = scifi ? 'SCI-FI' : night ? 'NIGHT' : 'DAY';
+    }
+
+    /* 星域按钮：只在星域主题下点亮 */
+    var skin = $('#skinToggle');
+    if (skin) {
+      skin.classList.toggle('is-on', scifi);
+      skin.setAttribute('aria-pressed', scifi ? 'true' : 'false');
+      skin.setAttribute('aria-label', scifi ? '退出星域主题（回到白天/夜晚）' : '切换到星域主题');
+      var sl = skin.querySelector('.skin-toggle__label');
+      if (sl) sl.textContent = '星域';
+    }
+
+    if (scifi) unlockScifi();
+    document.body.classList.toggle('is-unlocked', unlocked || scifi);
+
+    if (window.__SF_ATMOSPHERE__) window.__SF_ATMOSPHERE__.refresh();
+  }
+
+  /* 记住进入星域之前是白天还是黑夜，退出时回到原处 */
+  var SF_PREV = 'night';
+  try {
+    var pv = window.localStorage.getItem(THEME_KEY + ':prev');
+    if (pv === 'day' || pv === 'night') SF_PREV = pv;
+  } catch (e) {}
+
+  /* ---------- 星域是彩蛋：默认隐藏，解锁后才出现 ---------- */
+  var unlocked = false;
+  try {
+    unlocked = window.localStorage.getItem(THEME_KEY + ':unlock') === '1';
+  } catch (e) {}
+
+  function unlockScifi() {
+    if (unlocked) return;
+    unlocked = true;
+    document.body.classList.add('is-unlocked');
+    try { window.localStorage.setItem(THEME_KEY + ':unlock', '1'); } catch (e) {}
   }
 
   function initTheme() {
-    applyTheme(readTheme());
+    /* 彩蛋：在任何地方敲 star */
+    var seq = '';
+    document.addEventListener('keydown', function (e) {
+      if (!e.key || e.key.length !== 1 || !/[a-z]/i.test(e.key)) return;
+      seq = (seq + e.key.toLowerCase()).slice(-4);
+      if (seq === 'star') unlockScifi();
+    });
+
+    var start = readTheme();
+    if (start === 'scifi') { SF_PREV = 'night'; unlockScifi(); }
+    applyTheme(start);
+
+    var skin = $('#skinToggle');
+    if (skin) {
+      skin.addEventListener('click', function () {
+        var now = document.body.dataset.theme;
+        if (now !== 'scifi') SF_PREV = now === 'day' ? 'day' : 'night';
+        var next = now === 'scifi' ? SF_PREV : 'scifi';
+        document.body.classList.add('is-theming');
+        applyTheme(next);
+        try {
+          window.localStorage.setItem(THEME_KEY, next);
+          window.localStorage.setItem(THEME_KEY + ':prev', SF_PREV);
+        } catch (err) {}
+        window.clearTimeout(themeTimer);
+        themeTimer = window.setTimeout(function () {
+          document.body.classList.remove('is-theming');
+        }, 700);
+      });
+    }
+
     var btn = $('#themeToggle');
     if (!btn) return;
+
+    /* 手机端彩蛋：1.4 秒内连点 5 次主题按钮 → 解锁星域并直接进入 */
+    var taps = 0;
+    var tapTimer = 0;
+
     btn.addEventListener('click', function () {
-      var next = document.body.dataset.theme === 'night' ? 'day' : 'night';
-      /* 切换瞬间给全站开一段颜色过渡，再做替换 */
+      taps++;
+      window.clearTimeout(tapTimer);
+      tapTimer = window.setTimeout(function () { taps = 0; }, 1400);
+      if (taps >= 5) {
+        taps = 0;
+        unlockScifi();
+        document.body.classList.add('is-theming');
+        applyTheme('scifi');
+        try { window.localStorage.setItem(THEME_KEY, 'scifi'); } catch (e) {}
+        window.clearTimeout(themeTimer);
+        themeTimer = window.setTimeout(function () {
+          document.body.classList.remove('is-theming');
+        }, 700);
+        return;
+      }
+
+      var now = document.body.dataset.theme;
+      var next = now === 'night' ? 'day' : 'night';
       document.body.classList.add('is-theming');
       applyTheme(next);
       try { window.localStorage.setItem(THEME_KEY, next); } catch (e) {}
@@ -96,6 +185,11 @@ function applyLabels() {
       }, 640);
     });
   }
+
+  window.__ARCHIVE_EASTER__ = {
+    unlock: unlockScifi,
+    isUnlocked: function () { return unlocked; }
+  };
 
   /* 图片加载失败时的兜底（本地删了图也不会整块塌掉） */
   document.addEventListener('error', function (e) {
