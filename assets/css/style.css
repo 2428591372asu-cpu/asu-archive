@@ -1642,3 +1642,52 @@ body[data-theme="night"] .gitem:has(img.is-ready){ background:#0d0f12; }
   .duo__detail[data-side="left"] .duo__art img.is-wide{ object-position:82% 50%; }
   .duo__detail[data-side="right"] .duo__art img.is-wide{ object-position:78% 50%; }
 }
+
+/* ==========================================================================
+   「+」点阵背景层（由 assets/js/plus-field.js 绘制）
+   放在 z-index:-1：压住页面底色、被所有内容盖住，只从空白处透出来
+   ========================================================================== */
+.plus-field{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none;
+}
+/* 内容压在点阵之上（各主题通用）：点阵永远是最底层，被遮住就遮住 */
+body .wrap,
+body .topbar,
+body .foot{ position:relative; z-index:1; }
+body[data-theme="day"] .plus-field{ opacity:.9; }
+body[data-theme="night"] .plus-field{ opacity:1; }
+body[data-theme="scifi"] .plus-field{ opacity:.85; }
+@media (prefers-reduced-motion:reduce){
+  .plus-field{ opacity:.8; }
+}
+
+/* ==========================================================================
+   角色页立绘位：只保留分界框
+   （原设计有底色渐变 + 网格 + 底部白雾，边界太重，这里只留那圈线）
+   ========================================================================== */
+.plate--head{
+  background:none !important;
+  border:1px solid var(--line-2) !important;
+  box-shadow:none !important;
+}
+.plate--head .plate__grid,
+.plate--head .plate__cross,
+.plate--head .portrait__grid,
+.plate--head .portrait__word,
+.plate--head::after{ display:none !important; }
+.plate--head .plate__img,
+.plate--head .portrait__main{
+  filter:none !important;
+}
+/* 白雾去掉后，压在立绘上的小字靠描边保证可读 */
+.plate--head .plate__foot,
+.plate--head .plate__tag{
+  text-shadow:0 1px 3px rgba(255,255,255,.95), 0 0 10px rgba(255,255,255,.8);
+}
+body[data-theme="night"] .plate--head .plate__foot,
+body[data-theme="night"] .plate--head .plate__tag,
+body[data-theme="scifi"] .plate--head .plate__foot,
+body[data-theme="scifi"] .plate--head .plate__tag{
+  text-shadow:0 1px 3px rgba(0,0,0,.9), 0 0 10px rgba(0,0,0,.7);
+}

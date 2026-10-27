@@ -1,14 +1,4 @@
 {
-  "01_pugua-standing.png": {
-    "title": "立绘 · 自拍杆（透明底）",
-    "note": "全身站姿",
-    "cat": "立绘"
-  },
-  "02_pugua-standing-2.png": {
-    "title": "立绘 II · 透明底",
-    "note": "",
-    "cat": "立绘"
-  },
   "03_pugua-standing-3.jpg": {
     "title": "立绘 III · 黑裙",
     "note": "",
@@ -41,11 +31,6 @@
   },
   "09_pugua-face-1.jpg": {
     "title": "头像 · 贴纸",
-    "note": "",
-    "cat": "头像"
-  },
-  "10_pugua-face-2.jpg": {
-    "title": "头像 · 黄底",
     "note": "",
     "cat": "头像"
   },

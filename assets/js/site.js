@@ -32,6 +32,12 @@ function applyLabels() {
 }
   if (!D) return;
 
+  /* 点阵背景里的字：'archive' 或角色 id（模块级，首页与角色页共用） */
+  function paintPlusText(key) {
+    window.__PLUS_TEXT__ = key;
+    if (window.__PLUS_FIELD__) window.__PLUS_FIELD__.setText(key);
+  }
+
   var IMG = 'assets/img/';
   /* 单文件构建时 window.__IMG__ 里是 base64；正常目录版继续走 assets/img/ */
   function img(file) {
@@ -91,10 +97,6 @@ function applyLabels() {
       var sl = skin.querySelector('.skin-toggle__label');
       if (sl) sl.textContent = '星域';
     }
-
-    if (scifi) unlockScifi();
-    document.body.classList.toggle('is-unlocked', unlocked || scifi);
-
     if (window.__SF_ATMOSPHERE__) window.__SF_ATMOSPHERE__.refresh();
   }
 
@@ -105,30 +107,9 @@ function applyLabels() {
     if (pv === 'day' || pv === 'night') SF_PREV = pv;
   } catch (e) {}
 
-  /* ---------- 星域是彩蛋：默认隐藏，解锁后才出现 ---------- */
-  var unlocked = false;
-  try {
-    unlocked = window.localStorage.getItem(THEME_KEY + ':unlock') === '1';
-  } catch (e) {}
-
-  function unlockScifi() {
-    if (unlocked) return;
-    unlocked = true;
-    document.body.classList.add('is-unlocked');
-    try { window.localStorage.setItem(THEME_KEY + ':unlock', '1'); } catch (e) {}
-  }
-
   function initTheme() {
-    /* 彩蛋：在任何地方敲 star */
-    var seq = '';
-    document.addEventListener('keydown', function (e) {
-      if (!e.key || e.key.length !== 1 || !/[a-z]/i.test(e.key)) return;
-      seq = (seq + e.key.toLowerCase()).slice(-4);
-      if (seq === 'star') unlockScifi();
-    });
-
     var start = readTheme();
-    if (start === 'scifi') { SF_PREV = 'night'; unlockScifi(); }
+    if (start === 'scifi') SF_PREV = 'night';
     applyTheme(start);
 
     var skin = $('#skinToggle');
@@ -153,27 +134,7 @@ function applyLabels() {
     var btn = $('#themeToggle');
     if (!btn) return;
 
-    /* 手机端彩蛋：1.4 秒内连点 5 次主题按钮 → 解锁星域并直接进入 */
-    var taps = 0;
-    var tapTimer = 0;
-
     btn.addEventListener('click', function () {
-      taps++;
-      window.clearTimeout(tapTimer);
-      tapTimer = window.setTimeout(function () { taps = 0; }, 1400);
-      if (taps >= 5) {
-        taps = 0;
-        unlockScifi();
-        document.body.classList.add('is-theming');
-        applyTheme('scifi');
-        try { window.localStorage.setItem(THEME_KEY, 'scifi'); } catch (e) {}
-        window.clearTimeout(themeTimer);
-        themeTimer = window.setTimeout(function () {
-          document.body.classList.remove('is-theming');
-        }, 700);
-        return;
-      }
-
       var now = document.body.dataset.theme;
       var next = now === 'night' ? 'day' : 'night';
       document.body.classList.add('is-theming');
@@ -185,11 +146,6 @@ function applyLabels() {
       }, 640);
     });
   }
-
-  window.__ARCHIVE_EASTER__ = {
-    unlock: unlockScifi,
-    isUnlocked: function () { return unlocked; }
-  };
 
   /* 图片加载失败时的兜底（本地删了图也不会整块塌掉） */
   document.addEventListener('error', function (e) {
@@ -418,6 +374,7 @@ function applyLabels() {
       heroEl.dataset.slide = s.art ? 'art' : 'photo';
       if (s.art && s.char) heroEl.dataset.slideChar = s.char;
       else delete heroEl.dataset.slideChar;
+      paintPlusText(s.art && s.char ? s.char : 'archive');
     }
     var layers = $$('.hero__slide');
     var nav = $('#heroNav');
@@ -710,6 +667,7 @@ function applyLabels() {
 
     /* 主题由右上角开关决定；这里只挂角色强调色 + 页面底色 */
     document.body.dataset.char = c.id;
+    paintPlusText(c.id);
     document.body.dataset.surface = 'char';
 
     /* 左栏 */

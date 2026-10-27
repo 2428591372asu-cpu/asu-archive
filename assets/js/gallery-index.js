@@ -57,7 +57,7 @@ window.GALLERY = {
       ],
       "title": "生贺",
       "note": "",
-      "cat": "生贺",
+      "cat": "插画",
       "count": 2
     },
     {
@@ -268,7 +268,7 @@ window.GALLERY = {
       ],
       "title": "立绘1",
       "note": "",
-      "cat": "立绘1",
+      "cat": "立绘",
       "count": 6
     },
     {
@@ -281,7 +281,7 @@ window.GALLERY = {
       ],
       "title": "石炭头像",
       "note": "",
-      "cat": "石炭头像",
+      "cat": "头像",
       "count": 2
     },
     {
@@ -318,7 +318,7 @@ window.GALLERY = {
       ],
       "title": "双人插1",
       "note": "",
-      "cat": "双人插1",
+      "cat": "合作",
       "count": 3
     }
   ]

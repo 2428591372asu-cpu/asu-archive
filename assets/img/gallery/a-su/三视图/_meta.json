@@ -1,0 +1,25 @@
+{
+  "_title": "三视图",
+  "_note": "",
+  "_cat": "三视图",
+  "03_a-su-sheet-1.jpg": {
+    "title": "三视图 · 排版 1",
+    "note": "正 / 背 / 侧",
+    "cat": "三视图"
+  },
+  "04_a-su-sheet-2.jpg": {
+    "title": "三视图 · 排版 2",
+    "note": "",
+    "cat": "三视图"
+  },
+  "05_a-su-sheet-plain.jpg": {
+    "title": "三视图 · 无排版",
+    "note": "",
+    "cat": "三视图"
+  },
+  "06_a-su-turnaround.jpg": {
+    "title": "三视图 · 旧版",
+    "note": "含配色与细节标注",
+    "cat": "三视图"
+  }
+}

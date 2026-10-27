@@ -1,0 +1,35 @@
+{
+  "_title": "头像",
+  "_note": "",
+  "_cat": "头像",
+  "07_a-su-avatar.png": {
+    "title": "头像 · 透明底",
+    "note": "PNG 透明通道",
+    "cat": "头像"
+  },
+  "08_a-su-avatar2.png": {
+    "title": "头像 II · 透明底",
+    "note": "PNG 透明通道",
+    "cat": "头像"
+  },
+  "09_a-su-avatar-bg.jpg": {
+    "title": "头像 · 带背景",
+    "note": "",
+    "cat": "头像"
+  },
+  "10_a-su-avatar2-bg.jpg": {
+    "title": "头像 II · 带背景",
+    "note": "",
+    "cat": "头像"
+  },
+  "11_a-su-portrait.jpg": {
+    "title": "头像 · 白底",
+    "note": "",
+    "cat": "头像"
+  },
+  "12_a-su-portrait2.jpg": {
+    "title": "头像 II · 白底",
+    "note": "",
+    "cat": "头像"
+  }
+}

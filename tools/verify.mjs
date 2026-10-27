@@ -215,6 +215,8 @@ async function runPage(name, url, kind, opts) {
       duoNames: [...document.querySelectorAll('.duo__name')].map(e => e.textContent),
       rosterGone: document.querySelector('#roster') === null,
       heroIndexGone: document.querySelector('#heroIndex') === null,
+    plusLayer: !!document.querySelector('.plus-field'),
+    plusCells: (window.__PLUS_FIELD__ && window.__PLUS_FIELD__.stats().cells) || 0,
       detailClosed: Math.round(document.querySelector('#duoDetail').getBoundingClientRect().height) === 0,
       shots: document.querySelectorAll('.shot').length,
       stats: [...document.querySelectorAll('.hero__stat b')].map(e => e.textContent),
@@ -289,6 +291,7 @@ async function runPage(name, url, kind, opts) {
     result.toggle = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
       label: document.querySelector('.theme-toggle__label').textContent,
+      skinVisible: getComputedStyle(document.querySelector('#skinToggle')).display,
       pressed: document.querySelector('#themeToggle').getAttribute('aria-pressed'),
       bg: getComputedStyle(document.body).backgroundColor
     })`);
@@ -299,21 +302,6 @@ async function runPage(name, url, kind, opts) {
       `({ theme: document.body.dataset.theme })`);
 
     /* 星域主题：进入 → 检查氛围层 → 退出回到白天 */
-    /* 彩蛋：先确保是「未解锁 + 白天」的干净状态，再验证按钮出现 */
-    await evaluate(sessionId, `localStorage.removeItem('asu-archive-theme:unlock'); localStorage.setItem('asu-archive-theme','day'); 1`);
-    await evaluate(sessionId, `location.reload(); 1`);
-    await sleep(1600);
-    result.easter = await evaluate(sessionId, `({
-      api: !!window.__ARCHIVE_EASTER__,
-      unlockedDefault: window.__ARCHIVE_EASTER__ ? window.__ARCHIVE_EASTER__.isUnlocked() : null,
-      hidden: getComputedStyle(document.querySelector('#skinToggle')).display,
-      theme: document.body.dataset.theme
-    })`);
-    await evaluate(sessionId, `window.__ARCHIVE_EASTER__.unlock(); 1`);
-    await sleep(250);
-    result.easter.shown = await evaluate(sessionId, `getComputedStyle(document.querySelector('#skinToggle')).display`);
-    result.easter.unlockedAfter = await evaluate(sessionId, `window.__ARCHIVE_EASTER__.isUnlocked()`);
-
     await evaluate(sessionId, `document.querySelector('#skinToggle').click(); 1`);
     await sleep(1400);
     result.scifi = await evaluate(sessionId, `({
@@ -496,11 +484,9 @@ expect('index.toggle.bg（主题黑）', report.index.toggle.bg, 'rgb(8, 9, 11)'
 expect('index.toggleBack.theme', report.index.toggleBack.theme, 'day');
 
   /* 星域主题 */
-  expect('index.easter.theme', report.index.easter.theme, 'day');
-  expect('index.easter.api', report.index.easter.api, true);
-  expect('index.easter.unlockedDefault', report.index.easter.unlockedDefault, false);
-  expect('index.easter.shown', report.index.easter.shown, 'flex');
-  expect('index.easter.unlockedAfter', report.index.easter.unlockedAfter, true);
+  expect('index.skinToggle（夜晚也常显）', report.index.toggle.skinVisible, 'flex');
+  expect('index.plusLayer', report.index.checks.plusLayer, true);
+  expect('index.plusCells > 100', report.index.checks.plusCells > 100, true);
   expect('index.scifi.theme', report.index.scifi.theme, 'scifi');
   expect('index.scifi.pressed', report.index.scifi.pressed, 'true');
   expect('index.scifi.stars', report.index.scifi.stars, true);

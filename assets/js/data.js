@@ -216,7 +216,7 @@ window.ARCHIVE = (function () {
       name: '蒲瓜',
       latin: 'PUGUA',
       code: 'FILE-002',
-      cat: '仙狐 ',
+      cat: '仙狐',
       tags: ['蓝发', '黄绿瞳', '白丝'],
       card: {
         image: 'pugua-pixel.png',
@@ -549,6 +549,11 @@ window.ARCHIVE = (function () {
     },
     labels: {
       brandEn: 'A_SU&PUGUA ARCHIVE',
+      plusText: {
+        archive: 'ARCHIVE',
+        'a-su': 'A_SU',
+        pugua: 'PUGUA'
+      },
       brandCn: '设定档案',
       topMeta: 'LOCAL DEMO',
       titles: {

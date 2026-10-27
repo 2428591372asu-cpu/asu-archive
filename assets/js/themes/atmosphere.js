@@ -552,6 +552,38 @@
       },
       { passive: true }
     );
+    /* 手机：手指拖动同样驱动轨迹（触摸没有 hover，抬起就停） */
+    function onTouch(e) {
+      var t = e.touches && e.touches[0];
+      if (!t) return;
+      pointer.x = t.clientX;
+      pointer.y = t.clientY;
+      pointer.active = true;
+      pointer.px = (t.clientX / window.innerWidth - 0.5) * 2;
+      pointer.py = (t.clientY / window.innerHeight - 0.5) * 2;
+      var root = document.documentElement;
+      root.style.setProperty('--mx', pointer.px.toFixed(3));
+      root.style.setProperty('--my', pointer.py.toFixed(3));
+    }
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    window.addEventListener('touchmove', onTouch, { passive: true });
+    window.addEventListener(
+      'touchend',
+      function () {
+        pointer.active = false;
+        cursor.has = false;
+      },
+      { passive: true }
+    );
+    window.addEventListener(
+      'touchcancel',
+      function () {
+        pointer.active = false;
+        cursor.has = false;
+      },
+      { passive: true }
+    );
+
     window.addEventListener(
       'pointerleave',
       function () {
@@ -573,12 +605,6 @@
       v.className = 'sf-vignette';
       v.setAttribute('aria-hidden', 'true');
       document.body.appendChild(v);
-    }
-    if (!document.querySelector('.sf-sweep')) {
-      var s = document.createElement('div');
-      s.className = 'sf-sweep';
-      s.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(s);
     }
     if (!document.querySelector('.sf-frame')) {
       var f = document.createElement('div');

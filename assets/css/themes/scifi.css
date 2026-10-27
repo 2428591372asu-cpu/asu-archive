@@ -73,14 +73,6 @@ body[data-theme="night"] .sf-stars{ opacity:.5; }
 body[data-theme="scifi"] .sf-vignette{ opacity:1; }
 
 /* 缓慢横扫的一道扫描线（很淡，只做气氛） */
-.sf-sweep{
-  position:fixed; left:0; right:0; height:34vh; top:-34vh; z-index:1; pointer-events:none;
-  background:linear-gradient(180deg, transparent, rgba(79,216,255,.045) 62%, rgba(79,216,255,.11) 88%, transparent);
-  opacity:0;
-}
-body[data-theme="scifi"] .sf-sweep{ opacity:1; animation:sfSweep 26s linear infinite; }
-@keyframes sfSweep{
-  0%{ transform:translateY(0); }
   100%{ transform:translateY(150vh); }
 }
 
@@ -394,7 +386,6 @@ body.is-theming *{
 
 /* ---------- 15. 动效降级 ---------- */
 @media (prefers-reduced-motion:reduce){
-  .sf-sweep{ display:none; }
   .section-head::after, .skin-toggle__ring, .skin-toggle__ring::before{ animation:none !important; }
   .sf-stars{ opacity:.35 !important; }
 }
@@ -479,12 +470,13 @@ body[data-theme="scifi"] .dh__inner{
 }
 body[data-theme="scifi"] .hero__bg img,
 body[data-theme="scifi"] .plate img{
-  animation:sfHolo .9s var(--ease) both;
+  /* 只用 filter 做入场，不能碰 opacity：
+     .hero__slide 靠 opacity 做交叉淡入，动画占了 opacity 会让两层同时可见 */
+  animation:sfHolo .9s var(--ease);
 }
 @keyframes sfHolo{
-  0%{ opacity:.35; filter:brightness(1.8) saturate(.4) blur(3px); }
-  55%{ opacity:.9; }
-  100%{ opacity:1; filter:none; }
+  0%{ filter:brightness(1.8) saturate(.4) blur(3px); }
+  100%{ filter:none; }
 }
 
 /* 卡片悬停：底边一道光扫过 */
@@ -610,9 +602,3 @@ body[data-theme="night"] .sf-trail{ opacity:.55; }
   .sf-trail{ display:none; }
 }
 
-/* ==========================================================================
-   星域是彩蛋：默认不显示切换按钮，解锁后才出现
-   ========================================================================== */
-.skin-toggle{ display:none; }
-body.is-unlocked .skin-toggle,
-body[data-theme="scifi"] .skin-toggle{ display:inline-flex; }
