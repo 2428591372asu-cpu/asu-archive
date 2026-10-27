@@ -132,35 +132,6 @@ body[data-theme="scifi"] .topnav a::after{
 body[data-theme="scifi"] .topnav a:hover::after{ transform:scaleX(1); }
 
 /* ---------- 5. 主题切换按钮（新增的那一个） ---------- */
-.skin-toggle{
-  display:inline-flex; align-items:center; gap:8px; white-space:nowrap; flex:none;
-  height:30px; padding:0 11px; margin-left:8px;
-  border:1px solid var(--line-2); border-radius:2px;
-  font-family:var(--mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--ink-3); background:transparent;
-  transition:color .35s var(--ease), border-color .35s var(--ease), background .35s;
-}
-.skin-toggle:hover{ color:var(--ink); border-color:var(--line); }
-.skin-toggle__ring{
-  width:10px; height:10px; position:relative; flex:none;
-  border:1px solid currentColor; border-radius:50%;
-  opacity:.85;
-}
-.skin-toggle__ring::before{
-  content:""; position:absolute; inset:-3px; border:1px solid currentColor;
-  border-radius:50%; opacity:.34;
-  transform:rotate(28deg) skewX(24deg);
-}
-.skin-toggle__ring::after{
-  content:""; position:absolute; left:50%; top:50%; width:2px; height:2px; margin:-1px 0 0 -1px;
-  background:currentColor; border-radius:50%;
-}
-body[data-theme="scifi"] .skin-toggle{
-  color:var(--accent); border-color:var(--hud-dim); background:rgba(79,216,255,.07);
-  box-shadow:0 0 0 1px rgba(79,216,255,.10), 0 0 18px rgba(79,216,255,.14) inset;
-}
-body[data-theme="scifi"] .skin-toggle__ring{ animation:sfRing 9s linear infinite; }
-body[data-theme="scifi"] .skin-toggle__ring::before{ animation:sfRing 6s linear infinite reverse; }
 @keyframes sfRing{ to{ transform:rotate(360deg); } }
 
 /* 黑白天按钮在星域里也换成细玻璃 */
@@ -386,7 +357,7 @@ body.is-theming *{
 
 /* ---------- 15. 动效降级 ---------- */
 @media (prefers-reduced-motion:reduce){
-  .section-head::after, .skin-toggle__ring, .skin-toggle__ring::before{ animation:none !important; }
+  .section-head::after{ animation:none !important; }
   .sf-stars{ opacity:.35 !important; }
 }
 
@@ -398,11 +369,7 @@ body.is-theming *{
 
 
 /* 按钮文字不折行；窄屏只留环形图标 */
-.skin-toggle__label{ white-space:nowrap; }
 @media (max-width:1180px){
-  .skin-toggle__label{ display:none; }
-  .skin-toggle{ padding:0 9px; }
-  .skin-toggle__ring{ width:12px; height:12px; }
 }
 
 /* ==========================================================================

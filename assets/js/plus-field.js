@@ -82,6 +82,8 @@
     var t = (document.body && document.body.dataset.theme) || 'day';
     if (t === 'night') return { rgb: '206,226,246', base: 0.13, hot: 0.18, dot: 0.115 };
     if (t === 'scifi') return { rgb: '120,214,248', base: 0.15, hot: 0.2, dot: 0.13 };
+    /* 天堂：象牙纸面上的暖金细点，比星域更沉一点 */
+    if (t === 'heaven') return { rgb: '146,112,48', base: 0.13, hot: 0.175, dot: 0.115 };
     return { rgb: '18,30,44', base: 0.14, hot: 0.185, dot: 0.12 }; /* day */
   }
 

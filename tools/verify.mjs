@@ -285,40 +285,64 @@ async function runPage(name, url, kind, opts) {
     result.duoClosed = await evaluate(sessionId,
       `Math.round(document.querySelector('#duoDetail').getBoundingClientRect().height)`);
 
-    /* 主题开关：白天 → 夜晚 → 白天 */
+    /* ---- 主题组：白天/夜晚  ⇄  天域/星空 ---- */
+    result.pairBtn = await evaluate(sessionId, `({
+      exists: !!document.querySelector('#pairToggle'),
+      label: document.querySelector('.pair-toggle__label').textContent.trim(),
+      pressed: document.querySelector('#pairToggle').getAttribute('aria-pressed'),
+      oldGone: document.querySelector('#skinToggle') === null &&
+               document.querySelector('#heavenToggle') === null
+    })`);
+
+    /* 组内翻转：白天 → 夜晚 */
     await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
     await sleep(1600);
     result.toggle = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
       label: document.querySelector('.theme-toggle__label').textContent,
-      skinVisible: getComputedStyle(document.querySelector('#skinToggle')).display,
       pressed: document.querySelector('#themeToggle').getAttribute('aria-pressed'),
       bg: getComputedStyle(document.body).backgroundColor
     })`);
     await screenshot(sessionId, `${OUTDIR}/${name}--night.png`, false);
-    await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
-    await sleep(1600);
-    result.toggleBack = await evaluate(sessionId,
-      `({ theme: document.body.dataset.theme })`);
 
-    /* 星域主题：进入 → 检查氛围层 → 退出回到白天 */
-    await evaluate(sessionId, `document.querySelector('#skinToggle').click(); 1`);
-    await sleep(1400);
+    /* ??? 整组替换：夜晚 → 星空 */
+    await evaluate(sessionId, `document.querySelector('#pairToggle').click(); 1`);
+    await sleep(1600);
     result.scifi = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
-      pressed: document.querySelector('#skinToggle').getAttribute('aria-pressed'),
+      label: document.querySelector('.theme-toggle__label').textContent,
+      pairOn: document.querySelector('#pairToggle').classList.contains('is-on'),
+      pairPressed: document.querySelector('#pairToggle').getAttribute('aria-pressed'),
       stars: !!document.querySelector('.sf-stars'),
       orbRings: document.querySelectorAll('.sf-orb__ring').length,
       trailCanvas: !!document.querySelector('.sf-trail'),
       frame: !!document.querySelector('.sf-frame'),
-      bg: getComputedStyle(document.body).backgroundColor,
-      label: document.querySelector('.theme-toggle__label').textContent
+      bg: getComputedStyle(document.body).backgroundColor
     })`);
     await screenshot(sessionId, `${OUTDIR}/${name}--scifi.png`, false);
 
-    await evaluate(sessionId, `document.querySelector('#skinToggle').click(); 1`);
-    await sleep(1200);
-    result.scifiBack = await evaluate(sessionId, `({ theme: document.body.dataset.theme })`);
+    /* 组内翻转：星空 → 天域 */
+    await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
+    await sleep(1600);
+    result.heaven = await evaluate(sessionId, `({
+      theme: document.body.dataset.theme,
+      label: document.querySelector('.theme-toggle__label').textContent,
+      rays: !!document.querySelector('.hv-rays'),
+      doves: !!document.querySelector('.hv-doves'),
+      shards: document.querySelectorAll('.hv-shard').length,
+      pressed: document.querySelector('#themeToggle').getAttribute('aria-pressed'),
+      bg: getComputedStyle(document.body).backgroundColor
+    })`);
+    await screenshot(sessionId, `${OUTDIR}/${name}--heaven.png`, false);
+
+    /* ??? 再点一次：天域 → 白天（整组换回） */
+    await evaluate(sessionId, `document.querySelector('#pairToggle').click(); 1`);
+    await sleep(1500);
+    result.pairBack = await evaluate(sessionId, `({
+      theme: document.body.dataset.theme,
+      label: document.querySelector('.theme-toggle__label').textContent,
+      pairOn: document.querySelector('#pairToggle').classList.contains('is-on')
+    })`);
   }
 
   if (kind === 'duomobile') {
@@ -481,21 +505,35 @@ expect('index.toggle.theme', report.index.toggle.theme, 'night');
 expect('index.toggle.label', report.index.toggle.label, 'NIGHT');
 expect('index.toggle.pressed', report.index.toggle.pressed, 'true');
 expect('index.toggle.bg（主题黑）', report.index.toggle.bg, 'rgb(8, 9, 11)');
-expect('index.toggleBack.theme', report.index.toggleBack.theme, 'day');
+expect('pairBack.theme（整组换回白天）', report.index.pairBack.theme, 'day');
 
-  /* 星域主题 */
-  expect('index.skinToggle（夜晚也常显）', report.index.toggle.skinVisible, 'flex');
+  /* 主题组 */
+  expect('pairBtn.exists', report.index.pairBtn.exists, true);
+  expect('pairBtn.label', report.index.pairBtn.label, '???');
+  expect('pairBtn.pressed（默认关闭）', report.index.pairBtn.pressed, 'false');
+  expect('pairBtn.oldButtonsGone', report.index.pairBtn.oldGone, true);
   expect('index.plusLayer', report.index.checks.plusLayer, true);
   expect('index.plusCells > 100', report.index.checks.plusCells > 100, true);
+  /* ??? 之后：夜晚 → 星空 */
   expect('index.scifi.theme', report.index.scifi.theme, 'scifi');
-  expect('index.scifi.pressed', report.index.scifi.pressed, 'true');
+  expect('index.scifi.label', report.index.scifi.label, 'STARFIELD');
+  expect('index.scifi.pairOn', report.index.scifi.pairOn, true);
+  expect('index.scifi.pressed', report.index.scifi.pairPressed, 'true');
   expect('index.scifi.stars', report.index.scifi.stars, true);
   expect('index.scifi.orbRings', report.index.scifi.orbRings, 0);
   expect('index.scifi.trailCanvas', report.index.scifi.trailCanvas, true);
   expect('index.scifi.frame', report.index.scifi.frame, true);
   expect('index.scifi.bg（深空底）', report.index.scifi.bg, 'rgb(4, 7, 12)');
-  expect('index.scifi.label', report.index.scifi.label, 'SCI-FI');
-  expect('index.scifiBack.theme', report.index.scifiBack.theme, 'day');
+  /* 主按钮在组内翻转：星空 → 天域 */
+  expect('heaven.theme', report.index.heaven.theme, 'heaven');
+  expect('heaven.label', report.index.heaven.label, 'AETHER');
+  expect('heaven.pressed', report.index.heaven.pressed, 'false');
+  expect('heaven.rays', report.index.heaven.rays, true);
+  expect('heaven.doves', report.index.heaven.doves, true);
+  expect('heaven.shards >= 3', report.index.heaven.shards >= 3, true);
+  /* ??? 再点：整组换回白天 */
+  expect('pairBack.label', report.index.pairBack.label, 'DAY');
+  expect('pairBack.pairOn', report.index.pairBack.pairOn, false);
 expect('nav.afterFirstClick', report.nav.afterFirst, 'index.html');
 expect('nav.afterSecondClick', report.nav.afterSecond, 'character.html?id=a-su');
 

@@ -68,62 +68,68 @@ function applyLabels() {
     var t = null;
     try { t = window.localStorage.getItem(THEME_KEY); } catch (e) { t = null; }
     if (!t) {
-      var m = /(?:\?|&)theme=(day|night|scifi)/.exec(location.search);
+      var m = /(?:\?|&)theme=(day|night|scifi|heaven)/.exec(location.search);
       if (m) t = m[1];
     }
-    return t === 'night' || t === 'scifi' ? t : 'day';
+    return t === 'night' || t === 'scifi' || t === 'heaven' ? t : 'day';
+  }
+
+  /* ---------------------------------------------------------------- 主题组
+     主题是成对的：白天的对面是夜晚，天域的对面是星空。
+     主按钮只在组内翻转；「???」按钮整组替换。 */
+  var PAIRS = {
+    real: { a: 'day', b: 'night', la: 'DAY', lb: 'NIGHT' },
+    other: { a: 'heaven', b: 'scifi', la: 'AETHER', lb: 'STARFIELD' }
+  };
+
+  function pairOf(t) {
+    return t === 'heaven' || t === 'scifi' ? 'other' : 'real';
   }
 
   function applyTheme(t) {
     document.body.dataset.theme = t;
-    var scifi = t === 'scifi';
-    var night = t === 'night';
+
+    var p = pairOf(t);
+    var P = PAIRS[p];
+    var isB = t === P.b;
 
     var btn = $('#themeToggle');
     if (btn) {
-      btn.classList.toggle('is-night', night);
-      btn.setAttribute('aria-pressed', night ? 'true' : 'false');
-      btn.setAttribute('aria-label', night ? '切换到白天模式' : '切换到夜晚模式');
+      btn.classList.toggle('is-night', isB);
+      btn.setAttribute('aria-pressed', isB ? 'true' : 'false');
+      btn.setAttribute('aria-label', '切换到' + (isB ? P.la : P.lb));
       var lb = btn.querySelector('.theme-toggle__label');
-      if (lb) lb.textContent = scifi ? 'SCI-FI' : night ? 'NIGHT' : 'DAY';
+      if (lb) lb.textContent = isB ? P.lb : P.la;
     }
 
-    /* 星域按钮：只在星域主题下点亮 */
-    var skin = $('#skinToggle');
-    if (skin) {
-      skin.classList.toggle('is-on', scifi);
-      skin.setAttribute('aria-pressed', scifi ? 'true' : 'false');
-      skin.setAttribute('aria-label', scifi ? '退出星域主题（回到白天/夜晚）' : '切换到星域主题');
-      var sl = skin.querySelector('.skin-toggle__label');
-      if (sl) sl.textContent = '星域';
+    var pt = $('#pairToggle');
+    if (pt) {
+      pt.classList.toggle('is-on', p === 'other');
+      pt.setAttribute('aria-pressed', p === 'other' ? 'true' : 'false');
+      pt.setAttribute(
+        'aria-label',
+        p === 'other' ? '把天域/星空换回白天/夜晚' : '把白天/夜晚换成天域/星空'
+      );
     }
+
     if (window.__SF_ATMOSPHERE__) window.__SF_ATMOSPHERE__.refresh();
+    if (window.__HV_ATMOSPHERE__) window.__HV_ATMOSPHERE__.refresh();
   }
 
-  /* 记住进入星域之前是白天还是黑夜，退出时回到原处 */
-  var SF_PREV = 'night';
-  try {
-    var pv = window.localStorage.getItem(THEME_KEY + ':prev');
-    if (pv === 'day' || pv === 'night') SF_PREV = pv;
-  } catch (e) {}
-
   function initTheme() {
-    var start = readTheme();
-    if (start === 'scifi') SF_PREV = 'night';
-    applyTheme(start);
+    applyTheme(readTheme());
 
-    var skin = $('#skinToggle');
-    if (skin) {
-      skin.addEventListener('click', function () {
+    /* ???：整组替换（白天 ⇄ 天域，夜晚 ⇄ 星空） */
+    var pt = $('#pairToggle');
+    if (pt) {
+      pt.addEventListener('click', function () {
         var now = document.body.dataset.theme;
-        if (now !== 'scifi') SF_PREV = now === 'day' ? 'day' : 'night';
-        var next = now === 'scifi' ? SF_PREV : 'scifi';
+        var next;
+        if (pairOf(now) === 'real') next = now === 'night' ? 'scifi' : 'heaven';
+        else next = now === 'scifi' ? 'night' : 'day';
         document.body.classList.add('is-theming');
         applyTheme(next);
-        try {
-          window.localStorage.setItem(THEME_KEY, next);
-          window.localStorage.setItem(THEME_KEY + ':prev', SF_PREV);
-        } catch (err) {}
+        try { window.localStorage.setItem(THEME_KEY, next); } catch (e) {}
         window.clearTimeout(themeTimer);
         themeTimer = window.setTimeout(function () {
           document.body.classList.remove('is-theming');
@@ -131,12 +137,13 @@ function applyLabels() {
       });
     }
 
+    /* 主按钮：在当前的组里翻转 */
     var btn = $('#themeToggle');
     if (!btn) return;
-
     btn.addEventListener('click', function () {
       var now = document.body.dataset.theme;
-      var next = now === 'night' ? 'day' : 'night';
+      var P = PAIRS[pairOf(now)];
+      var next = now === P.a ? P.b : P.a;
       document.body.classList.add('is-theming');
       applyTheme(next);
       try { window.localStorage.setItem(THEME_KEY, next); } catch (e) {}

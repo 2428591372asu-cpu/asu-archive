@@ -17,7 +17,8 @@ CNAME / .nojekyll     GitHub Pages 配置
 assets/
   css/
     style.css         全站基础样式：设计 token、版式、三种主题的公共部分
-    themes/scifi.css  星域主题（深空档案感）的专属样式
+    themes/scifi.css  星空主题（STARFIELD，深空档案感）的专属样式
+    themes/heaven.css 天域主题（AETHER，冷白海报）的专属样式
   js/
     data.js           全站内容都在这里，改文字只改这个文件
     site.js           渲染与交互：主题、轮播、图集、详情页
@@ -25,6 +26,7 @@ assets/
     plus-field.js     背景「+ / ·」点阵（字符栅格化的底纹）
     themes/
       atmosphere.js   星域氛围层：星空、星座、鼠标/触摸星座轨迹
+      heaven.js       天域氛围层：白鸽群、玻璃碎片视差
   img/
     a-su-head.png 等   页面用的头像与线稿裁切
     gallery/          图集，按主文件夹分，一层子文件夹 = 一个系列
@@ -61,13 +63,25 @@ edit.bat              启动编辑器（会先自动扫描图集）
 
 ## 主题
 
-三种主题，右上角切换，状态存 `localStorage`：
+主题是**成对的**，右上角只有两颗按钮：
+
+- 左边那颗是主按钮，在**当前这一组**里翻转
+- 右边那颗是「???」，点一下把整组换掉
+
+```
+组一（默认）   白天 DAY      ⇄  夜晚 NIGHT
+                  ⇅ ? 按钮整组替换
+组二           天域 AETHER   ⇄  星空 STARFIELD
+```
+
+对应关系是 白天 ⇄ 天域、夜晚 ⇄ 星空，所以哪一组进来、退出都回到对面那一组。
+状态存 `localStorage`。四套主题：
 
 | 主题 | 说明 |
 | --- | --- |
 | `day` | 白天，默认 |
 | `night` | 夜晚 |
-| `scifi` | 星域，深空蓝黑 + 冷青，带星空与星座轨迹 |
+| `scifi` | 星空 STARFIELD：深空蓝黑 + 冷青，带星空与星座轨迹 |
 
 `?theme=scifi` 可以直接打开星域主题。
 

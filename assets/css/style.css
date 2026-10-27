@@ -1691,3 +1691,33 @@ body[data-theme="scifi"] .plate--head .plate__foot,
 body[data-theme="scifi"] .plate--head .plate__tag{
   text-shadow:0 1px 3px rgba(0,0,0,.9), 0 0 10px rgba(0,0,0,.7);
 }
+
+
+/* ==========================================================================
+   主题组按钮「???」
+   一键把白天/夜晚整组换成天域/星空；四套主题共用这一份样式。
+   ========================================================================== */
+.pair-toggle{
+  display:inline-flex; align-items:center; gap:7px; white-space:nowrap; flex:none;
+  height:30px; padding:0 10px; margin-left:8px;
+  border:1px dashed var(--line-2); border-radius:2px;
+  font-family:var(--mono); font-size:10px; letter-spacing:.18em;
+  color:var(--ink-3); background:transparent; cursor:pointer;
+  transition:color .35s var(--ease), border-color .35s var(--ease),
+             border-style .35s var(--ease), background .35s var(--ease);
+}
+.pair-toggle:hover{ color:var(--ink); border-color:var(--line); border-style:solid; }
+.pair-toggle__mark{
+  width:15px; height:15px; flex:none; display:grid; place-items:center;
+  border:1px solid currentColor; border-radius:50%;
+  font-size:9px; line-height:1; opacity:.75;
+}
+.pair-toggle__label{ letter-spacing:.2em; }
+.pair-toggle.is-on{
+  color:var(--accent); border-color:var(--accent); border-style:solid;
+  background:var(--accent-2);
+}
+.pair-toggle.is-on .pair-toggle__mark{ opacity:1; }
+@media (prefers-reduced-motion:reduce){
+  .pair-toggle{ transition:none; }
+}
