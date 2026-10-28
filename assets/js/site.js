@@ -64,14 +64,37 @@ function applyLabels() {
   var THEME_KEY = 'asu-archive-theme';
   var themeTimer = 0;
 
+  /* 本次会话里的主题：天域/星空只在当前标签页有效，不跨次保存 */
+  var LIVE_KEY = 'asu-archive-live';
+
   function readTheme() {
-    var t = null;
-    try { t = window.localStorage.getItem(THEME_KEY); } catch (e) { t = null; }
-    if (!t) {
-      var m = /(?:\?|&)theme=(day|night|scifi|heaven)/.exec(location.search);
-      if (m) t = m[1];
+    /* 带 ?theme= 的链接优先 */
+    var m = /(?:\?|&)theme=(day|night|scifi|heaven)/.exec(location.search);
+    if (m) return m[1];
+
+    /* 同一标签页里翻页（首页 ↔ 角色页）保持当前主题 */
+    var live = null;
+    try { live = window.sessionStorage.getItem(LIVE_KEY); } catch (e) { live = null; }
+    if (live === 'day' || live === 'night' || live === 'scifi' || live === 'heaven') {
+      return live;
     }
-    return t === 'night' || t === 'scifi' || t === 'heaven' ? t : 'day';
+
+    /* 新打开一律回到白天/夜晚，其中夜晚会被记住 */
+    var base = null;
+    try { base = window.localStorage.getItem(THEME_KEY); } catch (e) { base = null; }
+    return base === 'night' ? 'night' : 'day';
+  }
+
+  /* 白天/夜晚写进 localStorage；天域/星空只写 sessionStorage */
+  function writeTheme(t) {
+    try {
+      if (t === 'day' || t === 'night') {
+        window.localStorage.setItem(THEME_KEY, t);
+        window.sessionStorage.removeItem(LIVE_KEY);
+      } else {
+        window.sessionStorage.setItem(LIVE_KEY, t);
+      }
+    } catch (e) {}
   }
 
   /* ---------------------------------------------------------------- 主题组
@@ -129,7 +152,7 @@ function applyLabels() {
         else next = now === 'scifi' ? 'night' : 'day';
         document.body.classList.add('is-theming');
         applyTheme(next);
-        try { window.localStorage.setItem(THEME_KEY, next); } catch (e) {}
+        writeTheme(next);
         window.clearTimeout(themeTimer);
         themeTimer = window.setTimeout(function () {
           document.body.classList.remove('is-theming');
@@ -146,7 +169,7 @@ function applyLabels() {
       var next = now === P.a ? P.b : P.a;
       document.body.classList.add('is-theming');
       applyTheme(next);
-      try { window.localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      writeTheme(next);
       window.clearTimeout(themeTimer);
       themeTimer = window.setTimeout(function () {
         document.body.classList.remove('is-theming');

@@ -1,255 +1,448 @@
 /* ==========================================================================
-   A_SU ARCHIVE — 「天域 AETHER」主题
+   A_SU ARCHIVE — 「天域 AETHER」主题 · 印刷版
    --------------------------------------------------------------------------
-   参考明日方舟《众生行记》(The Masses' Travels) 的视觉语言：
-   拉特兰 / 云上圣座 / 众生与死者的救赎。
+   整页按《众生行记》图录的工艺重做：
 
-   不是暖金的教堂，而是冷白高调的海报式版面：
-   · 近乎纯白的冷光底，大面积留白
-   · 从画面上方垂直落下的细密放射线（刻线般细）
-   · 白鸽群：小、密、飘，构成上升的流动
-   · 玻璃碎片：几何切割 + 折射，让画面「断裂又交融」
-   · 唯一的高饱和是赤红，只用在极小的点上（激活态、标记）
-
-   与「星空 STARFIELD」（深空冷青、向外扩张）互为阴阳。
+   · 钴蓝圆盘：主视觉的构图中心，套印在插画上（multiply）
+   · 半调网点：圆盘内与页脚，印刷网点的白点
+   · 套印错位：标题、卡片、框线都描两遍，第二遍偏 2–3px 的钴蓝
+   · 构造线与尺寸标注：横竖两道带刻度的标注线
+   · 拼贴界面框：RECORD / SANCTUM / INDEX 三张小纸片压在图上
+   · 外框数字：主视觉角落一个空心的大号编号
+   · 碎玻璃：六块带钴蓝的锐角碎片
+   · 红色轨迹：六边形节点 + 锁定圈 + 树形分叉（离主干越远越淡）
    ========================================================================== */
 
 /* ---------------------------------------------------------------- 1. 变量 */
 body[data-theme="heaven"]{
-  --bg:#f4f7f9;
+  --bg:#f3f5f7;
   --bg-2:#ffffff;
   --panel:#ffffff;
-  --panel-2:#f8fafc;
-  --line:rgba(18,26,34,.26);
-  --line-2:rgba(18,26,34,.12);
-  --line-3:rgba(18,26,34,.05);
-  --ink:#10151a;
-  --ink-2:#46535f;
-  --ink-3:#7d8b97;
-  --ink-4:#b7c1ca;
+  --panel-2:#f7f9fa;
+  --line:rgba(13,17,22,.28);
+  --line-2:rgba(13,17,22,.13);
+  --line-3:rgba(13,17,22,.055);
+  --ink:#0d1116;
+  --ink-2:#3f4a55;
+  --ink-3:#7c8892;
+  --ink-4:#b6bfc7;
   --accent:#b8231f;
   --accent-ink:#ffffff;
-  --accent-pale:#e9eef2;
-  --accent-2:rgba(46,94,124,.12);
-  --aether-steel:#2f6a8c;
+  --accent-pale:#eceff2;
+  --accent-2:rgba(184,35,31,.12);
+  --red:#b8231f;
+  --blue:#3a5bc2;
+  --blue-deep:#13234a;
+  --blue-bright:#2a3fff;
+  --red-soft:rgba(184,35,31,.16);
+  --paper:#fbfcfd;
   color-scheme:light;
-}
-
-body[data-theme="heaven"]{
   background:
-    radial-gradient(ellipse 120% 70% at 50% -20%, #ffffff 0%, #ffffff 34%, rgba(255,255,255,0) 66%),
-    radial-gradient(ellipse 80% 50% at 78% 4%, rgba(206,224,236,.55), transparent 62%),
-    linear-gradient(180deg,#fbfdfe 0%, var(--bg) 52%, #eef3f6 100%);
+    radial-gradient(ellipse 78% 56% at 78% 0%, rgba(58,91,194,.16), transparent 64%),
+    radial-gradient(ellipse 62% 46% at 4% 6%, rgba(184,35,31,.1), transparent 60%),
+    linear-gradient(180deg,#fbfcfd 0%, var(--bg) 46%, #eef1f4 100%);
   color:var(--ink);
 }
 
-/* ---------------------------------------------------- 2. 冷光放射线（刻线） */
-.hv-rays{
-  position:fixed; left:50%; top:-56vh; width:190vmax; height:190vmax;
-  transform:translateX(-50%);
-  z-index:0; pointer-events:none; opacity:0;
-  background:
-    repeating-conic-gradient(from 0deg,
-      rgba(47,106,140,.22) 0deg 0.09deg,
-      transparent 0.09deg 2.2deg);
-  mask-image:radial-gradient(circle at 50% 50%, #000 4%, rgba(0,0,0,.55) 18%, transparent 46%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 4%, rgba(0,0,0,.55) 18%, transparent 46%);
-  animation:hvRays 240s linear infinite;
-}
-@keyframes hvRays{ to{ transform:translateX(-50%) rotate(360deg); } }
-
-/* 极细的水平刻线，给海报加印刷质感 */
+/* 纸张网格 + 极细噪点，压在内容后面 */
 body[data-theme="heaven"]::before{
-  content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
-  background-image:repeating-linear-gradient(180deg,
-    rgba(18,26,34,.05) 0 1px, transparent 1px 4px);
-  opacity:.5;
-  mask-image:linear-gradient(180deg, rgba(0,0,0,.7), transparent 40%);
-  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.7), transparent 40%);
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(to right, rgba(13,17,22,.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13,17,22,.035) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 92%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 92%);
 }
 body[data-theme="heaven"]::after{
-  content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
-  background-image:radial-gradient(rgba(18,26,34,.14) .5px, transparent .6px);
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:radial-gradient(rgba(13,17,22,.16) .55px, transparent .7px);
   background-size:4px 4px;
-  opacity:.22;
+  opacity:.2; mix-blend-mode:multiply;
+}
+
+/* ------------------------------------------------ 2. 主视觉的平面图层 */
+.hv-stage{
+  position:absolute; inset:0; z-index:1;
+  pointer-events:none; overflow:hidden;
+  opacity:0; transition:opacity .9s var(--ease);
+}
+body[data-theme="heaven"] .hv-stage{ opacity:1; }
+
+/* ---- 钴蓝圆盘：套印在插画上 ---- */
+.hv-disc{
+  position:absolute; right:1%; top:2%;
+  width:min(50vw,560px); aspect-ratio:1;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 36% 28%, rgba(255,255,255,.62), transparent 44%),
+    linear-gradient(158deg, #2a3fff 0%, #3a5bc2 54%, #13234a 100%);
   mix-blend-mode:multiply;
+  opacity:.34;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 62%, transparent 71%);
+  mask-image:radial-gradient(circle at 50% 50%, #000 62%, transparent 71%);
+}
+/* 圆盘里的半调网点 */
+.hv-disc::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background-image:radial-gradient(#fff 1.1px, transparent 1.35px);
+  background-size:9px 9px;
+  opacity:.5; mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 18%, #000 62%, transparent 70%);
+  mask-image:radial-gradient(circle at 50% 50%, transparent 18%, #000 62%, transparent 70%);
 }
 
-/* ------------------------------------------------------------- 3. 白鸽群 */
-.hv-doves{
-  position:fixed; inset:0; width:100%; height:100%;
-  z-index:0; pointer-events:none; opacity:0;
+/* ---- 圆盘的三道环：实线 / 虚线 / 刻度 ---- */
+.hv-ring{
+  position:absolute; border-radius:50%;
+  pointer-events:none; opacity:0;
+}
+body[data-theme="heaven"] .hv-ring{ opacity:1; }
+.hv-ring--a{
+  right:-1.5%; top:-.5%; width:min(55vw,620px); aspect-ratio:1;
+  /* 一段越过起点的弧：印厂里圆规没收住笔的那种 */
+  background:conic-gradient(from -14deg,
+    rgba(58,91,194,.42) 0deg 352deg, transparent 352deg 360deg);
+  -webkit-mask-image:radial-gradient(circle, transparent 98.2%, #000 98.6%, #000 99.4%, transparent 99.8%);
+  mask-image:radial-gradient(circle, transparent 98.2%, #000 98.6%, #000 99.4%, transparent 99.8%);
+  animation:hvSpin 120s linear infinite;
+}
+.hv-ring--a::before,
+.hv-ring--a::after{
+  content:""; position:absolute; width:7px; height:7px; border-radius:50%;
+  background:var(--blue); top:50%; margin-top:-3.5px;
+}
+.hv-ring--a::before{ left:-3.5px; }
+.hv-ring--a::after{ right:-3.5px; }
+.hv-ring--b{
+  right:-4%; top:-3%; width:min(62vw,700px); aspect-ratio:1;
+  border:1px dashed rgba(58,91,194,.24);
+  animation:hvSpin 200s linear infinite reverse;
+}
+.hv-ring--c{
+  right:-7%; top:-6%; width:min(70vw,790px); aspect-ratio:1;
+  background:repeating-conic-gradient(from 0deg,
+    rgba(58,91,194,.38) 0deg .35deg, transparent .35deg 3deg);
+  -webkit-mask-image:radial-gradient(circle, transparent 96.4%, #000 97.1%, #000 97.9%, transparent 98.3%);
+  mask-image:radial-gradient(circle, transparent 96.4%, #000 97.1%, #000 97.9%, transparent 98.3%);
+  animation:hvSpin 300s linear infinite;
+}
+@keyframes hvSpin{ to{ transform:rotate(360deg); } }
+
+/* ---- 拼贴界面框 ---- */
+.hv-frame{
+  position:absolute;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(13,17,22,.5);
+  box-shadow:3px 3px 0 rgba(58,91,194,.22), 0 8px 22px rgba(13,17,22,.07);
+  border-top:2px solid var(--blue);
+  padding:9px 11px 8px;
+  font-family:var(--mono); font-size:9.5px; line-height:1.5;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink);
+}
+.hv-frame b{
+  display:block; font-weight:700; letter-spacing:.06em;
+  font-size:13px; margin-bottom:2px;
+}
+.hv-frame i{ display:block; font-style:normal; color:var(--ink-3); letter-spacing:.1em; }
+.hv-frame--a{ left:54%; top:5%; transform:rotate(-1.6deg); width:216px; }
+.hv-frame--b{ right:2%; top:23%; transform:rotate(1.4deg); width:170px; }
+.hv-frame--c{ left:6.5%; top:63%; transform:rotate(-.8deg); width:168px; }
+
+/* ---- 构造线：两道带刻度的尺寸标注 ---- */
+.hv-dim{
+  position:absolute; color:var(--red);
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
+  opacity:.85;
+}
+.hv-dim--h{
+  left:7.2%; top:19%; width:34%; height:1px; background:currentColor;
+}
+.hv-dim--h::before,
+.hv-dim--h::after{
+  content:""; position:absolute; background:currentColor;
+  width:1px; height:9px; top:-4px;
+}
+.hv-dim--h::before{ left:0; }
+.hv-dim--h::after{ right:0; }
+.hv-dim--h span{
+  position:absolute; left:50%; top:-17px; transform:translateX(-50%);
+  background:rgba(243,245,247,.92); padding:0 6px; white-space:nowrap;
+}
+.hv-dim--v{
+  right:1.4%; top:26%; height:34%; width:1px; background:currentColor;
+}
+.hv-dim--v::before,
+.hv-dim--v::after{
+  content:""; position:absolute; background:currentColor;
+  height:1px; width:9px; left:-4px;
+}
+.hv-dim--v::before{ top:0; }
+.hv-dim--v::after{ bottom:0; }
+.hv-dim--v span{
+  position:absolute; top:50%; left:10px; transform:translateY(-50%);
+  writing-mode:vertical-rl; background:rgba(243,245,247,.92); padding:6px 0;
 }
 
-/* --------------------------------------------------------- 4. 玻璃碎片 */
+/* ---- 外框数字 ---- */
+.hv-no{
+  position:absolute; left:-2%; top:11%;
+  font-family:var(--mono); font-weight:800;
+  font-size:clamp(60px,9vw,120px); line-height:.8; letter-spacing:-.06em;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(58,91,194,.4);
+  opacity:.6; user-select:none;
+}
+
+/* ---- 碎玻璃：六块 ---- */
 .hv-shard{
-  position:fixed; z-index:1; pointer-events:none; opacity:0;
-  background:linear-gradient(148deg, rgba(255,255,255,.92) 0%, rgba(214,232,243,.5) 42%, rgba(47,106,140,.14) 100%);
+  position:absolute; pointer-events:none; opacity:0;
+  background:linear-gradient(148deg, rgba(255,255,255,.92) 0%, rgba(246,206,198,.5) 44%, rgba(184,35,31,.2) 100%);
   border:1px solid rgba(255,255,255,.85);
-  box-shadow:0 2px 18px rgba(47,106,140,.1);
-  -webkit-backdrop-filter:blur(1.5px) saturate(1.1);
-  backdrop-filter:blur(1.5px) saturate(1.1);
+  box-shadow:0 2px 16px rgba(184,35,31,.16);
+  -webkit-backdrop-filter:blur(1.2px) saturate(1.05);
+  backdrop-filter:blur(1.2px) saturate(1.05);
   transition:opacity .8s var(--ease), transform 1.4s var(--ease);
 }
+body[data-theme="heaven"] .hv-shard{ opacity:.5; }
 .hv-shard--a{
-  width:min(24vw,300px); height:min(30vw,380px);
-  top:6vh; right:8vw;
-  clip-path:polygon(38% 0%, 100% 16%, 78% 100%, 0% 74%);
+  width:min(20vw,250px); height:min(26vw,330px);
+  top:6%; right:11%; clip-path:polygon(38% 0%, 100% 16%, 78% 100%, 0% 74%);
   transform:rotate(-6deg);
 }
 .hv-shard--b{
-  width:min(15vw,190px); height:min(20vw,250px);
-  top:44vh; right:24vw;
-  clip-path:polygon(10% 0%, 100% 22%, 74% 96%, 0% 70%);
+  width:min(13vw,165px); height:min(17vw,215px);
+  top:52%; right:26%; clip-path:polygon(10% 0%, 100% 22%, 74% 96%, 0% 70%);
   transform:rotate(8deg);
 }
 .hv-shard--c{
-  width:min(11vw,150px); height:min(16vw,200px);
-  top:16vh; left:42vw;
-  clip-path:polygon(0% 22%, 82% 0%, 100% 74%, 30% 100%);
+  width:min(9vw,125px); height:min(14vw,175px);
+  top:10%; left:46%; clip-path:polygon(0% 22%, 82% 0%, 100% 74%, 30% 100%);
   transform:rotate(-12deg);
 }
+.hv-shard--d{
+  width:min(7.5vw,105px); height:min(11vw,150px);
+  top:62%; right:30%; clip-path:polygon(24% 0%, 100% 34%, 62% 100%, 0% 62%);
+  transform:rotate(14deg);
+}
+.hv-shard--e{
+  width:min(11vw,150px); height:min(7.5vw,105px);
+  top:76%; right:15%; clip-path:polygon(0% 30%, 74% 0%, 100% 66%, 22% 100%);
+  transform:rotate(-9deg);
+}
+.hv-shard--f{
+  width:min(6vw,85px); height:min(9.5vw,125px);
+  top:20%; right:22%; clip-path:polygon(50% 0%, 100% 52%, 34% 100%, 0% 40%);
+  transform:rotate(22deg);
+  background:linear-gradient(140deg, rgba(255,255,255,.9), rgba(184,35,31,.14) 58%, rgba(184,35,31,.26) 100%);
+}
 
-body[data-theme="heaven"] .hv-rays,
-body[data-theme="heaven"] .hv-doves{ opacity:1; }
-body[data-theme="heaven"] .hv-shard{ opacity:.55; }
+/* ---- 羽毛与轨迹两画布 ---- */
+.hv-feathers,
+.hv-trail{
+  position:fixed; inset:0; width:100%; height:100%;
+  pointer-events:none; opacity:0;
+  transition:opacity 1s var(--ease);
+}
+.hv-feathers{ z-index:1; }
+.hv-trail{ z-index:6; }
+body[data-theme="heaven"] .hv-feathers,
+body[data-theme="heaven"] .hv-trail{ opacity:1; }
 
-/* 内容压在氛围之上 */
+/* 内容压在平面图层之上 */
 body[data-theme="heaven"] .wrap,
 body[data-theme="heaven"] .topbar,
 body[data-theme="heaven"] .foot{ position:relative; z-index:2; }
 
-/* --------------------------------------------------------- 5. 顶栏/按钮 */
+/* --------------------------------------------------------- 3. 顶栏/按钮 */
 body[data-theme="heaven"] .topbar{
-  background:rgba(255,255,255,.82);
-  border-bottom:1px solid var(--line-2);
-  -webkit-backdrop-filter:blur(14px) saturate(1.06);
-  backdrop-filter:blur(14px) saturate(1.06);
+  background:rgba(251,252,253,.9);
+  border-bottom:1px solid rgba(13,17,22,.16);
+  -webkit-backdrop-filter:blur(12px) saturate(1.05);
+  backdrop-filter:blur(12px) saturate(1.05);
 }
-body[data-theme="heaven"] .topbar__nav a{ color:var(--ink-2); }
-body[data-theme="heaven"] .topbar__nav a::after{ background:var(--accent); height:1px; }
+body[data-theme="heaven"] .topbar__nav a{ color:var(--ink-2); letter-spacing:.16em; }
+body[data-theme="heaven"] .topbar__nav a::after{ background:var(--blue); height:2px; }
 body[data-theme="heaven"] .topbar__meta{ color:var(--ink-3); border-left-color:var(--line-2); }
 body[data-theme="heaven"] .brand__mark path:first-child{ stroke:var(--ink); }
-body[data-theme="heaven"] .brand__mark path:last-child{ fill:var(--accent); }
+body[data-theme="heaven"] .brand__mark path:last-child{ fill:var(--red); }
 body[data-theme="heaven"] .foot__mark path:first-child{ stroke:var(--ink); }
-body[data-theme="heaven"] .foot__mark path:last-child{ fill:var(--accent); }
+body[data-theme="heaven"] .foot__mark path:last-child{ fill:var(--red); }
 
-body[data-theme="heaven"] .theme-toggle{
-  border-color:var(--line); color:var(--ink-2); background:#fff;
+body[data-theme="heaven"] .theme-toggle,
+body[data-theme="heaven"] .pair-toggle{
+  border-color:rgba(13,17,22,.24); color:var(--ink-2); background:#fff;
 }
-body[data-theme="heaven"] .theme-toggle:hover{ border-color:var(--ink); color:var(--ink); }
+body[data-theme="heaven"] .theme-toggle:hover,
+body[data-theme="heaven"] .pair-toggle:hover{ border-color:var(--ink); color:var(--ink); }
 body[data-theme="heaven"] .theme-toggle__dot{
-  background:var(--accent); box-shadow:0 0 0 3px rgba(184,35,31,.12);
+  background:var(--red); box-shadow:0 0 0 3px rgba(184,35,31,.14);
+}
+body[data-theme="heaven"] .pair-toggle.is-on{
+  color:var(--red); border-color:var(--red); background:rgba(184,35,31,.06);
 }
 
-
-/* ------------------------------------------------------------- 6. 版式 */
-body[data-theme="heaven"] .section-head{ border-top:1px solid var(--ink); }
-body[data-theme="heaven"] .section-head__t span{ color:var(--ink-3); letter-spacing:.3em; }
+/* ------------------------------------------------------------- 4. 版式 */
+body[data-theme="heaven"] .section{ position:relative; }
+body[data-theme="heaven"] .section-head{
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--line-2);
+  padding-bottom:12px;
+}
+body[data-theme="heaven"] .section-head__idx{
+  color:var(--red); border:1px solid rgba(58,91,194,.55);
+  border-left:3px solid var(--blue);
+  padding:2px 7px; background:rgba(58,91,194,.06);
+}
+body[data-theme="heaven"] .section-head__idx i{ background:var(--red); }
+body[data-theme="heaven"] .section-head__t span{ color:var(--ink-3); letter-spacing:.32em; }
 body[data-theme="heaven"] .section-head__meta{ color:var(--ink-3); }
-body[data-theme="heaven"] .section-head__t::before{
-  content:""; display:inline-block; width:6px; height:6px;
-  margin-right:11px; vertical-align:middle;
-  background:var(--accent);
-}
+body[data-theme="heaven"] .section-head__t h2{ letter-spacing:.02em; }
 
 body[data-theme="heaven"] .btn{
-  background:#fff; border-color:var(--line); color:var(--ink);
+  background:#fff; border-color:rgba(13,17,22,.34); color:var(--ink);
+  box-shadow:2px 2px 0 rgba(184,35,31,.18);
 }
 body[data-theme="heaven"] .btn:hover{
   background:var(--ink); border-color:var(--ink); color:#fff;
+  box-shadow:2px 2px 0 var(--red);
 }
-body[data-theme="heaven"] .btn--ghost{ background:transparent; }
+body[data-theme="heaven"] .btn--ghost{ background:#fff; }
 body[data-theme="heaven"] .btn--ghost:hover{
-  background:transparent; color:var(--accent); border-color:var(--accent);
+  background:var(--blue); border-color:var(--blue); color:#fff;
+  box-shadow:3px 3px 0 rgba(184,35,31,.45);
 }
 body[data-theme="heaven"] .tag{
   background:#fff; color:var(--ink-2); border-color:var(--line-2);
 }
 
+/* 卡片：白纸 + 四角裁切记号 + 套印偏移的钴蓝边 */
 body[data-theme="heaven"] .gitem,
 body[data-theme="heaven"] .shot,
 body[data-theme="heaven"] .plate{
   background:#fff;
-  border-color:var(--line-2);
-  box-shadow:0 1px 2px rgba(18,26,34,.05), 0 18px 40px rgba(47,106,140,.08);
+  border:1px solid rgba(13,17,22,.16);
+  box-shadow:4px 4px 0 rgba(184,35,31,.1);
+  position:relative;
+}
+body[data-theme="heaven"] .gitem::after,
+body[data-theme="heaven"] .shot::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--ink) 0 0), linear-gradient(var(--ink) 0 0),
+    linear-gradient(var(--ink) 0 0), linear-gradient(var(--ink) 0 0),
+    linear-gradient(var(--ink) 0 0), linear-gradient(var(--ink) 0 0),
+    linear-gradient(var(--ink) 0 0), linear-gradient(var(--ink) 0 0);
+  background-repeat:no-repeat;
+  background-size:
+    9px 1px, 1px 9px, 9px 1px, 1px 9px,
+    9px 1px, 1px 9px, 9px 1px, 1px 9px;
+  background-position:
+    6px 6px, 6px 6px, calc(100% - 6px) 6px, calc(100% - 6px) 6px,
+    6px calc(100% - 6px), 6px calc(100% - 6px),
+    calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) calc(100% - 6px);
+  opacity:.5;
 }
 body[data-theme="heaven"] .gitem:hover,
 body[data-theme="heaven"] .shot:hover{
-  border-color:var(--accent);
-  box-shadow:0 2px 4px rgba(18,26,34,.06), 0 22px 46px rgba(184,35,31,.12);
+  border-color:var(--blue);
+  box-shadow:5px 5px 0 rgba(184,35,31,.18);
 }
 body[data-theme="heaven"] .gitem__cap,
 body[data-theme="heaven"] .shot__cap{ color:var(--ink-2); }
 body[data-theme="heaven"] .plate--head{
-  border-color:var(--line) !important;
-  background:none !important;
+  border-color:var(--line) !important; background:none !important;
+  box-shadow:none !important;
 }
 
-/* ------------------------------------------------------------- 7. 主视觉 */
-body[data-theme="heaven"] .hero__bg img{
-  filter:saturate(.62) brightness(1.06) contrast(.94);
-}
+/* ------------------------------------------------------------- 5. 主视觉 */
+body[data-theme="heaven"] .hero{ background:transparent; }
+body[data-theme="heaven"] .hero__bg img{ filter:saturate(.5) brightness(1.1) contrast(.92); }
 body[data-theme="heaven"] .hero__slide[data-kind="art"]{
-  filter:saturate(.55) brightness(1.16) contrast(.9);
+  filter:saturate(.6) brightness(1.05) contrast(.95);
 }
 body[data-theme="heaven"] .hero__scrim::before{ opacity:0; }
 body[data-theme="heaven"] .hero__scrim::after{
   opacity:1;
   background:
-    linear-gradient(96deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.92) 30%,
-      rgba(244,247,249,.44) 62%, rgba(244,247,249,.04) 100%),
-    linear-gradient(180deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,0) 24%,
-      rgba(244,247,249,.72) 84%, var(--bg) 100%);
+    linear-gradient(97deg, rgba(251,252,253,.99) 0%, rgba(251,252,253,.94) 26%,
+      rgba(243,245,247,.5) 58%, rgba(243,245,247,.05) 100%),
+    linear-gradient(180deg, rgba(251,252,253,.5) 0%, rgba(251,252,253,0) 22%,
+      rgba(243,245,247,.66) 82%, var(--bg) 100%);
 }
 body[data-theme="heaven"] .hero__grid{
-  opacity:.45;
+  opacity:.5;
   background-image:
-    linear-gradient(to right, rgba(47,106,140,.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(47,106,140,.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(184,35,31,.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(184,35,31,.1) 1px, transparent 1px);
+  background-size:72px 72px;
 }
 body[data-theme="heaven"] .hero__title-l1{
   color:var(--ink);
-  letter-spacing:-.02em;
-  text-shadow:0 1px 0 #fff;
+  letter-spacing:-.015em;
+  /* 只留一层很轻的套印错位，多一层就成拖尾 */
+  text-shadow:2px 2px 0 rgba(184,35,31,.18);
 }
 body[data-theme="heaven"] .hero__title-l2{
   color:transparent;
-  background:linear-gradient(180deg, rgba(16,21,26,.52) 0%, rgba(16,21,26,.16) 100%);
+  background:linear-gradient(180deg, rgba(13,17,22,.46) 0%, rgba(13,17,22,.12) 100%);
   -webkit-background-clip:text; background-clip:text;
 }
 body[data-theme="heaven"] .hero__kicker{ color:var(--ink-3); }
+body[data-theme="heaven"] .hero__tag{ color:var(--red); }
+body[data-theme="heaven"] .hero__tag .rhombus{ background:var(--red); }
 body[data-theme="heaven"] .hero__cn{ color:var(--ink-2); }
-body[data-theme="heaven"] .hero__lead{ border-left-color:var(--accent); color:var(--ink-2); }
+body[data-theme="heaven"] .hero__lead{
+  border-left:2px solid var(--red); color:var(--ink-2); padding-left:14px;
+}
 body[data-theme="heaven"] .hero__stats{
-  border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2);
+  border-top:1px solid rgba(13,17,22,.2); border-bottom:1px solid var(--line-2);
 }
 body[data-theme="heaven"] .stat__n{ color:var(--ink); }
 body[data-theme="heaven"] .stat__k{ color:var(--ink-3); }
 body[data-theme="heaven"] .hero__rail{ color:var(--ink-4); }
+body[data-theme="heaven"] .hero__cue{ color:var(--ink-3); }
 
+/* 主视觉的印刷边框：四角裁切角 */
 body[data-theme="heaven"] .hero::after{
-  content:""; position:absolute; inset:24px; z-index:1; pointer-events:none;
-  border:1px solid rgba(16,21,26,.14);
-  mask-image:linear-gradient(180deg, #000 0%, #000 30%, transparent 58%);
-  -webkit-mask-image:linear-gradient(180deg, #000 0%, #000 30%, transparent 58%);
+  content:""; position:absolute; inset:18px; z-index:1; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(13,17,22,.5) 0 0), linear-gradient(rgba(13,17,22,.5) 0 0),
+    linear-gradient(rgba(13,17,22,.5) 0 0), linear-gradient(rgba(13,17,22,.5) 0 0);
+  background-repeat:no-repeat;
+  background-size:16px 1px, 1px 16px, 16px 1px, 1px 16px;
+  background-position:0 0, 0 0, 100% 100%, 100% 100%;
+  opacity:.6;
 }
 
-/* ------------------------------------------------------- 8. 角色详情页 */
-body[data-theme="heaven"] .dh__latin{ color:var(--ink); }
+/* 双人索引条 */
+body[data-theme="heaven"] .duo__item{
+  border:1px solid rgba(13,17,22,.14); background:rgba(255,255,255,.82);
+  box-shadow:3px 3px 0 rgba(58,91,194,.12);
+}
+body[data-theme="heaven"] .duo__detail{
+  background:#fff; border:1px solid rgba(13,17,22,.2);
+  box-shadow:4px 4px 0 rgba(184,35,31,.12);
+}
+
+/* ------------------------------------------------------- 6. 角色详情页 */
+body[data-theme="heaven"] .dh__latin{
+  color:var(--ink);
+  text-shadow:3px 3px 0 rgba(184,35,31,.22);
+}
 body[data-theme="heaven"] .dh__cn{ color:var(--ink-2); }
 body[data-theme="heaven"] .dh__crumb{ color:var(--ink-3); }
 body[data-theme="heaven"] .dh__crumb a{ color:var(--ink-2); }
-body[data-theme="heaven"] .dh__crumb a:hover{ color:var(--accent); }
-body[data-theme="heaven"] .dh__lead{ border-left-color:var(--accent); color:var(--ink-2); }
+body[data-theme="heaven"] .dh__crumb a:hover{ color:var(--red); }
+body[data-theme="heaven"] .dh__lead{ border-left:2px solid var(--red); color:var(--ink-2); }
 body[data-theme="heaven"] .dh__glow{
-  background:radial-gradient(ellipse at 68% 38%, rgba(214,232,243,.7), transparent 60%);
+  background:radial-gradient(ellipse at 66% 34%, rgba(184,35,31,.12), transparent 62%);
 }
 body[data-theme="heaven"] .spec__row{ border-bottom-color:var(--line-3); }
 body[data-theme="heaven"] .spec__k{ color:var(--ink-3); }
 body[data-theme="heaven"] .spec__v{ color:var(--ink); }
 body[data-theme="heaven"] .plate__tag{
-  color:var(--ink-2); border-color:var(--line-2); background:rgba(255,255,255,.9);
+  color:var(--ink-2); border-color:var(--line-2); background:rgba(255,255,255,.92);
 }
 body[data-theme="heaven"] .plate__foot{ color:var(--ink-3); }
 body[data-theme="heaven"] .plate--head .plate__foot,
@@ -257,30 +450,213 @@ body[data-theme="heaven"] .plate--head .plate__tag{
   text-shadow:0 1px 3px rgba(255,255,255,.95), 0 0 10px rgba(255,255,255,.9);
 }
 
-/* ------------------------------------------------------------- 9. 页脚 */
+/* ------------------------------------------------------------- 7. 页脚 */
 body[data-theme="heaven"] .foot{
   border-top:1px solid var(--line-2);
-  background:linear-gradient(180deg, transparent, rgba(238,243,246,.9));
+  background:
+    radial-gradient(circle at 88% 120%, rgba(58,91,194,.14), transparent 58%),
+    linear-gradient(180deg, transparent, rgba(238,241,244,.92));
+  position:relative;
 }
-body[data-theme="heaven"] .foot__credit a{ color:var(--accent); }
+body[data-theme="heaven"] .foot::before{
+  content:""; position:absolute; right:2%; bottom:0;
+  width:min(38vw,420px); height:150px;
+  background-image:radial-gradient(rgba(58,91,194,.55) 1.1px, transparent 1.4px);
+  background-size:8px 8px;
+  -webkit-mask-image:linear-gradient(180deg, transparent, #000);
+  mask-image:linear-gradient(180deg, transparent, #000);
+  opacity:.5; pointer-events:none;
+}
+body[data-theme="heaven"] .foot__credit a{ color:var(--red); }
 
-/* --------------------------------------------------- 10. 减少动效/手机 */
+/* --------------------------------------------------- 8. 减少动效 / 手机 */
 @media (prefers-reduced-motion:reduce){
-  body[data-theme="heaven"] .hv-rays{ animation:none !important; }
+  body[data-theme="heaven"] .hv-ring{ animation:none !important; }
   .hv-shard{ transition:none; }
 }
 
 @media (max-width:1180px){
-
-  .hv-shard--a{ width:34vw; height:42vw; right:-4vw; }
-  .hv-shard--b{ width:22vw; height:28vw; }
-  .hv-shard--c{ display:none; }
+  .hv-frame--a{ left:auto; right:4%; top:4%; }
+  .hv-frame--b{ display:none; }
+  .hv-no{ font-size:clamp(70px,16vw,130px); }
+  .hv-dim--v{ display:none; }
 }
 @media (max-width:820px){
-  .hv-rays{ opacity:.6; }
-  body[data-theme="heaven"] .hero::after{ inset:12px; }
-  body[data-theme="heaven"]::after{ opacity:.16; }
-  .hv-shard--a{ opacity:.5; }
-  .hv-shard--b{ display:none; }
+  body[data-theme="heaven"] .hv-disc{ opacity:.3; width:78vw; right:-12%; top:2%; }
+  .hv-ring--b, .hv-ring--c{ display:none; }
+  .hv-frame--a, .hv-frame--c{ display:none; }
+  .hv-shard--a, .hv-shard--d, .hv-shard--f{ display:none; }
+  body[data-theme="heaven"] .hv-shard--b{ opacity:.45; }
+  .hv-dim--h, .hv-dim--v{ display:none; }
+  .hv-no{ top:auto; bottom:-2%; opacity:.5; }
+  body[data-theme="heaven"] .hero::after{ inset:10px; }
 }
 
+/* ==========================================================================
+   红色版补充：对位十字、半调色带、弧线收笔
+   ========================================================================== */
+
+/* ---- 印厂对位标记：细圆 + 十字，四角各一枚 ---- */
+.hv-reg{
+  position:absolute; width:22px; height:22px; pointer-events:none;
+  border:1px solid rgba(184,35,31,.55); border-radius:50%;
+  opacity:.9;
+}
+.hv-reg::before,
+.hv-reg::after{
+  content:""; position:absolute; background:rgba(184,35,31,.75);
+}
+.hv-reg::before{ left:50%; top:-5px; bottom:-5px; width:1px; margin-left:-.5px; }
+.hv-reg::after{ top:50%; left:-5px; right:-5px; height:1px; margin-top:-.5px; }
+.hv-reg--tl{ left:22px; top:22px; }
+.hv-reg--tr{ right:22px; top:22px; }
+.hv-reg--bl{ left:22px; bottom:22px; }
+.hv-reg--br{ right:22px; bottom:22px; }
+
+/* ---- 半调色带：主视觉底部一条逐渐显影的网点 ---- */
+.hv-strip{
+  position:absolute; left:0; right:0; bottom:0; height:132px;
+  background-image:radial-gradient(rgba(58,91,194,.7) 1.1px, transparent 1.5px);
+  background-size:7px 7px;
+  -webkit-mask-image:linear-gradient(180deg, transparent, #000 62%, #000);
+  mask-image:linear-gradient(180deg, transparent, #000 62%, #000);
+  opacity:.42; pointer-events:none;
+}
+
+
+/* ---- 红色的高光态：链接、按钮、卡片 ---- */
+body[data-theme="heaven"] .topbar__nav a:hover{ color:var(--accent); }
+body[data-theme="heaven"] .gitem:hover,
+body[data-theme="heaven"] .shot:hover{
+  border-color:var(--blue);
+  box-shadow:5px 5px 0 rgba(184,35,31,.26);
+}
+body[data-theme="heaven"] .btn:hover{
+  background:var(--accent); border-color:var(--accent); color:#fff;
+  box-shadow:2px 2px 0 rgba(13,17,22,.35);
+}
+
+@media (max-width:1180px){
+  .hv-reg{ width:16px; height:16px; }
+  .hv-reg--tl, .hv-reg--tr{ top:14px; }
+  .hv-reg--tl, .hv-reg--bl{ left:14px; }
+  .hv-reg--tr, .hv-reg--br{ right:14px; }
+}
+@media (max-width:820px){
+  .hv-reg{ display:none; }
+  .hv-strip{ height:90px; opacity:.3; }
+}
+
+/* ---- 图版编号：贴在章节头右上角 ---- */
+body[data-theme="heaven"] .section-head{ position:relative; }
+.hv-fig{
+  position:absolute; right:0; top:-19px;
+  font-family:var(--mono); font-size:9px; letter-spacing:.28em;
+  color:var(--accent); opacity:.9;
+}
+.hv-fig::before{
+  content:""; position:absolute; left:-16px; top:50%; width:10px; height:1px;
+  background:currentColor;
+}
+body[data-theme="heaven"] .section-head__idx{
+  border-radius:0; letter-spacing:.1em;
+}
+body[data-theme="heaven"] .section-head__meta{ letter-spacing:.24em; }
+
+/* ==========================================================================
+   撞色补充：印刷色标条、蓝标签、副标题染蓝
+   ========================================================================== */
+
+
+/* ---- 标注文字用蓝，线条用红：互相咬着 ---- */
+.hv-dim span{ color:var(--blue); font-weight:600; }
+.hv-frame i{ color:var(--blue); }
+.hv-frame b{ color:var(--ink); }
+
+
+/* ---- 章节头的短横线：右端一小截蓝 ---- */
+body[data-theme="heaven"] .section-head::before{
+  content:""; position:absolute; right:0; top:0; width:64px; height:1px;
+  background:var(--blue);
+}
+body[data-theme="heaven"] .section-head::after{
+  content:""; position:absolute; right:0; top:0; width:1px; height:12px;
+  background:var(--blue);
+}
+
+@media (max-width:820px){
+}
+
+/* ==========================================================================
+   活的装饰：浮动小几何、环形铭文、扫描故障条、点击留痕
+   ========================================================================== */
+
+/* ---- 浮动闪烁层：压在最上面，但只做点缀 ---- */
+.hv-float{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:5; pointer-events:none; opacity:0;
+  transition:opacity 1.2s var(--ease);
+}
+body[data-theme="heaven"] .hv-float{ opacity:1; }
+
+/* ---- 环形铭文：绕着圆盘慢慢转 ---- */
+.hv-orbit{
+  position:absolute; right:1%; top:2%; width:min(50vw,560px); aspect-ratio:1;
+  pointer-events:none; opacity:0;
+  animation:hvOrbit 140s linear infinite;
+}
+body[data-theme="heaven"] .hv-orbit{ opacity:.5; }
+.hv-orbit svg{ width:100%; height:100%; display:block; }
+.hv-orbit text{
+  fill:var(--blue);
+  font-family:var(--mono);
+  font-size:8.6px;
+  letter-spacing:.34em;
+  opacity:.5;
+}
+@keyframes hvOrbit{ to{ transform:rotate(360deg); } }
+
+/* ---- 扫描故障条：每 9 秒扫一道，中间闪两下 ---- */
+.hv-scan{
+  position:absolute; left:0; right:0; height:1px; top:-10px;
+  background:linear-gradient(90deg,
+    transparent, rgba(184,35,31,.55) 12%, rgba(58,91,194,.45) 58%, transparent 96%);
+  opacity:0; pointer-events:none;
+  animation:hvScan 9s cubic-bezier(.35,.1,.3,1) infinite;
+}
+@keyframes hvScan{
+  0%   { transform:translateY(0);     opacity:0; }
+  4%   { opacity:.5; }
+  6%   { opacity:.14; }
+  8%   { opacity:.42; }
+  52%  { transform:translateY(58vh);  opacity:.3; }
+  56%  { opacity:0; }
+  100% { transform:translateY(58vh);  opacity:0; }
+}
+
+/* ---- 章节之间加一条网点分隔，让页面“有装饰” ---- */
+body[data-theme="heaven"] .section::before{
+  content:""; position:absolute; left:0; right:0; top:-26px; height:9px;
+  background-image:radial-gradient(rgba(58,91,194,.5) 1px, transparent 1.2px);
+  background-size:10px 9px;
+  -webkit-mask-image:linear-gradient(90deg, #000, transparent 46%);
+  mask-image:linear-gradient(90deg, #000, transparent 46%);
+  opacity:.55; pointer-events:none;
+}
+
+/* ---- 页脚再补一圈蓝色细环，收个尾 ---- */
+body[data-theme="heaven"] .foot::after{
+  content:""; position:absolute; right:-90px; bottom:-150px;
+  width:300px; height:300px; border-radius:50%;
+  border:1px solid rgba(58,91,194,.28);
+  pointer-events:none;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hv-orbit, .hv-scan{ animation:none !important; }
+  .hv-scan{ display:none; }
+}
+@media (max-width:820px){
+  .hv-orbit{ display:none; }
+  body[data-theme="heaven"] .foot::after{ display:none; }
+}

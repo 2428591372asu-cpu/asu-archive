@@ -63,7 +63,6 @@ body[data-theme="scifi"]::after{
   opacity:0; transition:opacity 1.2s var(--ease);
 }
 body[data-theme="scifi"] .sf-stars{ opacity:1; }
-body[data-theme="night"] .sf-stars{ opacity:.5; }
 
 .sf-vignette{
   position:fixed; inset:0; z-index:1; pointer-events:none;
@@ -358,7 +357,7 @@ body.is-theming *{
 /* ---------- 15. 动效降级 ---------- */
 @media (prefers-reduced-motion:reduce){
   .section-head::after{ animation:none !important; }
-  .sf-stars{ opacity:.35 !important; }
+  body[data-theme="scifi"] .sf-stars{ opacity:.35 !important; }
 }
 
 /* ---------- 16. 手机：环体缩小、HUD 简化 ---------- */
@@ -564,7 +563,6 @@ body[data-theme="scifi"] .dh::after{
   opacity:0; transition:opacity .6s var(--ease);
 }
 body[data-theme="scifi"] .sf-trail{ opacity:1; }
-body[data-theme="night"] .sf-trail{ opacity:.55; }
 @media (prefers-reduced-motion:reduce){
   .sf-trail{ display:none; }
 }

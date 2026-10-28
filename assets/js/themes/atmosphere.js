@@ -80,22 +80,6 @@
         pulseA: 0.72
       };
     }
-    if (t === 'night') {
-      return {
-        on: true,
-        star: '225,238,255',
-        link: '200,225,255',
-        density: 18000,
-        max: 120,
-        linkDist: 120,
-        linkA: 0.16,
-        starA: 0.55,
-        trail: true,
-        clusterA: 0.6,
-        maxFps: 24,
-        pulseA: 0.42
-      };
-    }
     return { on: false, maxFps: 20, pulseA: 0 };
   }
 

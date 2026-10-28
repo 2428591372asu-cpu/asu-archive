@@ -285,6 +285,14 @@ async function runPage(name, url, kind, opts) {
     result.duoClosed = await evaluate(sessionId,
       `Math.round(document.querySelector('#duoDetail').getBoundingClientRect().height)`);
 
+    const fxProbe = `(() => {
+      const g = (s) => { const e = document.querySelector(s); if (!e) return 'none';
+        return getComputedStyle(e).opacity; };
+      return {
+        stars: g('.sf-stars'), trail: g('.sf-trail'), vign: g('.sf-vignette'),
+        stage: g('.hv-stage'), feathers: g('.hv-feathers'), shard: g('.hv-shard'), hvTrail: g('.hv-trail'), flt: g('.hv-float')
+      };
+    })()`;
     /* ---- 主题组：白天/夜晚  ⇄  天域/星空 ---- */
     result.pairBtn = await evaluate(sessionId, `({
       exists: !!document.querySelector('#pairToggle'),
@@ -294,9 +302,12 @@ async function runPage(name, url, kind, opts) {
                document.querySelector('#heavenToggle') === null
     })`);
 
+    result.fxDay = await evaluate(sessionId, fxProbe);
+
     /* 组内翻转：白天 → 夜晚 */
     await evaluate(sessionId, `document.querySelector('#themeToggle').click(); 1`);
     await sleep(1600);
+    result.fxNight = await evaluate(sessionId, fxProbe);
     result.toggle = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
       label: document.querySelector('.theme-toggle__label').textContent,
@@ -327,9 +338,16 @@ async function runPage(name, url, kind, opts) {
     result.heaven = await evaluate(sessionId, `({
       theme: document.body.dataset.theme,
       label: document.querySelector('.theme-toggle__label').textContent,
-      rays: !!document.querySelector('.hv-rays'),
-      doves: !!document.querySelector('.hv-doves'),
+      stage: !!document.querySelector('.hv-stage'),
+      disc: !!document.querySelector('.hv-disc'),
+      rings: document.querySelectorAll('.hv-ring').length,
+      frames: document.querySelectorAll('.hv-frame').length,
+      dims: document.querySelectorAll('.hv-dim').length,
+      floats: !!document.querySelector('.hv-float'),
+      orbit: !!document.querySelector('.hv-orbit'),
+      feathers: !!document.querySelector('.hv-feathers'),
       shards: document.querySelectorAll('.hv-shard').length,
+      trail: !!document.querySelector('.hv-trail'),
       pressed: document.querySelector('#themeToggle').getAttribute('aria-pressed'),
       bg: getComputedStyle(document.body).backgroundColor
     })`);
@@ -508,6 +526,12 @@ expect('index.toggle.bg（主题黑）', report.index.toggle.bg, 'rgb(8, 9, 11)'
 expect('pairBack.theme（整组换回白天）', report.index.pairBack.theme, 'day');
 
   /* 主题组 */
+  /* 特效不串味：黑白日里这些层必须完全透明 */
+  const fxKeys = ['stars', 'trail', 'vign', 'stage', 'feathers', 'shard', 'hvTrail', 'flt'];
+  fxKeys.forEach((k) => {
+    expect('day.fx.' + k + '（应为 0）', report.index.fxDay[k], '0');
+    expect('night.fx.' + k + '（应为 0）', report.index.fxNight[k], '0');
+  });
   expect('pairBtn.exists', report.index.pairBtn.exists, true);
   expect('pairBtn.label', report.index.pairBtn.label, '???');
   expect('pairBtn.pressed（默认关闭）', report.index.pairBtn.pressed, 'false');
@@ -528,9 +552,16 @@ expect('pairBack.theme（整组换回白天）', report.index.pairBack.theme, 'd
   expect('heaven.theme', report.index.heaven.theme, 'heaven');
   expect('heaven.label', report.index.heaven.label, 'AETHER');
   expect('heaven.pressed', report.index.heaven.pressed, 'false');
-  expect('heaven.rays', report.index.heaven.rays, true);
-  expect('heaven.doves', report.index.heaven.doves, true);
-  expect('heaven.shards >= 3', report.index.heaven.shards >= 3, true);
+  expect('heaven.feathers', report.index.heaven.feathers, true);
+  expect('heaven.shards >= 6', report.index.heaven.shards >= 6, true);
+  expect('heaven.trail（红色轨迹层）', report.index.heaven.trail, true);
+  expect('heaven.stage（平面图层）', report.index.heaven.stage, true);
+  expect('heaven.disc（钴蓝圆盘）', report.index.heaven.disc, true);
+  expect('heaven.rings >= 3', report.index.heaven.rings >= 3, true);
+  expect('heaven.frames >= 2', report.index.heaven.frames >= 2, true);
+  expect('heaven.dims >= 2', report.index.heaven.dims >= 2, true);
+  expect('heaven.floats（浮动层）', report.index.heaven.floats, true);
+  expect('heaven.orbit（环形铭文）', report.index.heaven.orbit, true);
   /* ??? 再点：整组换回白天 */
   expect('pairBack.label', report.index.pairBack.label, 'DAY');
   expect('pairBack.pairOn', report.index.pairBack.pairOn, false);

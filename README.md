@@ -18,7 +18,7 @@ assets/
   css/
     style.css         全站基础样式：设计 token、版式、三种主题的公共部分
     themes/scifi.css  星空主题（STARFIELD，深空档案感）的专属样式
-    themes/heaven.css 天域主题（AETHER，冷白海报）的专属样式
+    themes/heaven.css 天域主题（AETHER，印刷版式）的专属样式
   js/
     data.js           全站内容都在这里，改文字只改这个文件
     site.js           渲染与交互：主题、轮播、图集、详情页
@@ -26,7 +26,7 @@ assets/
     plus-field.js     背景「+ / ·」点阵（字符栅格化的底纹）
     themes/
       atmosphere.js   星域氛围层：星空、星座、鼠标/触摸星座轨迹
-      heaven.js       天域氛围层：白鸽群、玻璃碎片视差
+      heaven.js       天域氛围层：红色圆盘、拼贴框、碎玻璃、树形轨迹
   img/
     a-su-head.png 等   页面用的头像与线稿裁切
     gallery/          图集，按主文件夹分，一层子文件夹 = 一个系列
@@ -75,15 +75,16 @@ edit.bat              启动编辑器（会先自动扫描图集）
 ```
 
 对应关系是 白天 ⇄ 天域、夜晚 ⇄ 星空，所以哪一组进来、退出都回到对面那一组。
-状态存 `localStorage`。四套主题：
+白天/夜晚记在 `localStorage`，天域/星空只存在当前标签页（`sessionStorage`）——**重新打开站点一律回到白天/夜晚**，页面之间翻页时才保留当前主题。带 `?theme=` 的链接优先。四套主题：
 
 | 主题 | 说明 |
 | --- | --- |
 | `day` | 白天，默认 |
 | `night` | 夜晚 |
 | `scifi` | 星空 STARFIELD：深空蓝黑 + 冷青，带星空与星座轨迹 |
+| `heaven` | 天域 AETHER：红色圆盘 + 半调网点的印刷版式，带拼贴界面框、尺寸标注、对位十字、六块碎玻璃、红色树形轨迹 |
 
-`?theme=scifi` 可以直接打开星域主题。
+`?theme=scifi` / `?theme=heaven` 可以直接打开星空 / 天域主题。
 
 ## 背景点阵
 
