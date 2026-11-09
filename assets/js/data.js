@@ -262,7 +262,7 @@ window.ARCHIVE = (function () {
         },
         {
           k: '身高',
-          v: '163（带耳朵）/154'
+          v: '167（带耳朵）/158'
         },
         {
           k: '体重',
@@ -611,7 +611,7 @@ window.ARCHIVE = (function () {
       shotsMore: 'ITEMS — 点击任意一张查看大图',
       footer: {
         tagline: 'A_SU ARCHIVE — 本地演示 · 非官方同人档案',
-        source: 'SOURCE · D:\\Asu\\A_su的设定图集',
+        source: 'SOURCE · D:\Asu\A_su的设定图集',
         build: 'BUILD ·'
       }
     },
