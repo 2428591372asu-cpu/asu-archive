@@ -291,6 +291,17 @@ window.ARCHIVE = (function () {
           title: '立绘 III · 黑裙'
         },
         {
+          file: 'pugua-standing-4.webp',
+          cat: '立绘',
+          title: '立绘 IV · wink',
+          note: '透明底'
+        },
+        {
+          file: 'pugua-standing-4-w.webp',
+          cat: '立绘',
+          title: '立绘 IV · wink（白底）'
+        },
+        {
           file: 'pugua-turnaround.jpg',
           cat: '三视图',
           title: '三视图 · 正 / 侧 / 背',
