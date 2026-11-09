@@ -249,6 +249,20 @@ window.GALLERY = {
     },
     {
       "type": "image",
+      "file": "gallery/pugua/28_pugua-standing-4.webp",
+      "title": "立绘 IV · wink",
+      "note": "透明底",
+      "cat": "立绘"
+    },
+    {
+      "type": "image",
+      "file": "gallery/pugua/29_pugua-standing-4-w.webp",
+      "title": "立绘 IV · wink（白底）",
+      "note": "",
+      "cat": "立绘"
+    },
+    {
+      "type": "image",
       "file": "gallery/pugua/立绘2.png",
       "title": "立绘2",
       "note": "",
@@ -426,6 +440,12 @@ window.GALLERY_MAP = {
   "pugua-eyes.jpg": "gallery/pugua/26_pugua-eyes.jpg",
   "27_pugua-scene.jpg": "gallery/pugua/27_pugua-scene.jpg",
   "pugua-scene.jpg": "gallery/pugua/27_pugua-scene.jpg",
+  "28_pugua-standing-4.webp": "gallery/pugua/28_pugua-standing-4.webp",
+  "pugua-standing-4.webp": "gallery/pugua/28_pugua-standing-4.webp",
+  "__title__gallery/pugua/28_pugua-standing-4.webp": "立绘 IV · wink",
+  "29_pugua-standing-4-w.webp": "gallery/pugua/29_pugua-standing-4-w.webp",
+  "pugua-standing-4-w.webp": "gallery/pugua/29_pugua-standing-4-w.webp",
+  "__title__gallery/pugua/29_pugua-standing-4-w.webp": "立绘 IV · wink（白底）",
   "立绘2.png": "gallery/pugua/立绘2.png",
   "01_pugua-standing.png": "gallery/pugua/立绘1/01_pugua-standing.png",
   "pugua-standing.png": "gallery/pugua/立绘1/01_pugua-standing.png",
